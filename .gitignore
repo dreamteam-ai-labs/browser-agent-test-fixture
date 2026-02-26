@@ -9,3 +9,4 @@ frontend/.next/
 .DS_Store
 *.egg-info/
 dist/
+.venv/
