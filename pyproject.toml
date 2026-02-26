@@ -1,0 +1,17 @@
+[project]
+name = "browser-agent-test-fixture"
+version = "1.0.0"
+description = "Standalone test fixture for validating the browser agent + QA smoke test"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+    "sqlalchemy>=2.0.0",
+    "bcrypt>=4.2.0",
+    "pyjwt>=2.10.0",
+    "pydantic[email]>=2.10.0",
+]
+
+[build-system]
+requires = ["setuptools>=75.0"]
+build-backend = "setuptools.build_meta"

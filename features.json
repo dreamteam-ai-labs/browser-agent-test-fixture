@@ -1,0 +1,30 @@
+{
+  "product_name": "Browser Agent Test Fixture",
+  "features": [
+    {
+      "name": "User Authentication",
+      "description": "Register, login, and token verification",
+      "status": "completed"
+    },
+    {
+      "name": "Project Management",
+      "description": "Create, list, and delete projects",
+      "status": "completed"
+    },
+    {
+      "name": "Task Management",
+      "description": "Create, list, and delete tasks with project assignment",
+      "status": "completed"
+    },
+    {
+      "name": "Dashboard",
+      "description": "Overview with project and task counts",
+      "status": "completed"
+    },
+    {
+      "name": "Navigation",
+      "description": "Sidebar with route highlighting and logout",
+      "status": "completed"
+    }
+  ]
+}

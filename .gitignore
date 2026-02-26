@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+fixture.db
+node_modules/
+frontend/out/
+frontend/.next/
+.DS_Store
+*.egg-info/
+dist/

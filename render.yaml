@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: browser-agent-test-fixture
+    runtime: docker
+    repo: https://github.com/dreamteam-ai-labs/browser-agent-test-fixture
+    branch: main
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true
