@@ -31,11 +31,12 @@ const MACHINE = machineIdx >= 0 ? args[machineIdx + 1] : DEFAULT_MACHINE;
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
 function gh(cmd, opts = {}) {
-  const fullCmd = `GH_CONFIG_DIR="${GH_CONFIG_DIR}" gh ${cmd}`;
+  const fullCmd = `gh ${cmd}`;
   const result = execSync(fullCmd, {
     encoding: "utf-8",
     timeout: opts.timeout || 120_000,
     stdio: opts.stdio || "pipe",
+    env: { ...process.env, GH_CONFIG_DIR },
     ...opts,
   });
   return result.trim();
@@ -59,7 +60,7 @@ async function main() {
     // Step 1: Create codespace
     log("STEP 1: Creating codespace...");
     const createResult = gh(
-      `codespace create --repo ${REPO} --machine ${MACHINE} --status`,
+      `codespace create --repo ${REPO} --machine ${MACHINE}`,
       { timeout: 180_000 }
     );
     codespace = createResult.trim();
