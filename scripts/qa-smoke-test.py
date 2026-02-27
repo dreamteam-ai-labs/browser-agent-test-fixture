@@ -177,8 +177,11 @@ def make_ports_public():
         return {"success": False, "error": "gh ports timed out"}
 
     frontend_url = f"https://{codespace}-{FRONTEND_PORT}.app.github.dev"
+    # Point directly at /login to avoid client-side redirect destroying Puppeteer context
+    login_url = f"{frontend_url}/login"
     log(f"  Public URL: {frontend_url}")
-    return {"success": True, "frontend_url": frontend_url}
+    log(f"  Login URL:  {login_url}")
+    return {"success": True, "frontend_url": login_url}
 
 
 # -- Step 3: Read features ---------------------------------------------------
