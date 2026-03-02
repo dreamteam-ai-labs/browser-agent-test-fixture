@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-filesystem", "."]
+    },
+    "code-search": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["mcp-ripgrep@latest"]
+    }
+  }
+}

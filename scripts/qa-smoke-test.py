@@ -41,8 +41,24 @@ def log(msg):
     print(f"[qa-smoke] {msg}", file=sys.stderr, flush=True)
 
 
+def _parse_response_body(raw: str):
+    """Parse JSON or NDJSON response. For NDJSON, returns the last line (the result)."""
+    try:
+        return json.loads(raw)
+    except (json.JSONDecodeError, ValueError):
+        pass
+    # NDJSON: browser agent v2.2+ streams progress lines, last line is the result
+    lines = [l.strip() for l in raw.strip().splitlines() if l.strip()]
+    for line in reversed(lines):
+        try:
+            return json.loads(line)
+        except (json.JSONDecodeError, ValueError):
+            continue
+    return {"raw": raw[:500]}
+
+
 def http_post(url, data, timeout=30):
-    """POST JSON, return (status_code, parsed_body). status=0 means network error."""
+    """POST JSON, return (status_code, parsed_body). Handles both JSON and NDJSON responses."""
     body = json.dumps(data).encode("utf-8")
     req = urllib.request.Request(
         url, data=body,
@@ -51,7 +67,7 @@ def http_post(url, data, timeout=30):
     )
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
-            return resp.status, json.loads(resp.read().decode("utf-8"))
+            return resp.status, _parse_response_body(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         try:
             err = json.loads(e.read().decode("utf-8"))
@@ -80,7 +96,7 @@ def http_get(url, headers=None, timeout=10):
         return 0, {"error": str(e)}
 
 
-# -- Step 1: Register + verify auth ------------------------------------------
+# ── Step 1: Register + verify auth ──────────────────────────────────────────
 
 
 def run_auth_test():
@@ -94,6 +110,12 @@ def run_auth_test():
         "steps": {},
     }
 
+    # Always persist credentials early — factory loop Step 5d reads this file.
+    # Even if auth fails, having email/password lets the factory attempt browser login.
+    with open(CREDENTIALS_FILE, "w") as f:
+        json.dump({"email": email, "password": password}, f, indent=2)
+    log(f"  Credentials saved to {CREDENTIALS_FILE} (pre-auth)")
+
     # 1a. Register
     log(f"Registering: {email}")
     status, body = http_post(
@@ -104,7 +126,7 @@ def run_auth_test():
 
     if status < 200 or status >= 300:
         result["error"] = f"Registration failed (HTTP {status})"
-        log(f"  FAIL: {result['error']} -- {body}")
+        log(f"  FAIL: {result['error']} — {body}")
         return result
     log(f"  Register: HTTP {status} OK")
 
@@ -117,7 +139,7 @@ def run_auth_test():
 
     if status < 200 or status >= 300:
         result["error"] = f"Login failed (HTTP {status})"
-        log(f"  FAIL: {result['error']} -- {body}")
+        log(f"  FAIL: {result['error']} — {body}")
         return result
 
     # Extract token — apps may use different field names
@@ -141,26 +163,21 @@ def run_auth_test():
     result["steps"]["verify_token"] = {"status": status}
     log(f"  Verify token (/api/users/me): HTTP {status}")
 
-    # Auth succeeded
+    # Auth succeeded — even if /users/me has issues, we have working credentials
     result["success"] = True
     result["token_verified"] = (200 <= status < 300)
-
-    # Persist credentials so other tools can use them
-    with open(CREDENTIALS_FILE, "w") as f:
-        json.dump({"email": email, "password": password}, f, indent=2)
-    log(f"  Credentials saved to {CREDENTIALS_FILE}")
 
     return result
 
 
-# -- Step 2: Make ports public ------------------------------------------------
+# ── Step 2: Make ports public ───────────────────────────────────────────────
 
 
 def make_ports_public():
     """Make codespace ports public. Returns frontend URL or error."""
     codespace = os.environ.get("CODESPACE_NAME")
     if not codespace:
-        return {"success": False, "error": "CODESPACE_NAME env var not set -- not in a codespace?"}
+        return {"success": False, "error": "CODESPACE_NAME env var not set — not in a codespace?"}
 
     log(f"Making ports public (codespace: {codespace})")
     try:
@@ -184,7 +201,7 @@ def make_ports_public():
     return {"success": True, "frontend_url": login_url}
 
 
-# -- Step 3: Read features ---------------------------------------------------
+# ── Step 3: Read features ──────────────────────────────────────────────────
 
 
 def read_features():
@@ -200,14 +217,14 @@ def read_features():
         log(f"  {len(names)} completed features from features.json")
         return names
     except FileNotFoundError:
-        log("  features.json not found -- agent will auto-discover")
+        log("  features.json not found — agent will auto-discover")
         return []
     except Exception as e:
-        log(f"  Error reading features.json: {e} -- agent will auto-discover")
+        log(f"  Error reading features.json: {e} — agent will auto-discover")
         return []
 
 
-# -- Step 4: Call browser agent -----------------------------------------------
+# ── Step 4: Call browser agent ──────────────────────────────────────────────
 
 
 def call_browser_agent(frontend_url, email, password, features):
@@ -227,7 +244,7 @@ def call_browser_agent(frontend_url, email, password, features):
             "timeout": 120000,
             "uploadScreenshots": True,
         },
-        timeout=180,
+        timeout=300,
     )
 
     if status == 0:
@@ -249,7 +266,7 @@ def call_browser_agent(frontend_url, email, password, features):
 
     smoke = body.get("smokeTestResults", body)
     smoke["service_reachable"] = True
-    # Preserve screenshot URLs from top-level response
+    # Preserve screenshot URLs from top-level response (browser agent puts them outside smokeTestResults)
     if "screenshotUrls" in body and "screenshotUrls" not in smoke:
         smoke["screenshotUrls"] = body["screenshotUrls"]
     overall = smoke.get("overall", "unknown")
@@ -267,12 +284,12 @@ def call_browser_agent(frontend_url, email, password, features):
     return smoke
 
 
-# -- Main ---------------------------------------------------------------------
+# ── Main ────────────────────────────────────────────────────────────────────
 
 
 def main():
     log("=" * 60)
-    log("QA SMOKE TEST -- deterministic end-to-end verification")
+    log("QA SMOKE TEST — deterministic end-to-end verification")
     log("=" * 60)
 
     output = {
@@ -282,7 +299,7 @@ def main():
     }
     exit_code = 0
 
-    # -- Step 0: Browser agent pre-check (with retry for Render cold start) --
+    # ── Step 0: Browser agent pre-check (with retry for Render cold start) ──
     log("")
     log("STEP 0: Browser agent connectivity check")
 
@@ -303,7 +320,7 @@ def main():
             time.sleep(delay)
 
     if not browser_reachable:
-        log("  Browser agent UNREACHABLE after all retries -- skipping browser test")
+        log("  Browser agent UNREACHABLE after all retries — skipping browser test")
         output["browser_smoke_test"] = {
             "overall": "error",
             "reason": f"Browser agent unreachable after {WAKE_RETRIES} attempts",
@@ -312,17 +329,17 @@ def main():
     else:
         skip_browser = False
 
-    # -- Auth --
+    # ── Auth ──
     log("")
     log("STEP 1: Auth flow test")
     auth = run_auth_test()
     output["auth"] = auth
 
     if not auth["success"]:
-        log(f"\nAUTH FAILED -- cannot proceed with browser test")
+        log(f"\nAUTH FAILED — cannot proceed with browser test")
         output["browser_smoke_test"] = {
             "overall": "error",
-            "error": f"Auth failed: {auth.get('error')} -- no valid credentials for browser test",
+            "error": f"Auth failed: {auth.get('error')} — no valid credentials for browser test",
         }
         exit_code = 1
     else:
@@ -330,12 +347,12 @@ def main():
         password = auth["password"]
         log(f"\nQA TEST CREDENTIALS: email={email} password={password}")
 
-        # -- Frontend check --
+        # ── Frontend check ──
         if not os.path.isdir("frontend"):
-            log("\nNo frontend/ directory -- browser smoke test not applicable")
+            log("\nNo frontend/ directory — browser smoke test not applicable")
             output["browser_smoke_test"] = {"overall": "not_applicable"}
         else:
-            # -- Ports --
+            # ── Ports ──
             log("\nSTEP 2: Make ports public")
             ports = make_ports_public()
             if not ports["success"]:
@@ -346,13 +363,14 @@ def main():
                 }
                 exit_code = 2
             else:
-                # -- Features --
+                # ── Features ──
                 log("\nSTEP 3: Read features")
                 features = read_features()
 
-                # -- Browser agent --
+                # ── Browser agent ──
                 if skip_browser:
-                    log("\nSTEP 4: Skipped -- browser agent unreachable (Step 0)")
+                    log("\nSTEP 4: Skipped — browser agent unreachable (Step 0)")
+                    # output already set in Step 0
                 else:
                     log("\nSTEP 4: Browser smoke test")
                     smoke = call_browser_agent(
@@ -368,7 +386,7 @@ def main():
                     else:
                         exit_code = 1
 
-    # -- Write results --
+    # ── Write results ──
     output["exit_code"] = exit_code
     with open(RESULTS_FILE, "w") as f:
         json.dump(output, f, indent=2)

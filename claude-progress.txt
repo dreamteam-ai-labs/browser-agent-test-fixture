@@ -1,0 +1,9 @@
+=== Project Generated: 2026-03-02T19:00:49.639Z ===
+Project: browser-agent-test-fixture
+Status: Initial scaffolding complete
+
+API: FastAPI framework selected
+
+Read features.json for the full feature list and current status.
+
+Next: Run Phase 0 (environment_features.json) then implement features from features.json

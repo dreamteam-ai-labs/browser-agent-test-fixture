@@ -1,5 +1,5 @@
 {
-  "name": "QA Browser Test Harness",
+  "name": "browser-agent-test-fixture",
   "image": "mcr.microsoft.com/devcontainers/python:3.11",
 
   "features": {
@@ -14,16 +14,32 @@
     "vscode": {
       "extensions": [
         "anthropic.claude-code",
-        "ms-python.python"
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff",
+        "mikestead.dotenv",
+        "mhutchie.git-graph"
       ],
       "settings": {
         "python.defaultInterpreterPath": "/usr/local/bin/python",
-        "terminal.integrated.defaultProfile.linux": "bash"
+        "python.linting.enabled": true,
+        "editor.formatOnSave": true,
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff"
+        },
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "git.autofetch": true
       }
     }
   },
 
-  "forwardPorts": [3000, 8000],
+  "forwardPorts": [
+    3000,
+    4000,
+    5000,
+    8000,
+    8080
+  ],
 
   "portsAttributes": {
     "3000": {
@@ -31,8 +47,23 @@
       "onAutoForward": "notify",
       "visibility": "public"
     },
-    "8000": {
+    "4000": {
       "label": "Backend API",
+      "onAutoForward": "notify",
+      "visibility": "public"
+    },
+    "5000": {
+      "label": "Dev Server",
+      "onAutoForward": "notify",
+      "visibility": "public"
+    },
+    "8000": {
+      "label": "FastAPI",
+      "onAutoForward": "notify",
+      "visibility": "public"
+    },
+    "8080": {
+      "label": "Alt Server",
       "onAutoForward": "notify",
       "visibility": "public"
     }
@@ -42,8 +73,11 @@
   "postStartCommand": "bash .devcontainer/post-start.sh",
 
   "containerEnv": {
-    "PYTHONPATH": "${containerWorkspaceFolder}/src"
+    "PYTHONPATH": "${containerWorkspaceFolder}/src",
+    "NODE_ENV": "production",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
+
 
   "remoteUser": "vscode"
 }
