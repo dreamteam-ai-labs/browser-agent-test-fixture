@@ -1,23 +1,39 @@
 {
-  "timestamp": "2026-03-02T19:38:14.086195Z",
+  "timestamp": "2026-03-03T18:56:26.447453Z",
   "iteration": 1,
   "backend_health": "PASS",
-  "frontend_health": "PASS",
-  "frontend_build": "PASS (postcss.config.mjs -> postcss.config.js fix verified)",
+  "frontend_health": "PASS (static export serves all 8 pages; dev server has Tailwind CSS parse issue in dev mode only)",
+  "pytest": {
+    "total": 26,
+    "passed": 26,
+    "failed": 0,
+    "result": "PASS",
+    "warnings": [
+      "PydanticDeprecatedSince20: class-based Config deprecated in auth.py",
+      "PydanticDeprecatedSince20: class-based Config deprecated in projects.py",
+      "PydanticDeprecatedSince20: class-based Config deprecated in tasks.py"
+    ]
+  },
+  "frontend_build": {
+    "result": "PASS",
+    "framework": "Next.js 14.2.21",
+    "pages_built": 9,
+    "output": "static export (out/)"
+  },
   "auth_flow": {
     "success": true,
-    "email": "qa-tester-1772480183@test.example.com",
+    "email": "qa-tester-1772564108@test.example.com",
     "password": "TestPass123!",
     "steps": {
       "register": {
         "status": 200,
         "response": {
           "user": {
-            "id": 8,
-            "email": "qa-tester-1772480183@test.example.com",
+            "id": 3,
+            "email": "qa-tester-1772564108@test.example.com",
             "display_name": "QA Tester"
           },
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4IiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3MjQ4MDE4M0B0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzcyNTY2NTgzfQ.qWprQNAEZjWI8IJLukR0KDvw31Wq6_nUNyV1xOljVR8"
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3MjU2NDEwOEB0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzcyNjUwNTA4fQ.DzxI5iemqJQTzjTBx8mE0sQtQLVr5TYe8gB-EkCUpQU"
         }
       },
       "login": {
@@ -35,10 +51,58 @@
       "login": "PASS",
       "token_works": "PASS"
     },
-    "features_tested": 2,
-    "features_passed": 2,
+    "features_tested": 4,
+    "features_passed": 4,
     "features_failed": 0,
     "flows": [
+      {
+        "feature": "health-endpoint",
+        "steps": [
+          {
+            "action": "READ",
+            "endpoint": "GET /api/health",
+            "status": 200,
+            "result": "PASS"
+          }
+        ],
+        "overall": "PASS"
+      },
+      {
+        "feature": "user-auth",
+        "steps": [
+          {
+            "action": "REGISTER",
+            "endpoint": "POST /api/auth/register",
+            "status": 200,
+            "result": "PASS"
+          },
+          {
+            "action": "LOGIN",
+            "endpoint": "POST /api/auth/login",
+            "status": 200,
+            "result": "PASS"
+          },
+          {
+            "action": "READ_ME",
+            "endpoint": "GET /api/auth/me",
+            "status": 200,
+            "result": "PASS"
+          },
+          {
+            "action": "LOGIN_WRONG_PASS",
+            "endpoint": "POST /api/auth/login",
+            "status": 401,
+            "result": "PASS"
+          },
+          {
+            "action": "ME_UNAUTH",
+            "endpoint": "GET /api/auth/me",
+            "status": 403,
+            "result": "PASS"
+          }
+        ],
+        "overall": "PASS"
+      },
       {
         "feature": "project-management",
         "steps": [
@@ -46,12 +110,11 @@
             "action": "CREATE",
             "endpoint": "POST /api/projects",
             "status": 201,
-            "result": "PASS",
-            "resource_id": 2
+            "result": "PASS"
           },
           {
             "action": "READ",
-            "endpoint": "GET /api/projects/2",
+            "endpoint": "GET /api/projects/1",
             "status": 200,
             "result": "PASS"
           },
@@ -59,23 +122,17 @@
             "action": "LIST",
             "endpoint": "GET /api/projects",
             "status": 200,
-            "result": "PASS",
-            "contains_created": true
-          },
-          {
-            "action": "UPDATE",
-            "result": "SKIPPED",
-            "note": "No PUT endpoint in router"
+            "result": "PASS"
           },
           {
             "action": "DELETE",
-            "endpoint": "DELETE /api/projects/2",
+            "endpoint": "DELETE /api/projects/1",
             "status": 204,
             "result": "PASS"
           },
           {
             "action": "VERIFY_DELETE",
-            "endpoint": "GET /api/projects/2",
+            "endpoint": "GET /api/projects/1",
             "status": 404,
             "result": "PASS"
           }
@@ -86,11 +143,16 @@
         "feature": "task-management",
         "steps": [
           {
-            "action": "CREATE",
+            "action": "CREATE_STANDALONE",
             "endpoint": "POST /api/tasks",
             "status": 201,
-            "result": "PASS",
-            "resource_id": 1
+            "result": "PASS"
+          },
+          {
+            "action": "CREATE_WITH_PROJECT",
+            "endpoint": "POST /api/tasks",
+            "status": 201,
+            "result": "PASS"
           },
           {
             "action": "READ",
@@ -102,13 +164,7 @@
             "action": "LIST",
             "endpoint": "GET /api/tasks",
             "status": 200,
-            "result": "PASS",
-            "contains_created": true
-          },
-          {
-            "action": "UPDATE",
-            "result": "SKIPPED",
-            "note": "No PUT endpoint in router"
+            "result": "PASS"
           },
           {
             "action": "DELETE",
@@ -126,15 +182,13 @@
         "overall": "PASS"
       }
     ],
-    "critical_issues": []
+    "critical_issues": [
+      "Browser smoke test: overall='error' \u2014 CODESPACE_NAME env var not set, cannot make ports public for browser agent"
+    ]
   },
   "browser_smoke_test": {
     "overall": "error",
-    "tests": [],
-    "critical_issues": [
-      "No response from tester"
-    ],
-    "service_reachable": true
+    "error": "CODESPACE_NAME env var not set \u2014 not in a codespace?"
   },
   "frontend_pages": [
     {
@@ -143,55 +197,52 @@
       "result": "PASS"
     },
     {
-      "page": "/login",
+      "page": "/login/",
       "status": 200,
       "result": "PASS"
     },
     {
-      "page": "/register",
+      "page": "/register/",
       "status": 200,
       "result": "PASS"
     },
     {
-      "page": "/dashboard",
+      "page": "/dashboard/",
       "status": 200,
       "result": "PASS"
     },
     {
-      "page": "/projects",
+      "page": "/projects/",
       "status": 200,
       "result": "PASS"
     },
     {
-      "page": "/tasks",
+      "page": "/projects/new/",
       "status": 200,
       "result": "PASS"
     },
     {
-      "page": "/projects/new",
+      "page": "/tasks/",
       "status": 200,
       "result": "PASS"
     },
     {
-      "page": "/tasks/new",
+      "page": "/tasks/new/",
       "status": 200,
       "result": "PASS"
     }
   ],
-  "pytest": {
-    "result": "NO_TESTS_COLLECTED",
-    "note": "No tests/ directory exists in repo. Exit code 5 (no tests collected).",
-    "exit_code": 5
-  },
   "summary": {
-    "endpoints_passed": 10,
-    "endpoints_total": 10,
-    "features_functionally_passing": 2,
-    "features_functionally_tested": 2,
+    "pytest_passed": 26,
+    "pytest_total": 26,
+    "endpoints_passed": 17,
+    "endpoints_total": 17,
+    "features_functionally_passing": 4,
+    "features_functionally_tested": 4,
     "pages_passed": 8,
     "pages_total": 8,
     "critical_issues": [
-      "Browser smoke test result: 'error' \u2014 No response from tester"
+      "Browser smoke test: overall='error' \u2014 CODESPACE_NAME env var not set, cannot make ports public for browser agent"
     ]
   }
 }

@@ -1,19 +1,19 @@
 {
-  "timestamp": "2026-03-02T19:36:22Z",
+  "timestamp": "2026-03-03T18:55:08Z",
   "auth": {
     "success": true,
-    "email": "qa-tester-1772480183@test.example.com",
+    "email": "qa-tester-1772564108@test.example.com",
     "password": "TestPass123!",
     "steps": {
       "register": {
         "status": 200,
         "response": {
           "user": {
-            "id": 8,
-            "email": "qa-tester-1772480183@test.example.com",
+            "id": 3,
+            "email": "qa-tester-1772564108@test.example.com",
             "display_name": "QA Tester"
           },
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4IiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3MjQ4MDE4M0B0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzcyNTY2NTgzfQ.qWprQNAEZjWI8IJLukR0KDvw31Wq6_nUNyV1xOljVR8"
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3MjU2NDEwOEB0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzcyNjUwNTA4fQ.DzxI5iemqJQTzjTBx8mE0sQtQLVr5TYe8gB-EkCUpQU"
         }
       },
       "login": {
@@ -27,11 +27,7 @@
   },
   "browser_smoke_test": {
     "overall": "error",
-    "tests": [],
-    "critical_issues": [
-      "No response from tester"
-    ],
-    "service_reachable": true
+    "error": "CODESPACE_NAME env var not set \u2014 not in a codespace?"
   },
-  "exit_code": 1
+  "exit_code": 2
 }
