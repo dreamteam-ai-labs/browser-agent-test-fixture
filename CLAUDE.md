@@ -9,8 +9,8 @@ A project management app with auth, projects, and tasks — used to validate fac
 1. **Read progress state:**
    ```
    Read: environment_features.json
-   Read: features.json
    Read: claude-progress.txt
+   Call MCP tool: get_progress()
    ```
 
 2. **Review git status:**
@@ -26,13 +26,13 @@ A project management app with auth, projects, and tasks — used to validate fac
 
 4. **Select next task:**
    - **FIRST**: Complete ALL features in `environment_features.json` (Phase 0)
-   - **THEN**: Find first `"status": "pending"` feature in `features.json`
+   - **THEN**: Call `get_next_feature()` to get the next pending feature
    - Do NOT skip ahead to "more interesting" features
    - Do NOT declare project complete if pending features remain
    - Environment must be 100% validated before application development
 
 5. **Update progress tracking:**
-   - Mark selected feature as `"in_progress"` in `features.json`
+   - Call `start_feature(id="...")` to mark the selected feature as in_progress
    - Log session start in `claude-progress.txt`
    - Log component usage to `claude-component-log.txt` (append format: timestamp | component | action)
 
@@ -55,14 +55,14 @@ Agent teams are enabled (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`). You MUST use
 
 ### Workflow
 
-1. **Phase 0 + Phase 1** (you, sequential): Complete ALL environment features, then build foundations — database schema/migrations, auth module, frontend project setup (`npx create-next-app@14` — use Next.js 14 for stability; do NOT use latest/canary). Use `next.config.mjs` (not `.ts` — Next.js 14 doesn't support TypeScript config). Commit and push after each feature. IMPORTANT: The database-schema feature must define ALL tables needed by ALL features in the app (read the full features.json to identify every table). Later features should NOT need to create new tables — the schema should be complete from Phase 1.
+1. **Phase 0 + Phase 1** (you, sequential): Complete ALL environment features, then build foundations — database schema/migrations, auth module, frontend project setup (`npx create-next-app@14` — use Next.js 14 for stability; do NOT use latest/canary). Use `next.config.mjs` (not `.ts` — Next.js 14 doesn't support TypeScript config). After scaffolding, convert `frontend/postcss.config.mjs` to `frontend/postcss.config.js` (CommonJS `module.exports = { plugins: { tailwindcss: {}, autoprefixer: {} } }`) — the ESM version fails when `NODE_ENV=production` is pre-set. Commit and push after each feature. IMPORTANT: The database-schema feature must define ALL tables needed by ALL features in the app (read the full features.json to identify every table). Later features should NOT need to create new tables — the schema should be complete from Phase 1.
 
 2. **Phase 2+** (parallel agents): Spawn both builders:
    ```
    Spawn agent: backend-builder
    Spawn agent: frontend-builder
    ```
-   They will claim features from `features.json`, build, test, commit, and push independently. Wait for both to finish.
+   They will claim features via `get_next_feature()` and `start_feature()`, build, test, commit, and push independently. Wait for both to finish.
 
    **Audit sub-agent commits** (before spawning QA): After both builders finish, verify their work:
    ```bash
@@ -84,8 +84,9 @@ Agent teams are enabled (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`). You MUST use
 
 ### Coordination Rules
 
-- **`features.json` is the source of truth** — all agents use `FeatureList` for atomic status updates
-- **Concurrent access is safe**: `FeatureList` uses file locking. Create a fresh instance for each status update (don't hold references across long operations)
+- **`features.json` is the source of truth** — all agents use the reliable-ai MCP tools for atomic status updates
+- **Concurrent access is safe**: The MCP server uses file locking. Multiple agents can call `start_feature`, `complete_feature` etc. simultaneously
+- **Share discovered values**: Use `set_state(key, value)` to share environment info (e.g. `CODESPACE_NAME`, `DATABASE_URL`) and `get_state(key)` to read it — avoids agents re-discovering what another agent already found
 - **No overlapping files**: backend-builder owns `src/` + `tests/`, frontend-builder owns `frontend/`. You (lead) handle `main.py` router registration and cross-cutting concerns
 - **Commit per feature**: Every agent MUST commit and push after completing EACH feature — never batch multiple features into one commit. This is critical for debugging and rollback. Each commit = exactly one feature.
 
@@ -94,56 +95,60 @@ Agent teams are enabled (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`). You MUST use
 ## Feature Development Workflow
 
 ### Reading Features
-```python
-from reliable_ai.progress import FeatureList
 
-fl = FeatureList("features.json")
-next_feature = fl.get_next_pending()
-print(f"Next: {next_feature.name if next_feature else 'All complete!'}")
+Use the reliable-ai MCP tools (available as `mcp__reliable-ai__*` in your tool list):
 
-# List all features
-for f in fl.all_features:
-    print(f"  [{f.status}] {f.id}: {f.name}")
-
-# Progress summary
-print(fl.get_progress())
+```
+get_progress()                    → Markdown summary with all feature IDs, descriptions, deps
+get_next_feature()                → Next pending feature ready to start
+get_state(key="CODESPACE_NAME")   → Read shared project state
 ```
 
-### Completing Features
+### Working on Features
+
+```
+start_feature(id="feature-id")                        → Mark as in_progress (MUST call first)
+touch_feature(id="feature-id", note="built endpoints") → Record work iteration
+complete_feature(id="feature-id", tests_pass=true)     → Mark as completed
+```
+
+### Sharing Discovered Values
+
+When you discover environment values, share them so other agents don't have to re-discover:
+
+```
+set_state(key="CODESPACE_NAME", value="codespaces-abc123")
+set_state(key="DATABASE_URL", value="postgresql://...")
+```
+
+Other agents read these with `get_state(key="CODESPACE_NAME")`.
+
+### Completion Rules
+
 **NEVER mark a feature as completed unless:**
 - All code is written
 - Tests pass (`pytest -v`)
 - No TODO comments left
 
-```python
-from reliable_ai.progress import FeatureList
-
-fl = FeatureList("features.json")
-fl.start("feature-id")          # Mark as in_progress
-# ... build the feature ...
-fl.complete("feature-id")       # Mark as completed
-fl.save()
-```
-
-**NOTE**: Use `fl.all_features` to iterate features. Do NOT use `fl.features` (it does not exist).
+The MCP server enforces: `start_feature` must be called before `complete_feature`. Attempting to complete a feature that hasn't been started returns an error.
 
 ---
 
 ## reliable-ai Integration
 
-This project uses `reliable-ai` for feature tracking and coordination:
+This project uses reliable-ai's MCP server for feature tracking and coordination. The server is registered in `.claude/settings.json` and provides 7 tools:
 
-```python
-from reliable_ai.progress import FeatureList
+| Tool | Purpose |
+|------|---------|
+| `get_progress` | Project status with all feature IDs and dependencies |
+| `get_next_feature` | Next pending feature (respects deps and phases) |
+| `start_feature` | Mark feature as in_progress |
+| `touch_feature` | Record work iteration |
+| `complete_feature` | Mark feature as completed (enforces start-before-complete) |
+| `get_state` | Read shared project state |
+| `set_state` | Write shared project state |
 
-fl = FeatureList("features.json")
-next_feature = fl.get_next_pending()
-fl.start(next_feature.id)
-# ... build the feature ...
-fl.complete(next_feature.id)
-```
-
-FeatureList uses file locking for safe concurrent access from multiple agents.
+All tools use file locking for safe concurrent access from multiple agents.
 
 ---
 

@@ -85,7 +85,7 @@ If registration or login fails, or the token doesn't work → **CRITICAL**. You 
    POST   /api/<parent>/{parent_id}/<child>
    ... etc (every route from every router file)
    ```
-3. Read `features.json` — find all features with `"status": "completed"`. Note each feature's `id`, `name`, `description`, and `phase`.
+3. Call `get_progress(include_completed=true)` to see all features and their status. Note each completed feature's `id`, `name`, `description`, and `phase`. Also call `get_state(key="CODESPACE_NAME")` to read any shared environment values discovered by other agents.
 4. **Match each feature to its actual routes** from the endpoint map. Use the feature description and the router file names to make the match. The feature name often differs from the actual route path (e.g., a feature called "Billing Management" might use route `/api/invoices`, not `/api/billing`). **Always use the actual route from the code, never guess from the feature name.**
 5. Sort features by phase (Phase 1 before Phase 2, etc.) — parent resources must be created before child resources.
 6. Also read model/schema files (e.g., `src/fixture/models/`) to find the exact field names each endpoint expects (e.g., `start_time` not `start`, `workspace_id` not `workspace`).

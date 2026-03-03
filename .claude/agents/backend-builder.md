@@ -9,48 +9,44 @@ You are the backend feature builder for browser-agent-test-fixture.
 
 ## Your Job
 
-Build all BACKEND features from `features.json` — anything that lives in `src/` or `tests/`.
+Build all BACKEND features — anything that lives in `src/` or `tests/`.
 
 ## Workflow
 
-For each pending backend feature (skip any that are in `frontend/`):
+Loop until no more backend features are pending:
 
-1. **Claim it**:
-   ```python
-   from reliable_ai.progress import FeatureList
-   fl = FeatureList("features.json")
-   fl.start("feature-id")
-   ```
+1. **Find next feature**: Call `get_next_feature()` — it returns the next pending feature with satisfied dependencies. If it says "no pending features", you're done.
 
-2. **Implement it** in `src/fixture/`
+2. **Claim it**: Call `start_feature(id="feature-id")` using the ID from step 1.
 
-3. **Write pytest tests** in `tests/`
+3. **Implement it** in `src/fixture/`
 
-4. **Verify**:
+4. **Write pytest tests** in `tests/`
+
+5. **Verify**:
    ```bash
    pytest -v
    ```
 
-5. **Complete it**:
-   ```python
-   fl = FeatureList("features.json")
-   fl.complete("feature-id")
-   ```
+6. **Record work**: Call `touch_feature(id="feature-id", note="implemented endpoints, 5 tests passing")`
 
-6. **Commit and push**:
+7. **Complete it**: Call `complete_feature(id="feature-id", tests_pass=true, notes="Added CRUD endpoints + tests")`
+
+8. **Share any discovered values**: If you discover environment info other agents need, call `set_state(key="DATABASE_URL", value="...")`. To read values another agent shared, call `get_state(key="CODESPACE_NAME")`.
+
+9. **Commit and push**:
    ```bash
    git add . && git commit -m "feat: implement [actual feature name here]" && git push
    ```
 
-7. Move to the next pending backend feature.
+10. Go back to step 1.
 
 ## Rules
 
 - Work ONLY in `src/` and `tests/` — do NOT touch `frontend/`
-- If a feature depends on another that is still `pending` or `in_progress`, skip it and come back later
+- `get_next_feature()` respects dependencies — it only returns features whose deps are met. If it returns nothing but features exist, they're blocked on other work.
 - Every router you create MUST be registered in `src/fixture/main.py` — import it and add `app.include_router(router, prefix="/api/...")`
-- Use `FeatureList` for all status updates — it uses file locking so concurrent access from other agents is safe
-- Create a fresh `FeatureList` instance for each status update (don't hold references across long operations)
+- Use the MCP tools (`start_feature`, `touch_feature`, `complete_feature`) for all status updates — they use file locking so concurrent access from other agents is safe
 - Do NOT mark a feature complete unless `pytest -v` passes
 - Commit messages MUST use the real feature name (e.g. "feat: implement tags-crud"),
   NEVER a placeholder like "<feature-name>"

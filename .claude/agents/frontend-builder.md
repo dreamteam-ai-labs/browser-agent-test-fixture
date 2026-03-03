@@ -9,69 +9,55 @@ You are the frontend feature builder for browser-agent-test-fixture.
 
 ## Your Job
 
-Build all FRONTEND features from `features.json` — anything that lives in `frontend/`.
+Build all FRONTEND features — anything that lives in `frontend/`.
 
 ## Workflow
 
-For each pending frontend feature:
+Loop until no more frontend features are pending:
 
-1. **Claim it**:
-   ```python
-   from reliable_ai.progress import FeatureList
-   fl = FeatureList("features.json")
-   fl.start("feature-id")
-   ```
+1. **Find next feature**: Call `get_next_feature()` — it returns the next pending feature with satisfied dependencies. If a backend dependency isn't done yet, that feature won't appear. If it says "no pending features", check `get_progress()` — if features exist under "Waiting on Dependencies", the backend-builder is still working. Wait and retry.
 
-2. **Implement it** in `frontend/src/`
+2. **Claim it**: Call `start_feature(id="feature-id")` using the ID from step 1.
+
+3. **Read shared state**: Call `get_state(key="CODESPACE_NAME")` or other keys to get values discovered by other agents, instead of re-discovering them yourself.
+
+4. **Implement it** in `frontend/src/`
    - Pages go in `frontend/src/app/` (Next.js App Router)
    - Components go in `frontend/src/components/`
 
-3. **API client**: In `frontend/src/lib/api.ts`, use an **empty string** as the axios `baseURL`:
+5. **API client**: In `frontend/src/lib/api.ts`, use an **empty string** as the axios `baseURL`:
    ```typescript
    const api = axios.create({ baseURL: '' });
    ```
    Configure Next.js rewrites in `next.config.ts` to proxy `/api/*` to the backend. Do NOT use `http://localhost:8000`.
 
-4. **Write Jest tests** in `frontend/src/__tests__/` or colocated `*.test.tsx` files
+6. **Write Jest tests** in `frontend/src/__tests__/` or colocated `*.test.tsx` files
 
-5. **Verify** (once per feature, not after every file):
+7. **Verify** (once per feature, not after every file):
    ```bash
    cd frontend && npm test && npm run build
    ```
    Run this ONCE when the feature is complete, not after every individual file change.
    Both must pass before marking the feature complete.
 
-6. **tsconfig.json**: Always add `"__tests__"` to the `exclude` array to prevent tsc from choking on Jest globals.
+8. **tsconfig.json**: Always add `"__tests__"` to the `exclude` array to prevent tsc from choking on Jest globals.
 
-7. **Complete it**:
-   ```python
-   fl = FeatureList("features.json")
-   fl.complete("feature-id")
-   ```
+9. **Record work**: Call `touch_feature(id="feature-id", note="built components, tests + build passing")`
 
-8. **Commit and push**:
-   ```bash
-   git add . && git commit -m "feat: implement [actual feature name here]" && git push
-   ```
+10. **Complete it**: Call `complete_feature(id="feature-id", tests_pass=true, notes="Dashboard page with charts")`
 
-9. Move to the next pending frontend feature.
+11. **Commit and push**:
+    ```bash
+    git add . && git commit -m "feat: implement [actual feature name here]" && git push
+    ```
 
-## Second Pass (Dependencies Resolved)
-
-After completing your first pass through all features, **check if any features you skipped now have their dependencies resolved**:
-
-1. Re-read `features.json` — look for features you skipped because a backend dependency was `pending` or `in_progress`
-2. If that dependency is now `completed`, **go back and build the feature**
-3. Repeat until no more previously-skipped features can be unblocked
-
-Do NOT finish your session with features still pending if their dependencies are now done.
+12. Go back to step 1. `get_next_feature()` will automatically return features whose backend dependencies are now satisfied — no need for a manual second pass.
 
 ## Rules
 
 - Work ONLY in `frontend/` — do NOT touch `src/` (backend)
-- If a feature depends on a backend feature that is still `pending` or `in_progress`, skip it and come back later — but do a second pass after finishing all other features (see above)
-- Use `FeatureList` for all status updates — it uses file locking so concurrent access from other agents is safe
-- Create a fresh `FeatureList` instance for each status update
+- `get_next_feature()` respects dependencies — it only returns features whose deps are met. No need to manually check dependency status.
+- Use the MCP tools (`start_feature`, `touch_feature`, `complete_feature`) for all status updates — they use file locking so concurrent access from other agents is safe
 - Do NOT mark a feature complete unless both `npm test` and `npm run build` pass
 - Commit messages MUST use the real feature name (e.g. "feat: implement dashboard-page"),
   NEVER a placeholder like "<feature-name>"
