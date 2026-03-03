@@ -1,7 +1,7 @@
 {
   "project": "browser-agent-test-fixture-environment-setup",
   "version": "0.1.0",
-  "last_updated": "2026-03-02T19:00:49.799Z",
+  "last_updated": "2026-03-03T12:43:24.576Z",
   "features": [
     {
       "id": "verify-anthropic-api",
