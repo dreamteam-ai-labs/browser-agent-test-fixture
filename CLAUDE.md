@@ -136,7 +136,7 @@ The MCP server enforces: `start_feature` must be called before `complete_feature
 
 ## reliable-ai Integration
 
-This project uses reliable-ai's MCP server for feature tracking and coordination. The server is registered in `.claude/settings.json` and provides 7 tools:
+This project uses reliable-ai's MCP server for feature tracking and coordination. The server is registered in `.mcp.json` and provides 7 tools:
 
 | Tool | Purpose |
 |------|---------|

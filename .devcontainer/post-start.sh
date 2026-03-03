@@ -102,37 +102,19 @@ else
     echo "  ℹ️  Linear API key not configured"
 fi
 
-# 5. Configure MCP servers for Claude Code
+# 5. Verify MCP servers configured
 echo ""
-echo "🔧 Configuring MCP servers for Claude Code..."
+echo "🔧 Verifying MCP servers..."
+if [ -f ".mcp.json" ]; then
+    echo "  ✅ .mcp.json found — MCP servers configured (reliable-ai, filesystem, code-search)"
+else
+    echo "  ⚠️  .mcp.json not found — MCP servers may not be available"
+fi
 
-# Check if Claude CLI is available
+# Ensure Claude CLI is available
 if ! command -v claude &> /dev/null; then
     echo "📦 Installing Claude Code CLI..."
     npm install -g @anthropic-ai/claude-code || echo "⚠️  Could not install Claude CLI"
-fi
-
-# If Claude CLI is available, register MCP servers
-if command -v claude &> /dev/null; then
-    # Helper function to add MCP server if not exists
-    add_mcp_if_missing() {
-        local name=$1
-        shift  # Remove first argument, rest are the command and args
-        if ! claude mcp list 2>/dev/null | grep -q "$name"; then
-            claude mcp add "$name" "$@" 2>/dev/null && echo "  ✅ Added $name MCP server" || echo "  ⚠️  Failed to add $name"
-        else
-            echo "  ℹ️  $name MCP server already configured"
-        fi
-    }
-
-    # Add MCP servers
-    add_mcp_if_missing "filesystem" npx '@modelcontextprotocol/server-filesystem'
-    add_mcp_if_missing "code-search" npx 'mcp-ripgrep@latest'
-    add_mcp_if_missing "git" npx '@cyanheads/git-mcp-server'
-
-    echo "  📋 MCP servers configured. Run 'claude mcp list' to verify"
-else
-    echo "  ⚠️  Claude CLI not available - MCP servers not configured"
 fi
 
 # 6. Show project status

@@ -26,6 +26,7 @@ This directory contains Claude Code configurations for browser-agent-test-fixtur
 - **UserMessagePost**: Auto-creates GitHub issues when Claude encounters problems
 
 ### MCP Servers (from `.mcp.json`)
+- **reliable-ai**: Feature tracking and coordination (get_progress, start_feature, complete_feature, etc.)
 - **filesystem**: Sandboxed file access
 - **code-search**: Fast code search via ripgrep
 
