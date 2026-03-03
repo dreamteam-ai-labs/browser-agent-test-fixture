@@ -1,19 +1,19 @@
 {
-  "timestamp": "2026-03-03T18:55:08Z",
+  "timestamp": "2026-03-03T18:57:41Z",
   "auth": {
     "success": true,
-    "email": "qa-tester-1772564108@test.example.com",
+    "email": "qa-tester-1772564261@test.example.com",
     "password": "TestPass123!",
     "steps": {
       "register": {
         "status": 200,
         "response": {
           "user": {
-            "id": 3,
-            "email": "qa-tester-1772564108@test.example.com",
+            "id": 4,
+            "email": "qa-tester-1772564261@test.example.com",
             "display_name": "QA Tester"
           },
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3MjU2NDEwOEB0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzcyNjUwNTA4fQ.DzxI5iemqJQTzjTBx8mE0sQtQLVr5TYe8gB-EkCUpQU"
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0IiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3MjU2NDI2MUB0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzcyNjUwNjYyfQ.2IhgvT80rptXD6XXIGjJz9mee5tVIZ5qcPJeVoJoVYI"
         }
       },
       "login": {
