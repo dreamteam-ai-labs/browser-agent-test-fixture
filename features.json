@@ -1,7 +1,7 @@
 {
   "project": "browser-agent-test-fixture",
   "version": "0.1.0",
-  "last_updated": "2026-03-03T13:54:40.214737",
+  "last_updated": "2026-03-03T16:41:52.873927",
   "features": [
     {
       "id": "database-schema",
@@ -18,26 +18,13 @@
       "metadata": {
         "complexity": "medium",
         "category": "Data",
-        "priority": "high",
-        "completion_warning": "Completed in 7s (threshold: 600s)"
+        "priority": "high"
       },
-      "started_at": "2026-03-03T13:53:00.723616",
-      "completed_at": "2026-03-03T13:53:08.021521",
-      "iteration_count": 2,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-03T13:53:05.411288",
-          "note": "Validated: User, Project, Task models importable. All relationships defined. 26 tests pass including test_models.py."
-        },
-        {
-          "iteration": 2,
-          "timestamp": "2026-03-03T13:53:08.021523",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "Models User, Project, Task all importable. Relationships defined (owner, projects, tasks). All 26 pytest tests pass."
+      "started_at": null,
+      "completed_at": null,
+      "iteration_count": 0,
+      "work_history": [],
+      "completion_notes": null
     },
     {
       "id": "frontend-setup",
@@ -55,26 +42,13 @@
       "metadata": {
         "complexity": "medium",
         "category": "Frontend",
-        "priority": "high",
-        "completion_warning": "Completed in 64s (threshold: 600s)"
+        "priority": "high"
       },
-      "started_at": "2026-03-03T13:53:11.274689",
-      "completed_at": "2026-03-03T13:54:15.393764",
-      "iteration_count": 2,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-03T13:54:11.245716",
-          "note": "Next.js 14 build succeeds. All pages rendered: login, register, dashboard, projects, tasks. Static export to frontend/out/."
-        },
-        {
-          "iteration": 2,
-          "timestamp": "2026-03-03T13:54:15.393765",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "Next.js 14 production build succeeds. 9 routes generated. next.config.mjs used. Static export configured."
+      "started_at": null,
+      "completed_at": null,
+      "iteration_count": 0,
+      "work_history": [],
+      "completion_notes": null
     },
     {
       "id": "health-endpoint",
@@ -92,26 +66,13 @@
       "metadata": {
         "complexity": "simple",
         "category": "API",
-        "priority": "high",
-        "completion_warning": "Completed in 58s (threshold: 600s)"
+        "priority": "high"
       },
-      "started_at": "2026-03-03T13:53:10.829558",
-      "completed_at": "2026-03-03T13:54:08.973077",
-      "iteration_count": 2,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-03T13:53:22.638377",
-          "note": "Health endpoint returns 200 with status healthy. Server starts successfully."
-        },
-        {
-          "iteration": 2,
-          "timestamp": "2026-03-03T13:54:08.973078",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "GET /api/health returns 200 with status healthy. test_health.py passes."
+      "started_at": null,
+      "completed_at": null,
+      "iteration_count": 0,
+      "work_history": [],
+      "completion_notes": null
     },
     {
       "id": "user-auth",
@@ -130,32 +91,19 @@
       "metadata": {
         "complexity": "complex",
         "category": "Auth",
-        "priority": "high",
-        "completion_warning": "Completed in 63s (threshold: 600s)"
+        "priority": "high"
       },
-      "started_at": "2026-03-03T13:53:11.103255",
-      "completed_at": "2026-03-03T13:54:14.052789",
-      "iteration_count": 2,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-03T13:54:10.241510",
-          "note": "Register creates user with JWT, login returns token, /api/users/me returns profile, unauthenticated requests rejected. 7 auth tests pass."
-        },
-        {
-          "iteration": 2,
-          "timestamp": "2026-03-03T13:54:14.052790",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "Register/login/JWT/protected routes all working. 7 auth tests pass including test_me_unauthenticated (401)."
+      "started_at": null,
+      "completed_at": null,
+      "iteration_count": 0,
+      "work_history": [],
+      "completion_notes": null
     },
     {
       "id": "dashboard",
       "name": "Dashboard",
       "description": "Overview page at /dashboard showing project and task counts with quick links.",
-      "status": "completed",
+      "status": "in_progress",
       "phase": 2,
       "files": [
         "frontend/src/app/dashboard/page.tsx"
@@ -164,36 +112,23 @@
         "user-auth",
         "frontend-setup"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "metadata": {
         "complexity": "simple",
         "category": "Frontend",
-        "priority": "low",
-        "completion_warning": "Completed in 22s (threshold: 600s)"
+        "priority": "low"
       },
-      "started_at": "2026-03-03T13:54:17.866198",
-      "completed_at": "2026-03-03T13:54:39.611746",
-      "iteration_count": 2,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-03T13:54:34.239625",
-          "note": "frontend/src/app/dashboard/page.tsx exists. Rendered in production build (/dashboard route). Frontend build succeeds."
-        },
-        {
-          "iteration": 2,
-          "timestamp": "2026-03-03T13:54:39.611747",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "dashboard/page.tsx exists and renders in production build at /dashboard route."
+      "started_at": "2026-03-03T16:41:40.335158",
+      "completed_at": null,
+      "iteration_count": 0,
+      "work_history": [],
+      "completion_notes": null
     },
     {
       "id": "navigation",
       "name": "Navigation and Layout",
       "description": "Sidebar navigation with route highlighting and logout button. AuthGuard component protects authenticated routes. Layout component wraps all authenticated pages.",
-      "status": "completed",
+      "status": "pending",
       "phase": 2,
       "files": [
         "frontend/src/components/Sidebar.tsx",
@@ -204,30 +139,17 @@
         "user-auth",
         "frontend-setup"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "metadata": {
         "complexity": "simple",
         "category": "Frontend",
-        "priority": "low",
-        "completion_warning": "Completed in 22s (threshold: 600s)"
+        "priority": "low"
       },
-      "started_at": "2026-03-03T13:54:18.103402",
-      "completed_at": "2026-03-03T13:54:40.214729",
-      "iteration_count": 2,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-03T13:54:35.226847",
-          "note": "Sidebar.tsx, AuthGuard.tsx, Layout.tsx all exist in frontend/src/components/. All compiled successfully in production build."
-        },
-        {
-          "iteration": 2,
-          "timestamp": "2026-03-03T13:54:40.214730",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "Sidebar.tsx, AuthGuard.tsx, Layout.tsx all exist and compiled in production build."
+      "started_at": null,
+      "completed_at": null,
+      "iteration_count": 0,
+      "work_history": [],
+      "completion_notes": null
     },
     {
       "id": "project-management",
@@ -249,31 +171,31 @@
         "complexity": "medium",
         "category": "Feature",
         "priority": "medium",
-        "completion_warning": "Completed in 21s (threshold: 600s)"
+        "completion_warning": "Completed in 10s (threshold: 600s)"
       },
-      "started_at": "2026-03-03T13:54:17.252171",
-      "completed_at": "2026-03-03T13:54:37.949347",
+      "started_at": "2026-03-03T16:41:42.860744",
+      "completed_at": "2026-03-03T16:41:52.873919",
       "iteration_count": 2,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-03T13:54:32.625742",
-          "note": "Full CRUD validated: create (201), list (200), get single (200), delete (204). Auth enforced. 7 project tests pass."
+          "timestamp": "2026-03-03T16:41:49.921462",
+          "note": "Validated: routers/projects.py has all CRUD endpoints (POST, GET list, GET by id, DELETE) with auth enforcement and user isolation. 6 tests in test_projects.py all pass."
         },
         {
           "iteration": 2,
-          "timestamp": "2026-03-03T13:54:37.949349",
+          "timestamp": "2026-03-03T16:41:52.873920",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "Full CRUD working. Frontend pages at /projects and /projects/new. 7 pytest tests pass."
+      "completion_notes": "Validated existing implementation: routers/projects.py implements full CRUD with auth enforcement and user isolation. All 6 project tests pass (26 total)."
     },
     {
       "id": "task-management",
       "name": "Task Management",
       "description": "Full CRUD for tasks with project assignment. POST /api/tasks creates task with project_id. GET /api/tasks lists user's tasks. DELETE /api/tasks/{id} removes task. Frontend pages: /tasks (list), /tasks/new (create form with project selector).",
-      "status": "completed",
+      "status": "pending",
       "phase": 2,
       "files": [
         "src/fixture/routers/tasks.py",
@@ -285,30 +207,17 @@
         "project-management",
         "frontend-setup"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "metadata": {
         "complexity": "medium",
         "category": "Feature",
-        "priority": "medium",
-        "completion_warning": "Completed in 21s (threshold: 600s)"
+        "priority": "medium"
       },
-      "started_at": "2026-03-03T13:54:17.550894",
-      "completed_at": "2026-03-03T13:54:38.796363",
-      "iteration_count": 2,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-03T13:54:33.561122",
-          "note": "Full CRUD validated: create with project_id (201), list (200), get single (200), delete (204). Auth enforced. 8 task tests pass."
-        },
-        {
-          "iteration": 2,
-          "timestamp": "2026-03-03T13:54:38.796364",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "Full CRUD working. project_id assignment working. Frontend pages at /tasks and /tasks/new. 8 pytest tests pass."
+      "started_at": null,
+      "completed_at": null,
+      "iteration_count": 0,
+      "work_history": [],
+      "completion_notes": null
     }
   ]
 }
