@@ -1,7 +1,7 @@
 {
   "project": "browser-agent-test-fixture",
   "version": "0.1.0",
-  "last_updated": "2026-03-03T12:46:21.359702",
+  "last_updated": "2026-03-03T13:54:40.214737",
   "features": [
     {
       "id": "database-schema",
@@ -19,25 +19,25 @@
         "complexity": "medium",
         "category": "Data",
         "priority": "high",
-        "completion_warning": "Completed in 4s (threshold: 600s)"
+        "completion_warning": "Completed in 7s (threshold: 600s)"
       },
-      "started_at": "2026-03-03T12:45:30.834871",
-      "completed_at": "2026-03-03T12:45:35.293069",
+      "started_at": "2026-03-03T13:53:00.723616",
+      "completed_at": "2026-03-03T13:53:08.021521",
       "iteration_count": 2,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-03T12:45:33.234712",
-          "note": "Validated: User, Project, Task models importable. All 3 model tests pass (test_models.py). SQLite with file-based storage confirmed."
+          "timestamp": "2026-03-03T13:53:05.411288",
+          "note": "Validated: User, Project, Task models importable. All relationships defined. 26 tests pass including test_models.py."
         },
         {
           "iteration": 2,
-          "timestamp": "2026-03-03T12:45:35.293070",
+          "timestamp": "2026-03-03T13:53:08.021523",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "Models importable, all 3 model tests pass, relationships defined"
+      "completion_notes": "Models User, Project, Task all importable. Relationships defined (owner, projects, tasks). All 26 pytest tests pass."
     },
     {
       "id": "frontend-setup",
@@ -56,25 +56,25 @@
         "complexity": "medium",
         "category": "Frontend",
         "priority": "high",
-        "completion_warning": "Completed in 5s (threshold: 600s)"
+        "completion_warning": "Completed in 64s (threshold: 600s)"
       },
-      "started_at": "2026-03-03T12:45:47.709844",
-      "completed_at": "2026-03-03T12:45:52.528294",
+      "started_at": "2026-03-03T13:53:11.274689",
+      "completed_at": "2026-03-03T13:54:15.393764",
       "iteration_count": 2,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-03T12:45:50.514229",
-          "note": "Validated: NODE_ENV=production npm run build succeeds. All 9 routes built (/, /dashboard, /login, /register, /projects, /projects/new, /tasks, /tasks/new, /_not-found). api.ts uses empty baseURL. next.config.mjs present."
+          "timestamp": "2026-03-03T13:54:11.245716",
+          "note": "Next.js 14 build succeeds. All pages rendered: login, register, dashboard, projects, tasks. Static export to frontend/out/."
         },
         {
           "iteration": 2,
-          "timestamp": "2026-03-03T12:45:52.528295",
+          "timestamp": "2026-03-03T13:54:15.393765",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "Production build succeeds. 9 static routes built. App Router structure with all required pages."
+      "completion_notes": "Next.js 14 production build succeeds. 9 routes generated. next.config.mjs used. Static export configured."
     },
     {
       "id": "health-endpoint",
@@ -93,25 +93,25 @@
         "complexity": "simple",
         "category": "API",
         "priority": "high",
-        "completion_warning": "Completed in 4s (threshold: 600s)"
+        "completion_warning": "Completed in 58s (threshold: 600s)"
       },
-      "started_at": "2026-03-03T12:45:36.923427",
-      "completed_at": "2026-03-03T12:45:40.757774",
+      "started_at": "2026-03-03T13:53:10.829558",
+      "completed_at": "2026-03-03T13:54:08.973077",
       "iteration_count": 2,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-03T12:45:38.920428",
-          "note": "Validated: GET /api/health returns {status: healthy, version: 1.0.0, ...}. test_health.py passes."
+          "timestamp": "2026-03-03T13:53:22.638377",
+          "note": "Health endpoint returns 200 with status healthy. Server starts successfully."
         },
         {
           "iteration": 2,
-          "timestamp": "2026-03-03T12:45:40.757776",
+          "timestamp": "2026-03-03T13:54:08.973078",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "Health endpoint returns 200 with status healthy. test_health.py passes."
+      "completion_notes": "GET /api/health returns 200 with status healthy. test_health.py passes."
     },
     {
       "id": "user-auth",
@@ -131,25 +131,25 @@
         "complexity": "complex",
         "category": "Auth",
         "priority": "high",
-        "completion_warning": "Completed in 4s (threshold: 600s)"
+        "completion_warning": "Completed in 63s (threshold: 600s)"
       },
-      "started_at": "2026-03-03T12:45:41.950289",
-      "completed_at": "2026-03-03T12:45:46.293650",
+      "started_at": "2026-03-03T13:53:11.103255",
+      "completed_at": "2026-03-03T13:54:14.052789",
       "iteration_count": 2,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-03T12:45:44.391012",
-          "note": "Validated: POST /api/auth/register creates user with bcrypt hash, returns JWT. POST /api/auth/login validates and returns token. GET /api/users/me works. 7 auth tests pass."
+          "timestamp": "2026-03-03T13:54:10.241510",
+          "note": "Register creates user with JWT, login returns token, /api/users/me returns profile, unauthenticated requests rejected. 7 auth tests pass."
         },
         {
           "iteration": 2,
-          "timestamp": "2026-03-03T12:45:46.293652",
+          "timestamp": "2026-03-03T13:54:14.052790",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "Register, login, /users/me all working. JWT middleware enforced. 7 tests pass."
+      "completion_notes": "Register/login/JWT/protected routes all working. 7 auth tests pass including test_me_unauthenticated (401)."
     },
     {
       "id": "dashboard",
@@ -169,25 +169,25 @@
         "complexity": "simple",
         "category": "Frontend",
         "priority": "low",
-        "completion_warning": "Completed in 4s (threshold: 600s)"
+        "completion_warning": "Completed in 22s (threshold: 600s)"
       },
-      "started_at": "2026-03-03T12:46:10.483261",
-      "completed_at": "2026-03-03T12:46:14.798096",
+      "started_at": "2026-03-03T13:54:17.866198",
+      "completed_at": "2026-03-03T13:54:39.611746",
       "iteration_count": 2,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-03T12:46:12.828208",
-          "note": "Validated: frontend/src/app/dashboard/page.tsx exists. /dashboard route included in production build output (1.47 kB). Shows project/task counts with quick links."
+          "timestamp": "2026-03-03T13:54:34.239625",
+          "note": "frontend/src/app/dashboard/page.tsx exists. Rendered in production build (/dashboard route). Frontend build succeeds."
         },
         {
           "iteration": 2,
-          "timestamp": "2026-03-03T12:46:14.798098",
+          "timestamp": "2026-03-03T13:54:39.611747",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "Dashboard page exists and builds successfully. Overview page with project/task counts."
+      "completion_notes": "dashboard/page.tsx exists and renders in production build at /dashboard route."
     },
     {
       "id": "navigation",
@@ -209,25 +209,25 @@
         "complexity": "simple",
         "category": "Frontend",
         "priority": "low",
-        "completion_warning": "Completed in 4s (threshold: 600s)"
+        "completion_warning": "Completed in 22s (threshold: 600s)"
       },
-      "started_at": "2026-03-03T12:46:17.160779",
-      "completed_at": "2026-03-03T12:46:21.359675",
+      "started_at": "2026-03-03T13:54:18.103402",
+      "completed_at": "2026-03-03T13:54:40.214729",
       "iteration_count": 2,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-03T12:46:19.502123",
-          "note": "Validated: Sidebar.tsx, AuthGuard.tsx, Layout.tsx all exist in frontend/src/components/. Components used in authenticated pages. Build succeeds with all routes properly wrapped."
+          "timestamp": "2026-03-03T13:54:35.226847",
+          "note": "Sidebar.tsx, AuthGuard.tsx, Layout.tsx all exist in frontend/src/components/. All compiled successfully in production build."
         },
         {
           "iteration": 2,
-          "timestamp": "2026-03-03T12:46:21.359676",
+          "timestamp": "2026-03-03T13:54:40.214730",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "Sidebar, AuthGuard, Layout components all exist. Build includes all authenticated routes."
+      "completion_notes": "Sidebar.tsx, AuthGuard.tsx, Layout.tsx all exist and compiled in production build."
     },
     {
       "id": "project-management",
@@ -249,25 +249,25 @@
         "complexity": "medium",
         "category": "Feature",
         "priority": "medium",
-        "completion_warning": "Completed in 5s (threshold: 600s)"
+        "completion_warning": "Completed in 21s (threshold: 600s)"
       },
-      "started_at": "2026-03-03T12:45:55.687196",
-      "completed_at": "2026-03-03T12:46:00.465589",
+      "started_at": "2026-03-03T13:54:17.252171",
+      "completed_at": "2026-03-03T13:54:37.949347",
       "iteration_count": 2,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-03T12:45:58.679177",
-          "note": "Validated: POST/GET/GET{id}/DELETE /api/projects all work. Auth enforced. Project isolation confirmed. 8 project tests pass. Frontend pages: /projects, /projects/new exist in build output."
+          "timestamp": "2026-03-03T13:54:32.625742",
+          "note": "Full CRUD validated: create (201), list (200), get single (200), delete (204). Auth enforced. 7 project tests pass."
         },
         {
           "iteration": 2,
-          "timestamp": "2026-03-03T12:46:00.465590",
+          "timestamp": "2026-03-03T13:54:37.949349",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "Full CRUD working, auth enforced, isolation tested. 8 tests pass."
+      "completion_notes": "Full CRUD working. Frontend pages at /projects and /projects/new. 7 pytest tests pass."
     },
     {
       "id": "task-management",
@@ -290,25 +290,25 @@
         "complexity": "medium",
         "category": "Feature",
         "priority": "medium",
-        "completion_warning": "Completed in 5s (threshold: 600s)"
+        "completion_warning": "Completed in 21s (threshold: 600s)"
       },
-      "started_at": "2026-03-03T12:46:03.503361",
-      "completed_at": "2026-03-03T12:46:08.017447",
+      "started_at": "2026-03-03T13:54:17.550894",
+      "completed_at": "2026-03-03T13:54:38.796363",
       "iteration_count": 2,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-03T12:46:05.775573",
-          "note": "Validated: POST/GET/GET{id}/DELETE /api/tasks all work. Project assignment (project_id) confirmed. Auth enforced. Task isolation confirmed. 8 task tests pass. Frontend pages: /tasks, /tasks/new exist in build."
+          "timestamp": "2026-03-03T13:54:33.561122",
+          "note": "Full CRUD validated: create with project_id (201), list (200), get single (200), delete (204). Auth enforced. 8 task tests pass."
         },
         {
           "iteration": 2,
-          "timestamp": "2026-03-03T12:46:08.017448",
+          "timestamp": "2026-03-03T13:54:38.796364",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "Full CRUD with project assignment working. 8 tests pass."
+      "completion_notes": "Full CRUD working. project_id assignment working. Frontend pages at /tasks and /tasks/new. 8 pytest tests pass."
     }
   ]
 }
