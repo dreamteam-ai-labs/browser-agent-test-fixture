@@ -13,9 +13,10 @@ pip install hatchling setuptools wheel
 # 2. Install reliable-ai library (before project deps that depend on it)
 echo "[2/5] Installing reliable-ai..."
 
-# Check for tokens in both forms since post-create runs before CODESPACE_ mapping
-RELIABLE_AI_TOKEN="${RELIABLE_AI_TOKEN:-${CODESPACE_RELIABLE_AI_TOKEN}}"
-GITHUB_TOKEN="${GITHUB_TOKEN:-${CODESPACE_GITHUB_TOKEN}}"
+# Prefer CODESPACE_ secrets (user PAT with org access) over the auto-injected
+# GITHUB_TOKEN (scoped only to the current repo, can't reach reliable-ai)
+RELIABLE_AI_TOKEN="${CODESPACE_RELIABLE_AI_TOKEN:-${RELIABLE_AI_TOKEN}}"
+GITHUB_TOKEN="${CODESPACE_GITHUB_TOKEN:-${GITHUB_TOKEN}}"
 
 # Try multiple installation methods in order of preference:
 # 1. PyPI (if published)
