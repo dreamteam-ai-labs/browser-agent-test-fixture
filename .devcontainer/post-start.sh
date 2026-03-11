@@ -20,6 +20,16 @@ for var in $(env | grep '^CODESPACE_' | cut -d= -f1); do
     echo "export $unprefixed_name='${!var}'" >> ~/.dreamteam_env
 done
 
+# 1.1. Preserve CODESPACE_NAME for scripts that need the display name
+#      (e.g. qa-smoke-test.py constructs https://{CODESPACE_NAME}-{port}.app.github.dev)
+#      The built-in CODESPACE_NAME is the container hostname, not the display name.
+#      The CODESPACE_ mapping above gives us NAME=<display-name>, so re-export it.
+if [ -n "$NAME" ]; then
+    export CODESPACE_NAME="$NAME"
+    echo "export CODESPACE_NAME='$NAME'" >> ~/.dreamteam_env
+    echo "  ✅ CODESPACE_NAME preserved as $NAME"
+fi
+
 # 1.5. Set dynamic variables generated during project creation
 echo ""
 echo "🎯 Setting dynamic project variables..."
