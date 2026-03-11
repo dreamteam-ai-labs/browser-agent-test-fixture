@@ -6,6 +6,20 @@ set -e
 
 echo "=== browser-agent-test-fixture Codespace Setup ==="
 
+# Codespace secrets live in a base64-encoded file that only gets sourced for
+# SSH sessions (via /etc/profile.d/codespaces.sh). post-create.sh runs before
+# any SSH session, so we load them here using the same approach.
+SECRETS_FILE="/workspaces/.codespaces/shared/.env-secrets"
+if [ -z "$CODESPACE_GITHUB_TOKEN" ] && [ -f "$SECRETS_FILE" ]; then
+    echo "  Loading codespace secrets from $SECRETS_FILE..."
+    while read line; do
+        key=$(echo $line | sed "s/=.*//")
+        value=$(echo $line | sed "s/$key=//1")
+        decodedValue=$(echo $value | base64 -d)
+        export $key="$decodedValue"
+    done < "$SECRETS_FILE"
+fi
+
 # 1. Install build dependencies first
 echo "[1/5] Installing build dependencies..."
 pip install hatchling setuptools wheel
