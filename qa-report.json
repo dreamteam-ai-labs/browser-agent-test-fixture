@@ -1,23 +1,15 @@
 {
-  "timestamp": "2026-03-03T19:40:50.708911Z",
-  "iteration": 2,
+  "timestamp": "2026-03-11T22:27:30.448855Z",
+  "iteration": 3,
   "backend_health": "PASS",
   "frontend_health": "PASS",
   "auth_flow": {
     "success": true,
-    "email": "qa-tester-1772566639@test.example.com",
+    "email": "qa-browser-test@example.com",
     "password": "TestPass123!",
     "steps": {
       "register": {
-        "status": 200,
-        "response": {
-          "user": {
-            "id": 3,
-            "email": "qa-tester-1772566639@test.example.com",
-            "display_name": "QA Tester"
-          },
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3MjU2NjYzOUB0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzcyNjUzMDM5fQ.YUyj5ZqoXf4kKdZ8WUdaYaNdsqq25p1R5axVO9wb_oA"
-        }
+        "status": 200
       },
       "login": {
         "status": 200
@@ -34,19 +26,19 @@
       "login": "PASS",
       "token_works": "PASS"
     },
-    "features_tested": 4,
-    "features_passed": 4,
+    "features_tested": 3,
+    "features_passed": 3,
     "features_failed": 0,
     "flows": [
       {
-        "feature": "user-auth",
+        "feature": "user-authentication",
         "steps": [
           {
             "action": "REGISTER",
             "endpoint": "POST /api/auth/register",
             "status": 200,
             "result": "PASS",
-            "resource_id": "2"
+            "resource_id": "user-2"
           },
           {
             "action": "LOGIN",
@@ -78,7 +70,11 @@
             "status": 201,
             "result": "PASS",
             "resource_id": "1",
-            "request_body": "{\"name\":\"QA Test Project\",\"description\":\"Project created by QA testing\",\"color\":\"#ff5500\"}"
+            "body_sent": {
+              "name": "Test Project Alpha",
+              "description": "QA test project",
+              "color": "#ff0000"
+            }
           },
           {
             "action": "READ",
@@ -106,19 +102,30 @@
             "result": "PASS"
           }
         ],
-        "overall": "PASS",
-        "note": "No PUT/PATCH endpoint exists in projects router - only GET, POST, GET/{id}, DELETE/{id}"
+        "overall": "PASS"
       },
       {
         "feature": "task-management",
         "steps": [
+          {
+            "action": "SETUP",
+            "endpoint": "POST /api/projects",
+            "status": 201,
+            "result": "PASS",
+            "resource_id": "1",
+            "note": "created parent project"
+          },
           {
             "action": "CREATE",
             "endpoint": "POST /api/tasks",
             "status": 201,
             "result": "PASS",
             "resource_id": "1",
-            "request_body": "{\"title\":\"QA Test Task\",\"project_id\":1,\"status\":\"todo\"}"
+            "body_sent": {
+              "title": "QA Test Task",
+              "project_id": 1,
+              "status": "todo"
+            }
           },
           {
             "action": "READ",
@@ -146,209 +153,11 @@
             "result": "PASS"
           }
         ],
-        "overall": "PASS",
-        "note": "No PUT/PATCH endpoint exists in tasks router - only GET, POST, GET/{id}, DELETE/{id}"
-      },
-      {
-        "feature": "health-endpoint",
-        "steps": [
-          {
-            "action": "READ",
-            "endpoint": "GET /api/health",
-            "status": 200,
-            "result": "PASS"
-          }
-        ],
         "overall": "PASS"
       }
     ],
-    "critical_issues": [
-      "Browser smoke test FAILED: Login form at port 3000 (static Python http.server) cannot proxy /api/* requests to FastAPI at port 8000. The browser agent navigates to port 3000 and submits login credentials to /api/auth/login which resolves against port 3000, getting a 404. The FastAPI backend at port 8000 correctly serves both the static frontend AND the API, so the smoke test should use port 8000. The smoke test script hardcodes FRONTEND_PORT=3000 which is incorrect for a static export served via FastAPI."
-    ]
+    "critical_issues": []
   },
-  "browser_smoke_test": {
-    "overall": "fail",
-    "tests": [
-      {
-        "feature": "Login Page Access",
-        "status": "pass",
-        "notes": "Login page loads correctly with proper form fields and UI elements"
-      },
-      {
-        "feature": "Form Field Interaction",
-        "status": "pass",
-        "notes": "Email and password fields are interactive and accept input correctly"
-      },
-      {
-        "feature": "Input Validation",
-        "status": "pass",
-        "notes": "Form accepts valid email format and password input with proper masking"
-      },
-      {
-        "feature": "Login Authentication",
-        "status": "fail",
-        "notes": "Multiple login attempts with correct credentials failed, showing 'Login failed' error message consistently"
-      },
-      {
-        "feature": "Error Message Display",
-        "status": "pass",
-        "notes": "Error messages are properly displayed in red alert box when login fails"
-      },
-      {
-        "feature": "UI Responsiveness",
-        "status": "pass",
-        "notes": "Form fields highlight appropriately on focus, buttons are clickable"
-      }
-    ],
-    "critical_issues": [
-      "Login functionality completely broken - valid credentials are rejected",
-      "Authentication system appears non-functional preventing access to application features"
-    ],
-    "login_successful": false,
-    "pages_tested": 1,
-    "total_issues": 1,
-    "service_reachable": true,
-    "screenshotUrls": [
-      {
-        "step": 0,
-        "action": "initial_load",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": null
-      },
-      {
-        "step": 1,
-        "action": "screenshot",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/b8lqkj.png"
-      },
-      {
-        "step": 2,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/vaxe30.png"
-      },
-      {
-        "step": 3,
-        "action": "key",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/38pkz8.png"
-      },
-      {
-        "step": 4,
-        "action": "type",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/59llix.png"
-      },
-      {
-        "step": 5,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/gjtfso.png"
-      },
-      {
-        "step": 6,
-        "action": "type",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/7if2b0.png"
-      },
-      {
-        "step": 7,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": null
-      },
-      {
-        "step": 8,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/3tck6s.png"
-      },
-      {
-        "step": 9,
-        "action": "key",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/hb46ma.png"
-      },
-      {
-        "step": 10,
-        "action": "type",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/4kj5rc.png"
-      },
-      {
-        "step": 11,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/ywlrlm.png"
-      },
-      {
-        "step": 12,
-        "action": "key",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/b8rblu.png"
-      },
-      {
-        "step": 13,
-        "action": "type",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/4r4raa.png"
-      },
-      {
-        "step": 14,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/qvx7ht.png"
-      },
-      {
-        "step": 15,
-        "action": "wait",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": null
-      }
-    ]
-  },
-  "frontend_pages": [
-    {
-      "page": "/",
-      "status": 200,
-      "result": "PASS"
-    },
-    {
-      "page": "/login",
-      "status": 200,
-      "result": "PASS (via 301 redirect to /login/)"
-    },
-    {
-      "page": "/register",
-      "status": 200,
-      "result": "PASS (via 301 redirect to /register/)"
-    },
-    {
-      "page": "/dashboard",
-      "status": 200,
-      "result": "PASS (via 301 redirect to /dashboard/)"
-    },
-    {
-      "page": "/projects",
-      "status": 200,
-      "result": "PASS (via 301 redirect to /projects/)"
-    },
-    {
-      "page": "/projects/new",
-      "status": 200,
-      "result": "PASS (via 301 redirect to /projects/new/)"
-    },
-    {
-      "page": "/tasks",
-      "status": 200,
-      "result": "PASS (via 301 redirect to /tasks/)"
-    },
-    {
-      "page": "/tasks/new",
-      "status": 200,
-      "result": "PASS (via 301 redirect to /tasks/new/)"
-    }
-  ],
   "pytest": {
     "total": 26,
     "passed": 26,
@@ -357,46 +166,123 @@
   },
   "frontend_build": {
     "result": "PASS",
-    "command": "cd frontend && NODE_ENV=production npm run build",
-    "pages_generated": 9
-  },
-  "endpoint_map": {
-    "auth": [
-      "POST /api/auth/register",
-      "POST /api/auth/login",
-      "GET /api/auth/me",
-      "GET /api/users/me (alias in main.py)"
-    ],
-    "projects": [
-      "GET /api/projects",
-      "POST /api/projects",
-      "GET /api/projects/{project_id}",
-      "DELETE /api/projects/{project_id}"
-    ],
-    "tasks": [
-      "GET /api/tasks",
-      "POST /api/tasks",
-      "GET /api/tasks/{task_id}",
-      "DELETE /api/tasks/{task_id}"
-    ],
-    "health": [
-      "GET /api/health"
-    ],
-    "admin": [
-      "POST /api/admin/reset"
+    "routes_compiled": 9,
+    "routes": [
+      "/",
+      "/_not-found",
+      "/dashboard",
+      "/login",
+      "/projects",
+      "/projects/new",
+      "/register",
+      "/tasks",
+      "/tasks/new"
     ]
   },
+  "browser_smoke_test": {
+    "overall": "pass",
+    "tests": [
+      {
+        "feature": "User Authentication",
+        "status": "pass",
+        "notes": "Login successful with provided credentials. Redirected to dashboard with proper user identification."
+      },
+      {
+        "feature": "Dashboard",
+        "status": "pass",
+        "notes": "Dashboard displays correctly with welcome message, user data, and project/task counts (0/0 for new account)."
+      },
+      {
+        "feature": "Navigation and Layout",
+        "status": "pass",
+        "notes": "Sidebar navigation works correctly. Successfully navigated between Dashboard and Projects pages with proper highlighting of active menu items."
+      },
+      {
+        "feature": "Project Management - UI",
+        "status": "pass",
+        "notes": "Project creation form displays correctly with all required fields (name, description, color selector). Form is accessible and functional."
+      },
+      {
+        "feature": "Project Management - Creation",
+        "status": "skip",
+        "notes": "Form fields tested and populated but project creation not completed due to session end. Form validation and submission pending."
+      },
+      {
+        "feature": "Task Management",
+        "status": "skip",
+        "notes": "Not tested - requires existing project to access task functionality."
+      },
+      {
+        "feature": "User Management",
+        "status": "skip",
+        "notes": "Not tested - logout functionality visible but not executed."
+      },
+      {
+        "feature": "Data Persistence",
+        "status": "skip",
+        "notes": "Not tested - requires completed CRUD operations to verify data persistence."
+      }
+    ],
+    "critical_issues": [],
+    "login_successful": true,
+    "pages_tested": 3,
+    "total_issues": 0
+  },
+  "frontend_pages": [
+    {
+      "path": "/",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "path": "/login",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "path": "/register",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "path": "/dashboard",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "path": "/projects",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "path": "/projects/new",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "path": "/tasks",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "path": "/tasks/new",
+      "status": 200,
+      "result": "PASS"
+    }
+  ],
+  "fixes_applied": [
+    "Added API rewrites to next.config.mjs for dev mode: /api/* proxied to localhost:8000 so browser login works via Codespace port 3000 URL"
+  ],
   "summary": {
     "endpoints_passed": 12,
     "endpoints_total": 12,
-    "features_functionally_passing": 4,
-    "features_functionally_tested": 4,
+    "features_functionally_passing": 3,
+    "features_functionally_tested": 3,
     "pages_passed": 8,
     "pages_total": 8,
     "pytest_passed": 26,
     "pytest_total": 26,
-    "critical_issues": [
-      "BROWSER SMOKE TEST FAILED: Browser agent navigates to port 3000 (Python http.server serving static files only). API calls from the login form go to port 3000 which has no /api/* routes, so login returns 404/connection error. Root cause: smoke test uses FRONTEND_PORT=3000 but the correct port to test is 8000 (FastAPI backend serves both static files and API). The FastAPI main.py mounts frontend/out at / so port 8000 is the unified entry point."
-    ]
+    "browser_smoke_overall": "pass",
+    "critical_issues": []
   }
 }

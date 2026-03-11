@@ -1,20 +1,12 @@
 {
-  "timestamp": "2026-03-03T19:37:19Z",
+  "timestamp": "2026-03-11T22:26:30Z",
   "auth": {
     "success": true,
-    "email": "qa-tester-1772566639@test.example.com",
+    "email": "qa-browser-test@example.com",
     "password": "TestPass123!",
     "steps": {
       "register": {
-        "status": 200,
-        "response": {
-          "user": {
-            "id": 3,
-            "email": "qa-tester-1772566639@test.example.com",
-            "display_name": "QA Tester"
-          },
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3MjU2NjYzOUB0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzcyNjUzMDM5fQ.YUyj5ZqoXf4kKdZ8WUdaYaNdsqq25p1R5axVO9wb_oA"
-        }
+        "status": 200
       },
       "login": {
         "status": 200
@@ -26,145 +18,53 @@
     "token_verified": true
   },
   "browser_smoke_test": {
-    "overall": "fail",
+    "overall": "pass",
     "tests": [
       {
-        "feature": "Login Page Access",
+        "feature": "User Authentication",
         "status": "pass",
-        "notes": "Login page loads correctly with proper form fields and UI elements"
+        "notes": "Login successful with provided credentials. Redirected to dashboard with proper user identification."
       },
       {
-        "feature": "Form Field Interaction",
+        "feature": "Dashboard",
         "status": "pass",
-        "notes": "Email and password fields are interactive and accept input correctly"
+        "notes": "Dashboard displays correctly with welcome message, user data, and project/task counts (0/0 for new account)."
       },
       {
-        "feature": "Input Validation",
+        "feature": "Navigation and Layout",
         "status": "pass",
-        "notes": "Form accepts valid email format and password input with proper masking"
+        "notes": "Sidebar navigation works correctly. Successfully navigated between Dashboard and Projects pages with proper highlighting of active menu items."
       },
       {
-        "feature": "Login Authentication",
-        "status": "fail",
-        "notes": "Multiple login attempts with correct credentials failed, showing 'Login failed' error message consistently"
+        "feature": "Project Management - UI",
+        "status": "pass",
+        "notes": "Project creation form displays correctly with all required fields (name, description, color selector). Form is accessible and functional."
       },
       {
-        "feature": "Error Message Display",
-        "status": "pass",
-        "notes": "Error messages are properly displayed in red alert box when login fails"
+        "feature": "Project Management - Creation",
+        "status": "skip",
+        "notes": "Form fields tested and populated but project creation not completed due to session end. Form validation and submission pending."
       },
       {
-        "feature": "UI Responsiveness",
-        "status": "pass",
-        "notes": "Form fields highlight appropriately on focus, buttons are clickable"
+        "feature": "Task Management",
+        "status": "skip",
+        "notes": "Not tested - requires existing project to access task functionality."
+      },
+      {
+        "feature": "User Management",
+        "status": "skip",
+        "notes": "Not tested - logout functionality visible but not executed."
+      },
+      {
+        "feature": "Data Persistence",
+        "status": "skip",
+        "notes": "Not tested - requires completed CRUD operations to verify data persistence."
       }
     ],
-    "critical_issues": [
-      "Login functionality completely broken - valid credentials are rejected",
-      "Authentication system appears non-functional preventing access to application features"
-    ],
-    "login_successful": false,
-    "pages_tested": 1,
-    "total_issues": 1,
-    "service_reachable": true,
-    "screenshotUrls": [
-      {
-        "step": 0,
-        "action": "initial_load",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": null
-      },
-      {
-        "step": 1,
-        "action": "screenshot",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/b8lqkj.png"
-      },
-      {
-        "step": 2,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/vaxe30.png"
-      },
-      {
-        "step": 3,
-        "action": "key",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/38pkz8.png"
-      },
-      {
-        "step": 4,
-        "action": "type",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/59llix.png"
-      },
-      {
-        "step": 5,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/gjtfso.png"
-      },
-      {
-        "step": 6,
-        "action": "type",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/7if2b0.png"
-      },
-      {
-        "step": 7,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": null
-      },
-      {
-        "step": 8,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/3tck6s.png"
-      },
-      {
-        "step": 9,
-        "action": "key",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/hb46ma.png"
-      },
-      {
-        "step": 10,
-        "action": "type",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/4kj5rc.png"
-      },
-      {
-        "step": 11,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/ywlrlm.png"
-      },
-      {
-        "step": 12,
-        "action": "key",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/b8rblu.png"
-      },
-      {
-        "step": 13,
-        "action": "type",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/4r4raa.png"
-      },
-      {
-        "step": 14,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/qvx7ht.png"
-      },
-      {
-        "step": 15,
-        "action": "wait",
-        "pageUrl": "https://fixture-harness-v6767x79x496fxp76-3000.app.github.dev/login/",
-        "imageUrl": null
-      }
-    ]
+    "critical_issues": [],
+    "login_successful": true,
+    "pages_tested": 3,
+    "total_issues": 0
   },
-  "exit_code": 1
+  "exit_code": 0
 }
