@@ -15,21 +15,20 @@
       "Bash(python:*)",
       "Bash(pip:*)",
       "Bash(pytest:*)",
-      "Bash(curl:*)",
-      "Bash(npm:*)",
-      "Bash(npx:*)",
-      "Bash(node:*)",
-      "Bash(cat:*)",
-      "Bash(ls:*)",
-      "Bash(cd:*)",
-      "Bash(git:*)"
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [
       "Read(.env*)",
       "Read(**/*.pem)",
       "Read(**/secrets/**)",
       "Bash(rm -rf:*)",
-      "Bash(git push --force:*)"
+      "Bash(git push --force:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)"
     ]
   },
   "env": {

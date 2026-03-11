@@ -174,10 +174,18 @@ def run_auth_test():
 
 
 def make_ports_public():
-    """Make codespace ports public. Returns frontend URL or error."""
+    """Make codespace ports public. Returns frontend URL or error.
+
+    If `gh codespace ports visibility` fails (e.g. GITHUB_TOKEN lacks codespace scope),
+    we still return the URL — the harness/factory loop already makes ports public
+    externally via ensurePortsPublic() before Claude starts.
+    """
     codespace = os.environ.get("CODESPACE_NAME")
     if not codespace:
         return {"success": False, "error": "CODESPACE_NAME env var not set — not in a codespace?"}
+
+    frontend_url = f"https://{codespace}-{FRONTEND_PORT}.app.github.dev"
+    login_url = f"{frontend_url}/login"
 
     log(f"Making ports public (codespace: {codespace})")
     try:
@@ -186,16 +194,11 @@ def make_ports_public():
              "8000:public", f"{FRONTEND_PORT}:public", "-c", codespace],
             capture_output=True, text=True, timeout=15, check=True,
         )
-    except subprocess.CalledProcessError as e:
-        return {"success": False, "error": f"gh ports failed: {e.stderr.strip()}"}
-    except FileNotFoundError:
-        return {"success": False, "error": "gh CLI not found"}
-    except subprocess.TimeoutExpired:
-        return {"success": False, "error": "gh ports timed out"}
+        log(f"  Ports set public via gh CLI")
+    except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired) as e:
+        detail = getattr(e, 'stderr', str(e)).strip() if hasattr(e, 'stderr') else str(e)
+        log(f"  gh ports command failed ({detail}) — assuming ports already public (set by harness)")
 
-    frontend_url = f"https://{codespace}-{FRONTEND_PORT}.app.github.dev"
-    # Point directly at /login to avoid client-side redirect destroying Puppeteer context
-    login_url = f"{frontend_url}/login"
     log(f"  Public URL: {frontend_url}")
     log(f"  Login URL:  {login_url}")
     return {"success": True, "frontend_url": login_url}
