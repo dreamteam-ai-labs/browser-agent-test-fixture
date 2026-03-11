@@ -1,18 +1,18 @@
 {
   "project": "browser-agent-test-fixture-environment-setup",
   "version": "0.1.0",
-  "last_updated": "2026-03-11T22:03:29.953Z",
+  "last_updated": "2026-03-11T22:17:05.000Z",
   "features": [
     {
       "id": "verify-anthropic-api",
       "name": "Verify Anthropic API Access",
       "phase": 0,
-      "status": "pending",
+      "status": "completed",
       "description": "Test Claude API connectivity and validate that reliable-ai library can access Anthropic services properly",
       "files": [
         "tests/integration/test_anthropic_api.py"
       ],
-      "tests_pass": false,
+      "tests_pass": true,
       "dependencies": [],
       "validation": {
         "test_command": "python3 -c \"import os; assert os.environ.get('ANTHROPIC_API_KEY'), 'ANTHROPIC_API_KEY not set'; print('OK')\"",
@@ -26,12 +26,12 @@
       "id": "verify-browser-agent",
       "name": "Verify Browser Agent Connectivity",
       "phase": 0,
-      "status": "pending",
+      "status": "completed",
       "description": "Verify the Claude browser agent smoke testing service is reachable from this codespace and that CODESPACE_NAME is set.",
       "files": [
         "tests/integration/test_browser_agent.py"
       ],
-      "tests_pass": false,
+      "tests_pass": true,
       "dependencies": [],
       "validation": {
         "test_command": "curl -sf https://claude-browser-agent.onrender.com/health",
