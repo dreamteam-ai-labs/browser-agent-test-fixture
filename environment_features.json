@@ -1,7 +1,7 @@
 {
   "project": "browser-agent-test-fixture-environment-setup",
   "version": "0.1.0",
-  "last_updated": "2026-03-12T16:58:10.260Z",
+  "last_updated": "2026-03-12T17:43:48.791Z",
   "features": [
     {
       "id": "verify-anthropic-api",
@@ -24,18 +24,18 @@
     },
     {
       "id": "verify-browser-agent",
-      "name": "Verify Browser Agent Connectivity",
+      "name": "Verify Browser Agent End-to-End",
       "phase": 0,
       "status": "pending",
-      "description": "Verify the Claude browser agent smoke testing service is reachable from this codespace and that CODESPACE_NAME is set.",
+      "description": "3-stage verification: (1) health check, (2) /diagnose navigates to codespace URL + screenshot, (3) direct URL reachability. Run: python3 tests/integration/test_browser_agent.py",
       "files": [
         "tests/integration/test_browser_agent.py"
       ],
       "tests_pass": false,
       "dependencies": [],
       "validation": {
-        "test_command": "curl -sf https://claude-browser-agent.onrender.com/health",
-        "success_criteria": "Browser agent service responds to health check, CODESPACE_NAME is set"
+        "test_command": "python3 tests/integration/test_browser_agent.py",
+        "success_criteria": "All 3 stages pass: health OK, /diagnose navigates and screenshots codespace URL, direct URL reachable"
       },
       "environment_variables": [
         "CODESPACE_NAME"
