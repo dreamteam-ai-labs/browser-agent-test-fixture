@@ -1,22 +1,22 @@
 {
-  "timestamp": "2026-03-12T09:46:35.338232Z",
-  "iteration": 4,
+  "timestamp": "2026-03-12T11:17:48.601323Z",
+  "iteration": 5,
   "backend_health": "PASS",
   "frontend_health": "PASS",
   "auth_flow": {
     "success": true,
-    "email": "qa-tester-1773308612@test.example.com",
+    "email": "qa-tester-1773314076@test.example.com",
     "password": "TestPass123!",
     "steps": {
       "register": {
         "status": 200,
         "response": {
           "user": {
-            "id": 3,
-            "email": "qa-tester-1773308612@test.example.com",
+            "id": 4,
+            "email": "qa-tester-1773314076@test.example.com",
             "display_name": "QA Tester"
           },
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3MzMwODYxMkB0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzczMzk1MDEyfQ.QBQFtbRkn_uQ7FOwT8c-lQRwSRiI11XWJ8YT77uYlcQ"
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0IiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3MzMxNDA3NkB0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzczNDAwNDc2fQ.uhbsHgFavWt_kxyuZEjrhroPXEq4BCOjK4CqpirjopI"
         }
       },
       "login": {
@@ -39,26 +39,13 @@
     "features_failed": 0,
     "flows": [
       {
-        "feature": "health-endpoint",
-        "steps": [
-          {
-            "action": "GET",
-            "endpoint": "GET /api/health",
-            "status": 200,
-            "result": "PASS"
-          }
-        ],
-        "overall": "PASS"
-      },
-      {
         "feature": "user-auth",
         "steps": [
           {
             "action": "REGISTER",
             "endpoint": "POST /api/auth/register",
             "status": 200,
-            "result": "PASS",
-            "resource_id": "2"
+            "result": "PASS"
           },
           {
             "action": "LOGIN",
@@ -67,14 +54,8 @@
             "result": "PASS"
           },
           {
-            "action": "TOKEN_VERIFY",
+            "action": "GET_ME",
             "endpoint": "GET /api/auth/me",
-            "status": 200,
-            "result": "PASS"
-          },
-          {
-            "action": "TOKEN_VERIFY_ALT",
-            "endpoint": "GET /api/users/me",
             "status": 200,
             "result": "PASS"
           }
@@ -92,12 +73,6 @@
             "resource_id": "1"
           },
           {
-            "action": "READ",
-            "endpoint": "GET /api/projects/1",
-            "status": 200,
-            "result": "PASS"
-          },
-          {
             "action": "LIST",
             "endpoint": "GET /api/projects",
             "status": 200,
@@ -105,14 +80,20 @@
             "contains_created": true
           },
           {
+            "action": "READ",
+            "endpoint": "GET /api/projects/{id}",
+            "status": 200,
+            "result": "PASS"
+          },
+          {
             "action": "DELETE",
-            "endpoint": "DELETE /api/projects/1",
+            "endpoint": "DELETE /api/projects/{id}",
             "status": 204,
             "result": "PASS"
           },
           {
             "action": "VERIFY_DELETE",
-            "endpoint": "GET /api/projects/1",
+            "endpoint": "GET /api/projects/{id}",
             "status": 404,
             "result": "PASS"
           }
@@ -130,12 +111,6 @@
             "resource_id": "1"
           },
           {
-            "action": "READ",
-            "endpoint": "GET /api/tasks/1",
-            "status": 200,
-            "result": "PASS"
-          },
-          {
             "action": "LIST",
             "endpoint": "GET /api/tasks",
             "status": 200,
@@ -143,14 +118,20 @@
             "contains_created": true
           },
           {
+            "action": "READ",
+            "endpoint": "GET /api/tasks/{id}",
+            "status": 200,
+            "result": "PASS"
+          },
+          {
             "action": "DELETE",
-            "endpoint": "DELETE /api/tasks/1",
+            "endpoint": "DELETE /api/tasks/{id}",
             "status": 204,
             "result": "PASS"
           },
           {
             "action": "VERIFY_DELETE",
-            "endpoint": "GET /api/tasks/1",
+            "endpoint": "GET /api/tasks/{id}",
             "status": 404,
             "result": "PASS"
           }
@@ -164,44 +145,29 @@
     "overall": "pass",
     "tests": [
       {
-        "feature": "SQLite Database Schema",
-        "status": "pass",
-        "notes": "Database operations working correctly - CRUD functionality verified through task and project creation/deletion with proper data persistence"
-      },
-      {
-        "feature": "Frontend Project Setup",
-        "status": "pass",
-        "notes": "React application running smoothly with proper component rendering, responsive design, and clean professional interface"
-      },
-      {
-        "feature": "Health Check and App Config",
-        "status": "pass",
-        "notes": "Application stable with no crashes, proper URL routing, and fast page load performance throughout testing"
-      },
-      {
         "feature": "User Authentication",
         "status": "pass",
-        "notes": "Login successful with test credentials, session management working, user remains authenticated during navigation"
+        "notes": "Successfully logged in with provided credentials. Dashboard shows personalized welcome message and proper navigation."
       },
       {
         "feature": "Dashboard",
         "status": "pass",
-        "notes": "Dashboard loads correctly showing welcome message, project/task counters, and clean organized layout"
+        "notes": "Dashboard loads correctly showing welcome message, projects count (0), tasks count (0), and clean functional layout."
       },
       {
         "feature": "Navigation and Layout",
         "status": "pass",
-        "notes": "Sidebar navigation fully functional with smooth transitions between Dashboard, Projects, and Tasks sections"
+        "notes": "Left sidebar navigation working properly. Clear menu structure with Dashboard, Projects, Tasks. Logout functionality available."
       },
       {
         "feature": "Project Management",
         "status": "pass",
-        "notes": "Complete project lifecycle tested - creation form works with name/description/color fields, projects display correctly in table, delete functionality verified"
+        "notes": "Successfully created project 'QA Test Project' with name, description, and color selection. Project appears correctly in list with delete functionality."
       },
       {
         "feature": "Task Management",
         "status": "pass",
-        "notes": "Full task management verified - creation with title/status/project fields, status dropdown (To Do/In Progress/Done), proper table display, delete functionality working"
+        "notes": "Task creation form loads properly with title, project dropdown, and status fields. Project dropdown correctly shows previously created projects for selection."
       }
     ],
     "critical_issues": [],
@@ -213,146 +179,158 @@
       {
         "step": 0,
         "action": "initial_load",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/buior1.png"
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/mdkif9.png"
       },
       {
         "step": 1,
         "action": "screenshot",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/pcqgkl.png"
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/8p2bns.png"
       },
       {
         "step": 2,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/72hjip.png"
+        "action": "key",
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/dqqtfl.png"
       },
       {
         "step": 3,
-        "action": "key",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/4rt5uh.png"
+        "action": "type",
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/xp3ihi.png"
       },
       {
         "step": 4,
-        "action": "type",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/8axpte.png"
+        "action": "left_click",
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/s286zt.png"
       },
       {
         "step": 5,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/login/",
-        "imageUrl": null
+        "action": "key",
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/eeuhp7.png"
       },
       {
         "step": 6,
         "action": "type",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/q3mfz8.png"
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/login/",
+        "imageUrl": null
       },
       {
         "step": 7,
         "action": "left_click",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/dashboard/",
-        "imageUrl": null
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/tzox60.png"
       },
       {
         "step": 8,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/projects/",
-        "imageUrl": "https://litter.catbox.moe/jannph.png"
+        "action": "type",
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/0qf3vw.png"
       },
       {
         "step": 9,
         "action": "left_click",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/projects/new/",
-        "imageUrl": "https://litter.catbox.moe/oyxukq.png"
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/u9s5s7.png"
       },
       {
         "step": 10,
         "action": "left_click",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/projects/new/",
-        "imageUrl": "https://litter.catbox.moe/wuevka.png"
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/dashboard/",
+        "imageUrl": "https://litter.catbox.moe/7op3zh.png"
       },
       {
         "step": 11,
-        "action": "type",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/projects/new/",
-        "imageUrl": "https://litter.catbox.moe/qba0vn.png"
+        "action": "left_click",
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/projects/",
+        "imageUrl": "https://litter.catbox.moe/rufvlx.png"
       },
       {
         "step": 12,
         "action": "left_click",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/projects/new/",
-        "imageUrl": "https://litter.catbox.moe/1siwsc.png"
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/projects/new/",
+        "imageUrl": null
       },
       {
         "step": 13,
-        "action": "type",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/projects/new/",
-        "imageUrl": null
+        "action": "left_click",
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/projects/new/",
+        "imageUrl": "https://litter.catbox.moe/wuaz0c.png"
       },
       {
         "step": 14,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/projects/",
-        "imageUrl": "https://litter.catbox.moe/73fu34.png"
+        "action": "key",
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/projects/new/",
+        "imageUrl": null
       },
       {
         "step": 15,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/projects/",
-        "imageUrl": null
+        "action": "type",
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/projects/new/",
+        "imageUrl": "https://litter.catbox.moe/j329ju.png"
       },
       {
         "step": 16,
         "action": "left_click",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/tasks/",
-        "imageUrl": "https://litter.catbox.moe/8qq2t7.png"
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/projects/new/",
+        "imageUrl": "https://litter.catbox.moe/7ygf8n.png"
       },
       {
         "step": 17,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/tasks/new/",
-        "imageUrl": "https://litter.catbox.moe/3g47z1.png"
+        "action": "type",
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/projects/new/",
+        "imageUrl": "https://litter.catbox.moe/56d2aq.png"
       },
       {
         "step": 18,
         "action": "left_click",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/tasks/new/",
-        "imageUrl": "https://litter.catbox.moe/e4bio0.png"
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/projects/",
+        "imageUrl": "https://litter.catbox.moe/qihas9.png"
       },
       {
         "step": 19,
-        "action": "key",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/tasks/new/",
-        "imageUrl": "https://litter.catbox.moe/69w68n.png"
+        "action": "left_click",
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/tasks/",
+        "imageUrl": "https://litter.catbox.moe/n5siz7.png"
       },
       {
         "step": 20,
-        "action": "type",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/tasks/new/",
-        "imageUrl": "https://litter.catbox.moe/w1rka0.png"
+        "action": "left_click",
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/tasks/new/",
+        "imageUrl": null
       },
       {
         "step": 21,
         "action": "left_click",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/tasks/new/",
-        "imageUrl": null
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/tasks/new/",
+        "imageUrl": "https://litter.catbox.moe/7h64ny.png"
       },
       {
         "step": 22,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/tasks/",
-        "imageUrl": "https://litter.catbox.moe/f92rba.png"
+        "action": "key",
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/tasks/new/",
+        "imageUrl": null
       },
       {
         "step": 23,
-        "action": "left_click",
-        "pageUrl": "https://fixture-harness-5gpgpwpjwwvq3p4w6-3000.app.github.dev/tasks/",
+        "action": "type",
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/tasks/new/",
         "imageUrl": null
+      },
+      {
+        "step": 24,
+        "action": "left_click",
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/tasks/new/",
+        "imageUrl": "https://litter.catbox.moe/pnpdhk.png"
+      },
+      {
+        "step": 25,
+        "action": "left_click",
+        "pageUrl": "https://fixture-v3-4j9j9x95x95727v4p-3000.app.github.dev/tasks/new/",
+        "imageUrl": "https://litter.catbox.moe/y5kz6e.png"
       }
     ]
   },
@@ -360,39 +338,39 @@
     {
       "page": "/",
       "status": 200,
-      "result": "PASS"
+      "pass": true
     },
     {
       "page": "/login",
       "status": 200,
-      "result": "PASS"
-    },
-    {
-      "page": "/register",
-      "status": 200,
-      "result": "PASS"
+      "pass": true
     },
     {
       "page": "/dashboard",
       "status": 200,
-      "result": "PASS"
+      "pass": true
     },
     {
       "page": "/projects",
       "status": 200,
-      "result": "PASS"
+      "pass": true
     },
     {
       "page": "/tasks",
       "status": 200,
-      "result": "PASS"
+      "pass": true
+    },
+    {
+      "page": "/register",
+      "status": 200,
+      "pass": true
     }
   ],
   "summary": {
-    "endpoints_passed": 15,
-    "endpoints_total": 15,
-    "features_functionally_passing": 4,
-    "features_functionally_tested": 4,
+    "endpoints_passed": 14,
+    "endpoints_total": 14,
+    "features_functionally_passing": 3,
+    "features_functionally_tested": 3,
     "pages_passed": 6,
     "pages_total": 6,
     "critical_issues": []
