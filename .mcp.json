@@ -2,7 +2,7 @@
   "mcpServers": {
     "reliable-ai": {
       "command": "python",
-      "args": ["-m", "reliable_ai.serve", "--features", "features.json"]
+      "args": ["-m", "reliable_ai.serve", "--features", "features.json", "--env-features", "environment_features.json"]
     },
     "filesystem": {
       "type": "stdio",
