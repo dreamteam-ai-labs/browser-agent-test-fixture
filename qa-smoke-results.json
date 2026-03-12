@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-03-12T15:50:17Z",
+  "timestamp": "2026-03-12T17:12:22Z",
   "auth": {
     "success": true,
-    "email": "qa-tester-1773330617@test.example.com",
+    "email": "qa-tester-1773335542@test.example.com",
     "password": "TestPass123!",
     "steps": {
       "register": {
@@ -10,10 +10,10 @@
         "response": {
           "user": {
             "id": 3,
-            "email": "qa-tester-1773330617@test.example.com",
+            "email": "qa-tester-1773335542@test.example.com",
             "display_name": "QA Tester"
           },
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3MzMzMDYxN0B0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzczNDE3MDE3fQ.BBWaDoULSJHvOUzKDaFNQ-Ows_pXAE8Mdkgpq1j4Jks"
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3MzMzNTU0MkB0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzczNDIxOTQyfQ.vFt62ZaVIqDfblzzXkmqBHNj579FtMvs1UgVLU3T8YM"
         }
       },
       "login": {
@@ -29,29 +29,34 @@
     "overall": "pass",
     "tests": [
       {
-        "feature": "User Authentication",
+        "feature": "User Authentication & Login",
         "status": "pass",
-        "notes": "Login successful with provided credentials, welcome message displays correctly, logout functionality available"
+        "notes": "Successfully logged in with provided credentials (qa@test.com). Login form validation working, redirect to dashboard successful, user identity displayed correctly as 'QA Tester'"
       },
       {
         "feature": "Dashboard",
         "status": "pass",
-        "notes": "Dashboard loads properly, displays welcome message, shows project/task counts, clean responsive layout"
+        "notes": "Dashboard loads correctly showing welcome message, project count (0), task count (0), and proper navigation. Clean responsive layout with user identification"
       },
       {
-        "feature": "Navigation and Layout",
+        "feature": "Navigation & Layout",
         "status": "pass",
-        "notes": "Left sidebar navigation works correctly, proper page highlighting, all menu items accessible"
+        "notes": "Left sidebar navigation working properly with Dashboard, Projects, Tasks sections. Active state highlighting works correctly. Logout button accessible"
       },
       {
         "feature": "Project Management",
         "status": "pass",
-        "notes": "Project creation form works with name, description, and color picker. CRUD operations successful - create and delete tested successfully"
+        "notes": "Projects page loads correctly with empty state message. 'New Project' form functional with name, description, and color fields. Project creation successful - 'QA Test Project' created and displayed in table with delete action available"
       },
       {
         "feature": "Task Management",
         "status": "pass",
-        "notes": "Task creation works with title and status fields. Status dropdown shows To Do/In Progress/Done options. Task list displays properly with delete functionality"
+        "notes": "Tasks page loads correctly with empty state message. 'New Task' form functional with title, project dropdown, and status fields. Task creation successful - 'QA Test Task' created and displayed in table with delete action available"
+      },
+      {
+        "feature": "CRUD Operations",
+        "status": "pass",
+        "notes": "Create operations tested and working for both projects and tasks. Delete buttons present and accessible on both entities. Forms handle input validation and placeholder text correctly"
       }
     ],
     "critical_issues": [],
@@ -63,158 +68,158 @@
       {
         "step": 0,
         "action": "initial_load",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/zdvhrj.png"
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/g3jg4i.png"
       },
       {
         "step": 1,
         "action": "screenshot",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/vkuuoo.png"
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/szeful.png"
       },
       {
         "step": 2,
-        "action": "left_click",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/b5f7so.png"
+        "action": "key",
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/mndwx0.png"
       },
       {
         "step": 3,
         "action": "key",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/t4gnsw.png"
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/dma0b3.png"
       },
       {
         "step": 4,
-        "action": "type",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/afoe36.png"
+        "action": "left_click",
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/o7nnhb.png"
       },
       {
         "step": 5,
-        "action": "left_click",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/ca477p.png"
+        "action": "key",
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/5frm13.png"
       },
       {
         "step": 6,
         "action": "type",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/login/",
-        "imageUrl": null
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/dmt79a.png"
       },
       {
         "step": 7,
         "action": "left_click",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/login/",
-        "imageUrl": "https://litter.catbox.moe/ubrfwc.png"
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/lt4ui0.png"
       },
       {
         "step": 8,
-        "action": "wait",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/dashboard/",
-        "imageUrl": null
+        "action": "type",
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/83fqzn.png"
       },
       {
         "step": 9,
         "action": "left_click",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/projects/",
-        "imageUrl": "https://litter.catbox.moe/wyf87b.png"
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/login/",
+        "imageUrl": "https://litter.catbox.moe/5ldr79.png"
       },
       {
         "step": 10,
-        "action": "left_click",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/projects/new/",
-        "imageUrl": "https://litter.catbox.moe/r1gj8j.png"
+        "action": "wait",
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/dashboard/",
+        "imageUrl": "https://litter.catbox.moe/m4d0j1.png"
       },
       {
         "step": 11,
         "action": "left_click",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/projects/new/",
-        "imageUrl": "https://litter.catbox.moe/yjo2ci.png"
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/projects/",
+        "imageUrl": "https://litter.catbox.moe/wc8tte.png"
       },
       {
         "step": 12,
-        "action": "key",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/projects/new/",
-        "imageUrl": "https://litter.catbox.moe/54pq7d.png"
+        "action": "left_click",
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/projects/new/",
+        "imageUrl": null
       },
       {
         "step": 13,
-        "action": "type",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/projects/new/",
-        "imageUrl": "https://litter.catbox.moe/js63a4.png"
+        "action": "left_click",
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/projects/new/",
+        "imageUrl": null
       },
       {
         "step": 14,
-        "action": "left_click",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/projects/new/",
-        "imageUrl": null
+        "action": "key",
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/projects/new/",
+        "imageUrl": "https://litter.catbox.moe/mc39rm.png"
       },
       {
         "step": 15,
         "action": "type",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/projects/new/",
-        "imageUrl": "https://litter.catbox.moe/5grjxv.png"
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/projects/new/",
+        "imageUrl": "https://litter.catbox.moe/jyzc0e.png"
       },
       {
         "step": 16,
         "action": "left_click",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/projects/",
-        "imageUrl": null
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/projects/new/",
+        "imageUrl": "https://litter.catbox.moe/cvm6tt.png"
       },
       {
         "step": 17,
-        "action": "left_click",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/projects/",
-        "imageUrl": "https://litter.catbox.moe/qasec9.png"
+        "action": "type",
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/projects/new/",
+        "imageUrl": "https://litter.catbox.moe/z1cp09.png"
       },
       {
         "step": 18,
         "action": "left_click",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/tasks/",
-        "imageUrl": "https://litter.catbox.moe/3uzn0j.png"
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/projects/",
+        "imageUrl": "https://litter.catbox.moe/eh7evp.png"
       },
       {
         "step": 19,
         "action": "left_click",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/tasks/new/",
-        "imageUrl": "https://litter.catbox.moe/lodhd7.png"
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/tasks/",
+        "imageUrl": "https://litter.catbox.moe/dmwclm.png"
       },
       {
         "step": 20,
         "action": "left_click",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/tasks/new/",
-        "imageUrl": "https://litter.catbox.moe/xewzwh.png"
-      },
-      {
-        "step": 21,
-        "action": "key",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/tasks/new/",
-        "imageUrl": "https://litter.catbox.moe/g6u4o2.png"
-      },
-      {
-        "step": 22,
-        "action": "type",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/tasks/new/",
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/tasks/new/",
         "imageUrl": null
       },
       {
-        "step": 23,
+        "step": 21,
         "action": "left_click",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/tasks/new/",
-        "imageUrl": "https://litter.catbox.moe/c7d46h.png"
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/tasks/new/",
+        "imageUrl": null
+      },
+      {
+        "step": 22,
+        "action": "key",
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/tasks/new/",
+        "imageUrl": "https://litter.catbox.moe/8knq8i.png"
+      },
+      {
+        "step": 23,
+        "action": "type",
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/tasks/new/",
+        "imageUrl": "https://litter.catbox.moe/gj27kz.png"
       },
       {
         "step": 24,
         "action": "left_click",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/tasks/",
-        "imageUrl": null
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/tasks/",
+        "imageUrl": "https://litter.catbox.moe/9101wq.png"
       },
       {
         "step": 25,
         "action": "left_click",
-        "pageUrl": "https://fixture-v4-gx46456596g295x-3000.app.github.dev/tasks/",
-        "imageUrl": "https://litter.catbox.moe/91nuao.png"
+        "pageUrl": "https://fixture-v5-x5q5qjq7jqxwh6496-3000.app.github.dev/tasks/",
+        "imageUrl": "https://litter.catbox.moe/rtpf81.png"
       }
     ]
   },
