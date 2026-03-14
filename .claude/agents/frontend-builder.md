@@ -21,6 +21,8 @@ Build all FRONTEND features — anything that lives in `frontend/`.
 
 ## Workflow
 
+Before starting, call `validate_features()` to check for issues in features.json.
+
 Loop until no more frontend features are pending:
 
 1. **Find next feature**: Call `get_next_feature()` — it returns the next pending feature with satisfied dependencies. If a backend dependency isn't done yet, that feature won't appear. If it says "no pending features", check `get_progress()` — if features exist under "Waiting on Dependencies", the backend-builder is still working. Wait and retry.

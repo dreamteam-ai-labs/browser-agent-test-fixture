@@ -21,6 +21,8 @@ Build all BACKEND features — anything that lives in `src/` or `tests/`.
 
 ## Workflow
 
+Before starting, call `validate_features()` to check for issues in features.json.
+
 Loop until no more backend features are pending:
 
 1. **Find next feature**: Call `get_next_feature()` — it returns the next pending feature with satisfied dependencies. If it says "no pending features", you're done.
