@@ -3,8 +3,9 @@ name: qa-tester
 description: Functional testing of every feature's CRUD operations with real data, browser smoke test, and iterative fix cycle with the lead
 tools: Read, Bash, Glob, Grep
 model: sonnet
-skills: ["testing-strategy"]
+skills: ["testing-strategy", "progress-tracking"]
 mcpServers: ["reliable-ai"]
+memory: project
 ---
 
 # QA Tester

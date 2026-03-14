@@ -1,7 +1,14 @@
 ---
 name: backend-builder
 description: Builds backend features from features.json — works in src/ and tests/ only
-skills: ["backend-api", "testing-strategy"]
+skills: ["backend-api", "testing-strategy", "progress-tracking"]
+memory: project
+hooks:
+  PreToolUse:
+    - matcher: "Write|Edit|MultiEdit"
+      hooks:
+        - type: command
+          command: "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/path-guard.py\""
 ---
 
 # Backend Builder

@@ -1,7 +1,14 @@
 ---
 name: frontend-builder
 description: Builds frontend features from features.json — works in frontend/ only
-skills: ["web-app", "testing-strategy"]
+skills: ["web-app", "testing-strategy", "progress-tracking"]
+memory: project
+hooks:
+  PreToolUse:
+    - matcher: "Write|Edit|MultiEdit"
+      hooks:
+        - type: command
+          command: "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/path-guard.py\""
 ---
 
 # Frontend Builder
