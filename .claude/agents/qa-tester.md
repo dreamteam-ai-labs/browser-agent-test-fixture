@@ -45,7 +45,7 @@ If `/api/health` does not return 200 (or times out), record as a CRITICAL failur
 ### Step 2: Start the frontend
 ```bash
 pkill -f 'next dev' 2>/dev/null; sleep 1
-cd frontend && npx next dev -p 3000 &
+cd frontend && ./node_modules/.bin/next dev -p 3000 &
 cd ..
 sleep 5
 ```

@@ -1,7 +1,7 @@
 {
   "project": "browser-agent-test-fixture",
   "version": "0.1.0",
-  "last_updated": "2026-03-14T15:36:57.205Z",
+  "last_updated": "2026-03-14T17:28:55.876Z",
   "features": [
     {
       "id": "database-schema",
