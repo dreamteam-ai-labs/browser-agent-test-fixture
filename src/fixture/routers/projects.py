@@ -48,6 +48,19 @@ def get_project(project_id: int, db: Session = Depends(get_db), user: User = Dep
     return project
 
 
+@router.put("/{project_id}", response_model=ProjectResponse)
+def update_project(project_id: int, body: ProjectCreate, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    project = db.query(Project).filter(Project.id == project_id, Project.user_id == user.id).first()
+    if not project:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
+    project.name = body.name
+    project.description = body.description
+    project.color = body.color
+    db.commit()
+    db.refresh(project)
+    return project
+
+
 @router.delete("/{project_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_project(project_id: int, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     project = db.query(Project).filter(Project.id == project_id, Project.user_id == user.id).first()

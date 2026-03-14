@@ -48,6 +48,19 @@ def get_task(task_id: int, db: Session = Depends(get_db), user: User = Depends(g
     return task
 
 
+@router.put("/{task_id}", response_model=TaskResponse)
+def update_task(task_id: int, body: TaskCreate, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    task = db.query(Task).filter(Task.id == task_id, Task.user_id == user.id).first()
+    if not task:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
+    task.title = body.title
+    task.project_id = body.project_id
+    task.status = body.status
+    db.commit()
+    db.refresh(task)
+    return task
+
+
 @router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_task(task_id: int, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     task = db.query(Task).filter(Task.id == task_id, Task.user_id == user.id).first()
