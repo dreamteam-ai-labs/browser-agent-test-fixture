@@ -155,13 +155,16 @@ def run_auth_test():
         return result
     log(f"  Login: HTTP {status} OK, token received")
 
-    # 1c. Verify token with /api/users/me
-    status, body = http_get(
-        f"{BACKEND_URL}/api/users/me",
-        headers={"Authorization": f"Bearer {token}"},
-    )
-    result["steps"]["verify_token"] = {"status": status}
-    log(f"  Verify token (/api/users/me): HTTP {status}")
+    # 1c. Verify token — try /api/auth/me first (common), fall back to /api/users/me
+    for verify_path in ["/api/auth/me", "/api/users/me"]:
+        status, body = http_get(
+            f"{BACKEND_URL}{verify_path}",
+            headers={"Authorization": f"Bearer {token}"},
+        )
+        log(f"  Verify token ({verify_path}): HTTP {status}")
+        if 200 <= status < 300:
+            break
+    result["steps"]["verify_token"] = {"status": status, "path": verify_path}
 
     # Auth succeeded — even if /users/me has issues, we have working credentials
     result["success"] = True

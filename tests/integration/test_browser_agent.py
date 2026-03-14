@@ -95,26 +95,38 @@ def stage3_url_reachable(codespace_name):
 
     The /diagnose test goes through the browser agent. This test verifies
     the codespace URL is also reachable directly, catching port visibility issues.
+    Retries up to 3 times — ports may take a moment to become public.
     """
     print("\n--- Stage 3: Direct URL Reachability ---")
     url = f"https://{codespace_name}-8000.app.github.dev/api/health"
     print(f"  Target: {url}")
-    try:
-        req = urllib.request.Request(url, method="GET")
-        resp = urllib.request.urlopen(req, timeout=30)
-        data = resp.read().decode()
-        print(f"  PASS: HTTP {resp.status} — {data[:100]}")
-        return {"pass": True, "status": resp.status, "url": url}
-    except urllib.error.HTTPError as e:
-        # 401/403 = GitHub "Continue" interstitial — URL is reachable, just gated
-        if e.code in (401, 403):
-            print(f"  PASS (with gate): HTTP {e.code} — GitHub Continue page (expected for public ports)")
-            return {"pass": True, "status": e.code, "url": url, "note": "GitHub Continue interstitial"}
-        print(f"  FAIL: HTTP {e.code}")
-        return {"pass": False, "status": e.code, "url": url, "error": str(e)}
-    except Exception as e:
-        print(f"  FAIL: {e}")
-        return {"pass": False, "url": url, "error": str(e)}
+    retries = 3
+    retry_delay = 5
+    for attempt in range(retries):
+        try:
+            req = urllib.request.Request(url, method="GET")
+            resp = urllib.request.urlopen(req, timeout=30)
+            data = resp.read().decode()
+            print(f"  PASS: HTTP {resp.status} — {data[:100]}")
+            return {"pass": True, "status": resp.status, "url": url, "attempts": attempt + 1}
+        except urllib.error.HTTPError as e:
+            # 401/403 = GitHub "Continue" interstitial — URL is reachable, just gated
+            if e.code in (401, 403):
+                print(f"  PASS (with gate): HTTP {e.code} — GitHub Continue page (expected for public ports)")
+                return {"pass": True, "status": e.code, "url": url, "note": "GitHub Continue interstitial", "attempts": attempt + 1}
+            if attempt < retries - 1:
+                print(f"  Attempt {attempt + 1}/{retries} failed (HTTP {e.code}), retrying in {retry_delay}s...")
+                time.sleep(retry_delay)
+            else:
+                print(f"  FAIL: HTTP {e.code}")
+                return {"pass": False, "status": e.code, "url": url, "error": str(e)}
+        except Exception as e:
+            if attempt < retries - 1:
+                print(f"  Attempt {attempt + 1}/{retries} failed ({e}), retrying in {retry_delay}s...")
+                time.sleep(retry_delay)
+            else:
+                print(f"  FAIL: {e}")
+                return {"pass": False, "url": url, "error": str(e)}
 
 
 def run_all():

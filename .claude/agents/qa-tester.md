@@ -1,6 +1,10 @@
 ---
 name: qa-tester
 description: Functional testing of every feature's CRUD operations with real data, browser smoke test, and iterative fix cycle with the lead
+tools: Read, Bash, Glob, Grep
+model: sonnet
+skills: ["testing-strategy"]
+mcpServers: ["reliable-ai"]
 ---
 
 # QA Tester
@@ -243,15 +247,18 @@ Before writing the report, compile the FULL list of critical issues from all tie
 - Optional/convenience endpoint missing
 - Minor response format issues (e.g., missing pagination metadata)
 
-### Step 9: Write qa-report.json
+### Step 9: Write qa-report.json (cumulative)
 
 Write ALL test evidence to `qa-report.json` at the repo root. This is permanent evidence — the factory loop picks it up for F5 feedback.
+
+**The report is cumulative** — each iteration appends to an `iterations` array so the full QA history is preserved. The top-level `latest` field always points to the most recent iteration for easy reading.
 
 For auth and browser smoke test results: copy the `auth` and `browser_smoke_test` sections directly from `qa-smoke-results.json`. Do NOT rewrite or summarize them.
 
 ```python
-python3 -c "
-import json, datetime
+python3 << 'PYEOF'
+import json, datetime, os
+
 # Load smoke test results
 smoke = {}
 try:
@@ -259,9 +266,24 @@ try:
         smoke = json.load(f)
 except FileNotFoundError:
     pass
-report = {
+
+# Load existing report to append to iterations array
+existing = {'iterations': []}
+if os.path.exists('qa-report.json'):
+    try:
+        with open('qa-report.json') as f:
+            existing = json.load(f)
+        # Handle old format (no iterations array) — wrap it as iteration 1
+        if 'iterations' not in existing:
+            existing = {'iterations': [existing]}
+    except (json.JSONDecodeError, KeyError):
+        existing = {'iterations': []}
+
+iteration_num = len(existing['iterations']) + 1
+
+this_iteration = {
     'timestamp': datetime.datetime.utcnow().isoformat() + 'Z',
-    'iteration': 1,  # increment on each retest cycle
+    'iteration': iteration_num,
     'backend_health': '...',  # PASS or FAIL from step 1
     'frontend_health': '...',  # PASS or FAIL from step 2
     'auth_flow': smoke.get('auth', {}),  # from step 6 script
@@ -304,16 +326,20 @@ report = {
         'critical_issues': []  # COMPLETE list from step 8
     }
 }
+
+existing['iterations'].append(this_iteration)
+existing['latest'] = this_iteration
+
 with open('qa-report.json', 'w') as f:
-    json.dump(report, f, indent=2)
-print('qa-report.json written')
-"
+    json.dump(existing, f, indent=2)
+print(f'qa-report.json written (iteration {iteration_num}, {len(existing["iterations"])} total)')
+PYEOF
 ```
 
 Commit and push the report:
 ```bash
 git add qa-report.json
-git commit -m "qa: test report (iteration N)"
+git commit -m "qa: test report (iteration N) — X/Y features passing, Z critical issues"
 git push
 ```
 

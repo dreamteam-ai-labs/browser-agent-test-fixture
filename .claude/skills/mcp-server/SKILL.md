@@ -53,319 +53,117 @@ mcp-server/
 
 ### Basic Server Structure
 
-Using reliable-ai's MCP implementation:
+Using FastMCP (the standard Python MCP library):
 
 ```python
-from reliable_ai.mcp import MCPServerBase, create_tool
-from typing import Any
+from mcp.server.fastmcp import FastMCP
 
-class MyServer(MCPServerBase):
-    def __init__(self) -> None:
-        super().__init__(name="my-server", version="1.0.0")
-        self._register_tools()
+mcp = FastMCP("my-server")
 
-    def _register_tools(self) -> None:
-        # Register each tool with its handler
-        self.register_tool(
-            create_tool(
-                name="greet",
-                description="Greet a user by name",
-                parameters={
-                    "name": {
-                        "type": "string",
-                        "description": "The name to greet",
-                    },
-                    "formal": {
-                        "type": "boolean",
-                        "description": "Use formal greeting",
-                        "default": False,
-                    },
-                },
-                required=["name"],
-            ),
-            handler=self._handle_greet,
-        )
+@mcp.tool()
+def greet(name: str, formal: bool = False) -> str:
+    """Greet a user by name.
 
-    async def _handle_greet(self, params: dict[str, Any]) -> str:
-        name = params["name"]
-        formal = params.get("formal", False)
+    Args:
+        name: The name to greet
+        formal: Use formal greeting
+    """
+    if formal:
+        return f"Good day, {name}. How may I assist you?"
+    return f"Hello, {name}!"
 
-        if formal:
-            return f"Good day, {name}. How may I assist you?"
-        return f"Hello, {name}!"
-
-    def get_capabilities(self) -> dict[str, Any]:
-        return {
-            "my-server": {
-                "version": self.version,
-                "tools": self.tool_names,
-            }
-        }
+if __name__ == "__main__":
+    mcp.run()
 ```
 
 ### Tool Definition Best Practices
 
 ```python
-# Good: Clear, specific description
-create_tool(
-    name="search_files",
-    description="Search for files matching a pattern in a directory. Returns list of matching file paths.",
-    parameters={
-        "pattern": {
-            "type": "string",
-            "description": "Glob pattern (e.g., '*.py', 'src/**/*.ts')",
-        },
-        "directory": {
-            "type": "string",
-            "description": "Directory to search in (defaults to current directory)",
-            "default": ".",
-        },
-        "max_results": {
-            "type": "integer",
-            "description": "Maximum number of results to return",
-            "default": 100,
-        },
-    },
-    required=["pattern"],
-)
+# Good: Clear docstring, typed parameters, descriptive names
+@mcp.tool()
+def search_files(pattern: str, directory: str = ".", max_results: int = 100) -> list[str]:
+    """Search for files matching a glob pattern in a directory.
 
-# Bad: Vague description
-create_tool(
-    name="search",
-    description="Search stuff",  # Too vague!
-    parameters={...},
-)
+    Returns list of matching file paths.
+
+    Args:
+        pattern: Glob pattern (e.g., '*.py', 'src/**/*.ts')
+        directory: Directory to search in (defaults to current directory)
+        max_results: Maximum number of results to return
+    """
+    ...
+
+# Bad: Vague description, unclear parameters
+@mcp.tool()
+def search(q: str) -> str:
+    """Search stuff."""  # Too vague!
+    ...
 ```
 
-### Filesystem Server Example
+### Filesystem Operations Example
 
 ```python
+from mcp.server.fastmcp import FastMCP
 from pathlib import Path
-from reliable_ai.mcp import (
-    FilesystemServer,
-    FilePermission,
-    PathConfig,
-)
 
-# Create sandboxed filesystem server
-server = FilesystemServer(
-    allowed_paths=["/home/user/workspace"],
-    default_permissions=FilePermission.READ_WRITE,
-)
+mcp = FastMCP("filesystem-server")
 
-# Add specific path with restricted permissions
-server.add_allowed_path(
-    "/home/user/sensitive",
-    permissions=FilePermission.READ_ONLY,
-)
+ALLOWED_PATHS = [Path("/home/user/workspace")]
 
-# Available tools:
-# - read_file: Read file contents
-# - write_file: Write to file
-# - list_directory: List directory contents
-# - create_directory: Create new directory
-# - delete: Delete file or directory
-# - move: Move/rename file
-# - copy: Copy file
-# - get_file_info: Get file metadata
-```
+@mcp.tool()
+def read_file(path: str) -> str:
+    """Read file contents from an allowed path."""
+    file_path = Path(path).resolve()
+    if not any(file_path.is_relative_to(p) for p in ALLOWED_PATHS):
+        raise ValueError(f"Access denied to path: {path}")
+    if not file_path.exists():
+        raise FileNotFoundError(f"File not found: {path}")
+    return file_path.read_text()
 
-### API Proxy Server Example
-
-```python
-from reliable_ai.mcp import (
-    APIProxyServer,
-    EndpointConfig,
-    HttpMethod,
-    RateLimitConfig,
-    RetryConfig,
-    RetryStrategy,
-)
-
-# Create API proxy with auth and rate limiting
-server = APIProxyServer(
-    base_url="https://api.example.com/v1",
-    auth_header="${API_KEY}",  # From environment
-    rate_limit=RateLimitConfig(
-        requests_per_minute=60,
-        burst_limit=10,
-    ),
-    retry_config=RetryConfig(
-        strategy=RetryStrategy.EXPONENTIAL,
-        max_retries=3,
-    ),
-)
-
-# Add typed endpoints
-server.add_endpoint(EndpointConfig(
-    path="/users/{user_id}",
-    method=HttpMethod.GET,
-    description="Get user by ID",
-    parameters={
-        "user_id": {"type": "string", "description": "User ID"},
-    },
-    cache_ttl=300,  # Cache for 5 minutes
-))
-
-server.add_endpoint(EndpointConfig(
-    path="/users",
-    method=HttpMethod.POST,
-    description="Create a new user",
-    parameters={
-        "name": {"type": "string"},
-        "email": {"type": "string"},
-    },
-    required_params=["name", "email"],
-))
+@mcp.tool()
+def list_directory(path: str = ".") -> list[str]:
+    """List directory contents."""
+    dir_path = Path(path).resolve()
+    if not any(dir_path.is_relative_to(p) for p in ALLOWED_PATHS):
+        raise ValueError(f"Access denied to path: {path}")
+    return [str(p.name) for p in dir_path.iterdir()]
 ```
 
 ### Error Handling
 
 ```python
-from reliable_ai.mcp import MCPError, MCPErrorCode
+@mcp.tool()
+def read_file(path: str) -> str:
+    """Read file contents with proper error handling."""
+    file_path = Path(path)
 
-async def _handle_read_file(self, params: dict[str, Any]) -> str:
-    path = Path(params["path"])
+    if not file_path.exists():
+        raise FileNotFoundError(f"File not found: {path}")
 
-    # Permission check
-    if not self._is_allowed_path(path):
-        raise MCPError(
-            MCPErrorCode.PERMISSION_DENIED,
-            f"Access denied to path: {path}",
-        )
-
-    # File existence
-    if not path.exists():
-        raise MCPError(
-            MCPErrorCode.RESOURCE_NOT_FOUND,
-            f"File not found: {path}",
-        )
-
-    # Read file
     try:
-        return path.read_text()
+        return file_path.read_text()
+    except PermissionError:
+        raise ValueError(f"Permission denied: {path}")
     except Exception as e:
-        raise MCPError(
-            MCPErrorCode.INTERNAL_ERROR,
-            f"Failed to read file: {e}",
-        )
+        raise RuntimeError(f"Failed to read file: {e}")
 ```
 
 ## Advanced
-
-### Scaffold New Servers
-
-```python
-from reliable_ai.mcp import scaffold_server, ServerSpec, ToolSpec
-
-# Define server specification
-spec = ServerSpec(
-    name="database-server",
-    description="MCP server for database operations",
-    tools=[
-        ToolSpec(
-            name="query",
-            description="Execute a read-only SQL query",
-            parameters={
-                "sql": {"type": "string", "description": "SQL query"},
-                "limit": {"type": "integer", "default": 100},
-            },
-            required_params=["sql"],
-        ),
-        ToolSpec(
-            name="list_tables",
-            description="List all tables in the database",
-            parameters={},
-        ),
-    ],
-)
-
-# Generate project
-files = scaffold_server(spec, output_dir="./database-server")
-# Creates: server.py, tests/, README.md
-```
-
-### Audit Logging
-
-```python
-server = MyServer(
-    enable_audit_log=True,
-    audit_log_path=Path("./logs/audit.log"),
-)
-
-# Access audit log
-for entry in server.audit_log:
-    print(f"{entry.timestamp}: {entry.method} - {'OK' if entry.success else 'FAIL'}")
-
-# Get recent entries
-recent = server.get_recent_audit(limit=10)
-```
-
-### Middleware
-
-```python
-from reliable_ai.mcp import MCPRequest, MCPResponse
-
-async def logging_middleware(
-    request: MCPRequest,
-    next_handler,
-) -> MCPResponse:
-    print(f"Request: {request.method}")
-    response = await next_handler(request)
-    print(f"Response: {'success' if response.success else 'error'}")
-    return response
-
-async def auth_middleware(
-    request: MCPRequest,
-    next_handler,
-) -> MCPResponse:
-    token = request.metadata.get("auth_token")
-    if not validate_token(token):
-        return MCPResponse.error_response(
-            MCPError(MCPErrorCode.PERMISSION_DENIED, "Invalid token"),
-            request.id,
-        )
-    return await next_handler(request)
-
-server.add_middleware(logging_middleware)
-server.add_middleware(auth_middleware)
-```
 
 ### Testing MCP Servers
 
 ```python
 import pytest
-from reliable_ai.mcp import MCPRequest
+from mcp.server.fastmcp import FastMCP
 
-@pytest.fixture
-def server():
-    return MyServer()
+# Test your tool functions directly — they're just Python functions
+def test_greet():
+    result = greet("Alice")
+    assert "Alice" in result
 
-@pytest.mark.asyncio
-async def test_greet_tool(server):
-    await server.start()
-
-    response = await server.handle_request(MCPRequest(
-        method="tools/call",
-        params={
-            "name": "greet",
-            "arguments": {"name": "Alice"},
-        },
-    ))
-
-    assert response.success is True
-    assert "Alice" in str(response.result)
-
-    await server.stop()
-
-@pytest.mark.asyncio
-async def test_invalid_tool(server):
-    await server.start()
-
-    response = await server.handle_request(MCPRequest(
-        method="tools/call",
-        params={"name": "nonexistent"},
-    ))
+def test_greet_formal():
+    result = greet("Alice", formal=True)
+    assert "Good day" in result
 
     assert response.success is False
     assert response.error.code == MCPErrorCode.METHOD_NOT_FOUND

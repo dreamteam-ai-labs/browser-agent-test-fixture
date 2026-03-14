@@ -323,36 +323,13 @@ GET_USER = ServiceContract(
 
 ### Workspace-Aware Context
 
-```python
-from reliable_ai.workspace import WorkspaceManager, Subsystem
+Use Claude Code's native workspace features for cross-subsystem context:
 
-# Initialize workspace
-workspace = WorkspaceManager("./fullstack-app")
-
-# Define subsystems
-workspace.add_subsystem(Subsystem(
-    name="frontend",
-    path="packages/frontend",
-    type="nextjs",
-    port=3000,
-))
-
-workspace.add_subsystem(Subsystem(
-    name="backend",
-    path="packages/backend",
-    type="fastapi",
-    port=8000,
-))
-
-workspace.add_subsystem(Subsystem(
-    name="shared",
-    path="packages/shared",
-    type="library",
-))
-
-# Get cross-subsystem context
-context = workspace.get_context()
-# Returns: relationships, shared types, API contracts
+```
+# Claude Code handles workspace discovery natively:
+# - Auto-detects monorepo structure (Turborepo, pnpm, npm workspaces)
+# - Agent Teams coordinate across frontend/backend subsystems
+# - FeatureList tracks cross-subsystem feature dependencies
 ```
 
 ### Coordinated Deployment
@@ -443,24 +420,17 @@ When working on fullstack apps, the agent should:
    - Check API versioning
 
 ```python
-from reliable_ai.workspace import WorkspaceManager
+from reliable_ai.progress import FeatureList
 
-# Agent workflow for adding new feature
-workspace = WorkspaceManager(".")
+# Agent workflow for adding new feature across subsystems
+features = FeatureList("features.json")
 
-# 1. Plan changes across subsystems
-changes = workspace.plan_feature("Add user preferences")
-# Returns: [
-#   ("shared", "Add PreferencesType"),
-#   ("backend", "Add /api/preferences endpoint"),
-#   ("frontend", "Add preferences page"),
-# ]
-
-# 2. Execute in order with validation
-for subsystem, change in changes:
-    workspace.switch_context(subsystem)
-    # Make changes...
-    workspace.validate_contracts()
+# Features have dependencies — backend before frontend
+# get_next_pending() respects dependency order automatically
+next_feature = features.get_next_pending()
+features.start(next_feature.id)
+# ... implement in the appropriate subsystem ...
+features.complete(next_feature.id)
 ```
 
 ## Resources

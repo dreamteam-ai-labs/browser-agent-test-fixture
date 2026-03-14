@@ -92,6 +92,14 @@ elif [ -f "pyproject.toml" ]; then
     pip install -e ".[dev]" 2>/dev/null || pip install -e .
 fi
 
+# 3.1. Sync deps into the pytest venv (Codespaces ships /usr/local/py-utils/venvs/pytest
+#      with its own site-packages — if pytest is invoked from there it can't import our code)
+PYTEST_VENV_PIP="/usr/local/py-utils/venvs/pytest/bin/pip"
+if [ -x "$PYTEST_VENV_PIP" ]; then
+    echo "  Syncing project deps into pytest venv..."
+    $PYTEST_VENV_PIP install -e ".[dev]" 2>/dev/null || $PYTEST_VENV_PIP install -e . || true
+fi
+
 # 4. Install Claude Code CLI
 echo "[4/5] Installing Claude Code..."
 npm install -g @anthropic-ai/claude-code

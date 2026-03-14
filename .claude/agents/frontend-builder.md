@@ -1,6 +1,7 @@
 ---
 name: frontend-builder
 description: Builds frontend features from features.json — works in frontend/ only
+skills: ["web-app", "testing-strategy"]
 ---
 
 # Frontend Builder

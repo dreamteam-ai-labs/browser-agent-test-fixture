@@ -1,17 +1,15 @@
 {
   "project": "browser-agent-test-fixture-environment-setup",
   "version": "0.1.0",
-  "last_updated": "2026-03-12T17:58:37.073Z",
+  "last_updated": "2026-03-14T13:36:15.914Z",
   "features": [
     {
       "id": "verify-anthropic-api",
       "name": "Verify Anthropic API Access",
       "phase": 0,
       "status": "pending",
-      "description": "Test Claude API connectivity and validate that reliable-ai library can access Anthropic services properly",
-      "files": [
-        "tests/integration/test_anthropic_api.py"
-      ],
+      "description": "Verify ANTHROPIC_API_KEY is set and Claude API is accessible. Run the validation command below.",
+      "files": [],
       "tests_pass": false,
       "dependencies": [],
       "validation": {

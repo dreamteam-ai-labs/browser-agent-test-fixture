@@ -518,25 +518,21 @@ When working on microservices:
    - Verify event flows
 
 ```python
-from reliable_ai.workspace import WorkspaceManager, ServiceMesh
+from reliable_ai.progress import FeatureList, ProjectState
 
 # Agent workflow for microservices
-workspace = WorkspaceManager(".")
-mesh = ServiceMesh(workspace)
+features = FeatureList("features.json")
+state = ProjectState("project-state.json")
 
-# 1. Understand service topology
-topology = mesh.get_topology()
-# Returns: services, dependencies, event flows
+# 1. Track cross-service state
+state.set("order-service.url", "http://localhost:8001")
+state.set("payment-service.url", "http://localhost:8002")
 
-# 2. Plan changes across services
-changes = mesh.plan_change("Add order cancellation")
-# Returns: affected services, contracts, events
-
-# 3. Execute with dependency order
-for service, change in mesh.ordered_changes(changes):
-    workspace.switch_context(service)
-    # Make changes...
-    mesh.validate_contracts(service)
+# 2. Features with dependencies ensure correct build order
+next_feature = features.get_next_pending()
+features.start(next_feature.id)
+# ... implement in the appropriate service ...
+features.complete(next_feature.id)
 ```
 
 ## Resources

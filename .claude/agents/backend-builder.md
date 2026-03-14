@@ -1,6 +1,7 @@
 ---
 name: backend-builder
 description: Builds backend features from features.json — works in src/ and tests/ only
+skills: ["backend-api", "testing-strategy"]
 ---
 
 # Backend Builder

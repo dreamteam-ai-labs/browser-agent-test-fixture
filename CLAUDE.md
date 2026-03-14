@@ -10,6 +10,7 @@ A project management app with auth, projects, and tasks — used to validate fac
    ```
    Read: environment_features.json
    Read: claude-progress.txt
+   Read: qa-report.json (if it exists — contains previous QA iterations with failures to fix)
    Call MCP tool: get_progress()
    ```
 
@@ -27,6 +28,7 @@ A project management app with auth, projects, and tasks — used to validate fac
 4. **Select next task:**
    - **FIRST**: Complete ALL features in `environment_features.json` (Phase 0)
    - **THEN**: Call `get_next_feature()` to get the next pending feature
+   - **IF qa-report.json exists with critical issues**: Fix those issues before building new features — read the `latest` entry's `summary.critical_issues` array and address each one
    - Do NOT skip ahead to "more interesting" features
    - Do NOT declare project complete if pending features remain
    - Environment must be 100% validated before application development
@@ -56,6 +58,7 @@ Agent teams are enabled (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`). You MUST use
 ### Workflow
 
 1. **Phase 0 + Phase 1** (you, sequential): Complete ALL environment features, then build foundations — database schema/migrations, auth module, frontend project setup (`npx create-next-app@14` — use Next.js 14 for stability; do NOT use latest/canary). Use `next.config.mjs` (not `.ts` — Next.js 14 doesn't support TypeScript config). After scaffolding, convert `frontend/postcss.config.mjs` to `frontend/postcss.config.js` (CommonJS `module.exports = { plugins: { tailwindcss: {}, autoprefixer: {} } }`) — the ESM version fails when `NODE_ENV=production` is pre-set. Commit and push after each feature. IMPORTANT: The database-schema feature must define ALL tables needed by ALL features in the app (read the full features.json to identify every table). Later features should NOT need to create new tables — the schema should be complete from Phase 1.
+   - **Environment features (`tests/integration/`)**: Run these tests directly with `pytest tests/integration/test_*.py -v` — do NOT read the test source files first. They are pre-written and validated; reading them wastes tokens.
 
 2. **Phase 2+** (parallel agents): Spawn both builders:
    ```
@@ -80,7 +83,7 @@ Agent teams are enabled (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`). You MUST use
    smoke test failures), fix them and ask it to retest. Do NOT declare the build complete until
    QA reports zero critical issues.
 
-4. **Final pass** (you): Run `pytest -v && cd frontend && npm test && npm run build`. Verify all routers are registered in `main.py`. Commit any remaining fixes.
+4. **Final pass** (you): Run `pytest -v && cd frontend && npm test && npm run build`. Verify all routers are registered in `main.py`. Commit any remaining fixes. For trivial fixes (typos, missing imports, config), run only the affected test file — no need for a full `npm run build` after a one-line fix.
 
 ### Coordination Rules
 
@@ -174,6 +177,7 @@ All tools use file locking for safe concurrent access from multiple agents.
 - Use type hints on all functions
 - Write docstrings for public APIs
 - Keep functions focused and small
+- **FastAPI lifecycle**: Use `lifespan` context manager (NOT `@app.on_event("startup")` which is deprecated). Example: `@asynccontextmanager async def lifespan(app): yield` then `app = FastAPI(lifespan=lifespan)`
 
 ### Testing
 - Write tests for all new features
@@ -184,6 +188,7 @@ All tools use file locking for safe concurrent access from multiple agents.
 - **Frontend build validation**: After adding or modifying frontend pages, run `cd frontend && NODE_ENV=production npm run build` to verify the production build succeeds. `next start` only serves pre-built pages — any page added after the last build will 404 in production.
 - **Database schema validation**: If using a shared database that may have pre-existing tables from other projects, verify your ORM models match the actual schema after creating them. Mismatches between SQLAlchemy models and the real DB columns cause 409 Conflict or 500 errors at runtime. Run `ALTER TABLE ... ADD COLUMN` migrations for any missing columns rather than assuming the DB is empty.
 - **Frontend tsconfig**: When creating `frontend/tsconfig.json`, always add `"__tests__"` to the `exclude` array. Jest test files use globals (`describe`, `it`, `expect`) that are not recognized by tsc without `@types/jest` in the compilation scope. Excluding test dirs from tsconfig prevents build failures while keeping Jest happy via its own config.
+- **Frontend jest.config**: When creating `jest.config.js` or `jest.config.ts`, never define the same key twice (e.g., two `transform` or two `moduleNameMapper` entries). JavaScript objects silently drop duplicate keys, causing test configuration to break.
 - **Frontend API client**: In `frontend/src/lib/api.ts`, use an **empty string** as the axios `baseURL` (NOT `http://localhost:8000`). Configure Next.js rewrites in `next.config.ts` to proxy `/api/*` requests to the backend. This ensures the app works in all environments (local dev, Codespaces, deployed). Hardcoding `localhost:8000` breaks when the app is accessed remotely because the browser sends requests to the user's local machine instead of the server.
 
 ### Committing
