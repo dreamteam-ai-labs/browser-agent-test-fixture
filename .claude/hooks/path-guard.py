@@ -11,6 +11,22 @@ Agent rules:
 """
 import json
 import sys
+from datetime import datetime
+from pathlib import Path
+
+
+def log_hook(hook_name: str, agent_id: str, action: str, detail: str = ""):
+    log_path = Path(".claude/hooks/hook-log.txt")
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().isoformat(timespec="milliseconds")
+    line = f"{timestamp} | {hook_name} | agent={agent_id} | {action}"
+    if detail:
+        line += f" | {detail}"
+    try:
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write(line + "\n")
+    except OSError:
+        pass  # Best-effort logging — never break the hook
 
 
 # Agent path rules: {agent_id_pattern: {"allow": [...], "deny": [...]}}
@@ -95,8 +111,10 @@ def main():
 
     allowed, reason = check_path(file_path, rules)
     if allowed:
+        log_hook("path-guard", agent_id, "ALLOW", f"path={file_path}")
         json.dump({"decision": "allow"}, sys.stdout)
     else:
+        log_hook("path-guard", agent_id, "DENY", f"path={file_path}")
         json.dump({
             "decision": "block",
             "reason": reason,

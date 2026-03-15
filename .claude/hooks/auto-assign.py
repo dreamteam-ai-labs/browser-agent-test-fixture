@@ -6,7 +6,22 @@ find the next pending feature and returns it as a message for the idle agent.
 """
 import json
 import sys
+from datetime import datetime
 from pathlib import Path
+
+
+def log_hook(hook_name: str, agent_id: str, action: str, detail: str = ""):
+    log_path = Path(".claude/hooks/hook-log.txt")
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().isoformat(timespec="milliseconds")
+    line = f"{timestamp} | {hook_name} | agent={agent_id} | {action}"
+    if detail:
+        line += f" | {detail}"
+    try:
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write(line + "\n")
+    except OSError:
+        pass  # Best-effort logging — never break the hook
 
 
 def get_next_pending(features_path: str = "features.json") -> dict | None:
@@ -47,6 +62,7 @@ def main():
         pass
 
     if next_feature:
+        log_hook("auto-assign", agent_id, "SUGGEST", f"feature={next_feature['id']}")
         message = (
             f"Next pending feature: {next_feature['name']} (id: {next_feature['id']}). "
             f"Description: {next_feature.get('description', 'N/A')}. "
@@ -55,6 +71,7 @@ def main():
         json.dump({"decision": "allow", "message": message}, sys.stdout)
     elif has_in_progress:
         # Other agents still working — stay alive in case more work unlocks
+        log_hook("auto-assign", agent_id, "WAIT", "features still in progress")
         json.dump({
             "decision": "allow",
             "message": "No pending features, but some are still in progress. "
@@ -62,6 +79,7 @@ def main():
         }, sys.stdout)
     else:
         # All features done — stop the idle agent to save cost
+        log_hook("auto-assign", agent_id, "STOP", "all features completed")
         json.dump({
             "decision": "allow",
             "continue": False,

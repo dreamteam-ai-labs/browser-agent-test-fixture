@@ -2,6 +2,7 @@
 name: progress-tracking
 description: Guide for using FeatureList state machine. Use when working with features.json, starting features, or completing work.
 user-invocable: false
+context: fork
 ---
 
 # Progress Tracking with FeatureList
