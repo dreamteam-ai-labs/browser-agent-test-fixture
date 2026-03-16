@@ -255,6 +255,7 @@ Before writing the report, compile the FULL list of critical issues from all tie
 - Any CRUD operation fails for any feature (can't create, can't read back, can't update, can't delete, update doesn't persist)
 - Browser smoke test returns anything other than `pass`
 - Feature endpoint returns 500
+- Feature tagged `"ui"` in features.json has no component test — check `frontend/src/__tests__/` and colocated `*.test.tsx` files. If no test exists for a UI-tagged feature, report as CRITICAL: "feature 'X' tagged 'ui' but has no component test"
 
 **NON-CRITICAL (report but don't block):**
 - Frontend page returns 404 (routing config issue)

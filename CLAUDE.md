@@ -88,6 +88,7 @@ Agent teams are enabled (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`). You MUST use
 ### Coordination Rules
 
 - **`features.json` is the source of truth** — all agents use the reliable-ai MCP tools for atomic status updates
+- **Tag every feature**: Each feature in features.json should have a `tags` array: `["backend"]` for API-only features, `["ui", "frontend"]` for UI-only features, or `["backend", "ui"]` for full-stack features. Tags drive UI test enforcement — QA will flag UI-tagged features that lack component tests as CRITICAL.
 - **Concurrent access is safe**: The MCP server uses file locking. Multiple agents can call `start_feature`, `complete_feature` etc. simultaneously
 - **Share discovered values**: Use `set_state(key, value)` to share environment info (e.g. `CODESPACE_NAME`, `DATABASE_URL`) and `get_state(key)` to read it — avoids agents re-discovering what another agent already found
 - **No overlapping files**: backend-builder owns `src/` + `tests/`, frontend-builder owns `frontend/`. You (lead) handle `main.py` router registration and cross-cutting concerns
