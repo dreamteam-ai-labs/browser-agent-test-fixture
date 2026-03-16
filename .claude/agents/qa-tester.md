@@ -77,6 +77,12 @@ If registration or login fails, or the token doesn't work → **CRITICAL**. You 
 
 **This step is CRITICAL — it prevents you from guessing endpoint paths and getting them wrong.**
 
+**Cache-first**: Route discovery is expensive (reads many files). Check for a cached map before doing full discovery:
+
+Call `get_state(key="endpoint_map")`. If it returns a valid JSON string (not empty, not "not found"), parse it and use it as the endpoint map — **skip directly to sub-step 3 below**.
+
+If no cache exists (first iteration, or cache was invalidated), perform full discovery:
+
 1. Read `src/fixture/main.py` — find every `app.include_router(...)` call. List all route prefixes.
 2. For EACH registered router, read the actual router file (e.g., `src/fixture/routers/projects.py`) and list every `@router.get`, `@router.post`, `@router.put`, `@router.patch`, `@router.delete` with its exact path. Build a complete endpoint map:
    ```
@@ -91,6 +97,10 @@ If registration or login fails, or the token doesn't work → **CRITICAL**. You 
    POST   /api/<parent>/{parent_id}/<child>
    ... etc (every route from every router file)
    ```
+   **Cache it**: Call `set_state(key="endpoint_map", value="<JSON string of the endpoint map>")` so subsequent iterations skip these file reads.
+
+Then, regardless of whether the map came from cache or discovery:
+
 3. Call `get_progress(include_completed=true)` to see all features and their status. Note each completed feature's `id`, `name`, `description`, and `phase`. Also call `get_state(key="CODESPACE_NAME")` to read any shared environment values discovered by other agents.
 4. **Match each feature to its actual routes** from the endpoint map. Use the feature description and the router file names to make the match. The feature name often differs from the actual route path (e.g., a feature called "Billing Management" might use route `/api/invoices`, not `/api/billing`). **Always use the actual route from the code, never guess from the feature name.**
 5. Sort features by phase (Phase 1 before Phase 2, etc.) — parent resources must be created before child resources.
@@ -186,6 +196,8 @@ For each completed feature in `features.json`:
 6. **Record every step** with: feature name, endpoint, method, request body sent, expected status, actual status, response body (first 200 chars), PASS/FAIL.
 
 7. Not every feature is a CRUD resource — some are utility endpoints (e.g., "export data", "generate report"). For these, test the endpoint with valid input and verify you get a meaningful response, not an error.
+
+8. **Cache invalidation**: If any endpoint from the cached map returns **404 or 405** (Method Not Allowed) during testing, the route structure has changed. Call `set_state(key="endpoint_map", value="")` to clear the cache, then re-run Step 4 from scratch (full discovery) before continuing. This can happen when the lead restructures routes during a fix cycle.
 
 ### Step 6: Browser Smoke Test (Tier 2 — mandatory)
 

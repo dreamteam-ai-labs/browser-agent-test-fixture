@@ -39,7 +39,7 @@ Loop until no more frontend features are pending:
    ```typescript
    const api = axios.create({ baseURL: '' });
    ```
-   Configure Next.js rewrites in `next.config.ts` to proxy `/api/*` to the backend. Do NOT use `http://localhost:8000`.
+   Configure Next.js rewrites in `next.config.mjs` to proxy `/api/*` to the backend. Do NOT use `http://localhost:8000`.
 
 6. **Write Jest tests** in `frontend/src/__tests__/` or colocated `*.test.tsx` files
 
@@ -62,6 +62,16 @@ Loop until no more frontend features are pending:
     ```
 
 12. Go back to step 1. `get_next_feature()` will automatically return features whose backend dependencies are now satisfied — no need for a manual second pass.
+
+## Common Pitfalls
+
+These bugs recur across builds and waste QA iterations. Avoid them:
+
+1. **Numeric rendering**: API responses may return numbers that arrive as strings after JSON parsing. Always wrap with `Number()` before calling `.toFixed()`, `.toLocaleString()`, or other numeric methods — calling `.toFixed()` on a string throws a runtime crash.
+
+2. **Auth token storage**: Store auth tokens in httpOnly cookies or pass via `Authorization` header. NEVER store tokens in `localStorage` — it's vulnerable to XSS and inaccessible to server-side code in Next.js.
+
+3. **Next.js config format**: Use `next.config.mjs` (ESM), NOT `next.config.ts`. Next.js 14 does not support TypeScript config files natively. Do not upgrade to Next.js 15.
 
 ## Rules
 
