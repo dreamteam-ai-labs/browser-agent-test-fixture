@@ -32,7 +32,7 @@ import urllib.error
 
 BACKEND_URL = "http://localhost:8000"
 FRONTEND_PORT = 3000
-BROWSER_AGENT_URL = "https://claude-browser-agent.onrender.com"
+BROWSER_AGENT_URL = "https://browser-agent.monkeypashion.co.uk"
 CREDENTIALS_FILE = "qa-test-credentials.json"
 RESULTS_FILE = "qa-smoke-results.json"
 

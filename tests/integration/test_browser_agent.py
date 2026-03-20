@@ -12,7 +12,7 @@ Writes full result to browser-agent-preflight.json for QA tester.
 """
 import json, os, sys, time, urllib.request, urllib.error
 
-BROWSER_AGENT_BASE = "https://claude-browser-agent.onrender.com"
+BROWSER_AGENT_BASE = "https://browser-agent.monkeypashion.co.uk"
 PREFLIGHT_FILE = "browser-agent-preflight.json"
 MAX_RETRIES = 6
 RETRY_DELAYS = [5, 10, 15, 15, 15, 15]

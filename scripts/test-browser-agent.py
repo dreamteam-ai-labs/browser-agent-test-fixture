@@ -4,7 +4,7 @@ Test harness — validate the browser agent against the test fixture.
 Usage:
     python scripts/test-browser-agent.py
     python scripts/test-browser-agent.py --fixture-url https://browser-agent-test-fixture.onrender.com
-    python scripts/test-browser-agent.py --browser-agent-url https://claude-browser-agent.onrender.com
+    python scripts/test-browser-agent.py --browser-agent-url https://browser-agent.monkeypashion.co.uk
 
 Exit codes:
     0 = pass
@@ -22,7 +22,7 @@ import urllib.request
 import urllib.error
 
 DEFAULT_FIXTURE_URL = "https://browser-agent-test-fixture.onrender.com"
-DEFAULT_BROWSER_AGENT_URL = "https://claude-browser-agent.onrender.com"
+DEFAULT_BROWSER_AGENT_URL = "https://browser-agent.monkeypashion.co.uk"
 
 SEED_EMAIL = "test@fixture.example.com"
 SEED_PASSWORD = "TestFixture123!"
