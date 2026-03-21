@@ -116,13 +116,7 @@ For each completed feature in `features.json`:
 
 2. **Find the corresponding route prefix** from Step 4's router list. If the feature description mentions `/api/something`, match it to the registered router.
 
-3. **Construct valid request bodies with realistic data.** Read the feature description and acceptance criteria to know what fields are required. Use realistic values, not empty objects. For example, if a feature manages "projects" with a name and description, send:
-   ```json
-   {"name": "Test Project Alpha", "description": "A project created by QA testing"}
-   ```
-   NOT `{}`. NOT `{"test": true}`.
-
-   If you're unsure what fields a resource needs, read the corresponding model/schema file (e.g., `src/fixture/models/` or the router file for that feature) to find the field names and types.
+3. **Construct valid request bodies.** Payloads must match fields from the feature description. Use realistic values, not empty objects. If you get 422, read the error response to discover the required fields — then check model/schema files if needed.
 
 4. **Test the full CRUD lifecycle** for the resource:
 
@@ -223,15 +217,28 @@ Then read the results:
 cat qa-smoke-results.json
 ```
 
-**Classification rules (strict):**
-- Exit code 0 AND `browser_smoke_test.overall` is `"pass"` → PASS
-- ANY other outcome → **CRITICAL**
-  - Exit code 1 (test failure) → CRITICAL: browser test failed
-  - Exit code 2 (infrastructure error) → CRITICAL: browser test infrastructure error
-  - `overall` is `"partial"`, `"fail"`, or `"error"` → CRITICAL
-  - Script crashed or didn't produce results → CRITICAL
+**Check browser console messages** — the smoke test captures console errors, JS exceptions, and failed network requests from the browser (same as F12 in Chrome). Look at `consoleMessages` in the results:
+```bash
+cat qa-smoke-results.json | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+msgs = d.get('consoleMessages', [])
+errors = [m for m in msgs if m.get('type') in ('error', 'pageerror', 'requestfailed')]
+if errors:
+    print(f'BROWSER CONSOLE ERRORS ({len(errors)}):')
+    for m in errors:
+        print(f'  [{m[\"type\"]}] {m[\"text\"][:200]}')
+else:
+    print('No browser console errors')
+"
+```
+If there are `pageerror` entries (unhandled JS exceptions) or `error` entries showing failed CSS/JS resources → **CRITICAL**. These indicate runtime crashes or missing assets that break the user experience even if pages return HTTP 200.
+
+**Classification:** Exit code 0 AND `browser_smoke_test.overall` is `"pass"` → PASS. Anything else → **CRITICAL**.
 
 **You must NOT report "0 critical issues" if the browser smoke test returned anything other than pass.** A non-pass browser test is always a critical issue — it means a real user would have problems using the app.
+
+**Review smoke test screenshots** — the smoke test uploads screenshots during navigation. Check `screenshotUrls` in `qa-smoke-results.json`. Download and visually inspect each screenshot. If any page appears to be raw unstyled HTML (no colours, no layout, no spacing — just plain text and default browser form elements), report as **CRITICAL**: "UI renders without styling — likely CSS/build configuration issue". This catches silent CSS failures that produce no console errors.
 
 ### Step 7: Frontend Page Checks (Tier 3)
 
@@ -256,6 +263,7 @@ Before writing the report, compile the FULL list of critical issues from all tie
 - Browser smoke test returns anything other than `pass`
 - Feature endpoint returns 500
 - Feature tagged `"ui"` in features.json has no component test — check `frontend/src/__tests__/` and colocated `*.test.tsx` files. If no test exists for a UI-tagged feature, report as CRITICAL: "feature 'X' tagged 'ui' but has no component test"
+- Browser console shows `pageerror` (unhandled JS exception) or failed resource loads (CSS/JS 404s)
 
 **NON-CRITICAL (report but don't block):**
 - Frontend page returns 404 (routing config issue)
@@ -383,7 +391,7 @@ QA RESULTS (iteration N):
 
 - Do NOT fix code yourself — only test and report
 - Do NOT modify any source files (qa-report.json is the only file you create)
-- **ALWAYS use `-m 30` on every curl command** (30-second timeout). A hanging endpoint must not stall the entire QA cycle. If curl times out, record it as CRITICAL (endpoint hangs).
+- **Use timeouts on curl commands** (e.g. `-m 30`). If a request hangs, record as CRITICAL.
 - **ALWAYS run the FULL test suite on every iteration** — never skip tiers or do "targeted retests"
 - **Test with real data** — never send empty request bodies `{}` to create/update endpoints
 - **Read feature descriptions** to understand what each endpoint expects — don't guess

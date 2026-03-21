@@ -35,22 +35,11 @@ Loop until no more frontend features are pending:
    - Pages go in `frontend/src/app/` (Next.js App Router)
    - Components go in `frontend/src/components/`
 
-5. **API client**: In `frontend/src/lib/api.ts`, use an **empty string** as the axios `baseURL`:
-   ```typescript
-   const api = axios.create({ baseURL: '' });
-   ```
-   Configure Next.js rewrites in `next.config.mjs` to proxy `/api/*` to the backend. Do NOT use `http://localhost:8000`.
+5. **API client**: API calls from frontend must work without CORS errors. Do NOT hardcode `localhost:8000` — it breaks when the app is accessed remotely. Use Next.js rewrites or an equivalent proxy approach. Verify by testing an API call from the browser.
 
 6. **Write Jest tests** in `frontend/src/__tests__/` or colocated `*.test.tsx` files
 
-7. **Verify** (once per feature, not after every file):
-   ```bash
-   cd frontend && npm test && npm run build
-   ```
-   Run this ONCE when the feature is complete, not after every individual file change.
-   Both must pass before marking the feature complete.
-
-8. **tsconfig.json**: Always add `"__tests__"` to the `exclude` array to prevent tsc from choking on Jest globals.
+7. **Verify**: Run `cd frontend && npm test && npm run build`. Both must pass before marking the feature complete.
 
 9. **Record work**: Call `touch_feature(id="feature-id", note="built components, tests + build passing")`
 
@@ -65,13 +54,22 @@ Loop until no more frontend features are pending:
 
 ## Common Pitfalls
 
-These bugs recur across builds and waste QA iterations. Avoid them:
+Watch for these — they recur across builds:
 
-1. **Numeric rendering**: API responses may return numbers that arrive as strings after JSON parsing. Always wrap with `Number()` before calling `.toFixed()`, `.toLocaleString()`, or other numeric methods — calling `.toFixed()` on a string throws a runtime crash.
+1. **Numeric rendering**: API responses may return numbers as strings. Wrap with `Number()` before calling `.toFixed()` or `.toLocaleString()` — calling these on a string throws a runtime crash.
 
-2. **Auth token storage**: Store auth tokens in httpOnly cookies or pass via `Authorization` header. NEVER store tokens in `localStorage` — it's vulnerable to XSS and inaccessible to server-side code in Next.js.
+2. **Auth token storage**: Prefer httpOnly cookies or `Authorization` header over `localStorage` for auth tokens — `localStorage` is vulnerable to XSS and inaccessible to server-side code in Next.js.
 
-3. **Next.js config format**: Use `next.config.mjs` (ESM), NOT `next.config.ts`. Next.js 14 does not support TypeScript config files natively. Do not upgrade to Next.js 15.
+## Tailwind CSS Size Validation
+
+After `npm run build` succeeds, check CSS output size:
+```bash
+find frontend/.next -name "*.css" -exec wc -c {} + 2>/dev/null | tail -1
+```
+If total CSS is less than 1000 bytes, Tailwind is likely purging all classes.
+Check that `tailwind.config` content paths match your actual page locations
+(e.g., `"./src/**/*.{js,ts,jsx,tsx}"` not `"./app/**/*.{js,ts,jsx,tsx}"`).
+Fix the paths and rebuild before completing the feature.
 
 ## Rules
 

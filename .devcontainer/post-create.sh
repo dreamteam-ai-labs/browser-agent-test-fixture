@@ -25,9 +25,9 @@ if [ -z "$CODESPACE_GITHUB_TOKEN" ] && [ -f "$SECRETS_FILE" ]; then
     done < "$SECRETS_FILE"
 fi
 
-# 1. Install build dependencies
+# 1. Install build dependencies (skip if prebuilt image already has them)
 echo "[1/3] Installing build dependencies..."
-pip install --quiet hatchling setuptools wheel
+pip install --quiet hatchling setuptools wheel 2>/dev/null || true
 
 # 2. Install project dependencies
 echo "[2/3] Installing project dependencies..."
@@ -44,7 +44,7 @@ if [ -x "$PYTEST_VENV_PIP" ]; then
     $PYTEST_VENV_PIP install --quiet -e ".[dev]" 2>/dev/null || $PYTEST_VENV_PIP install --quiet -e . || true
 fi
 
-# 3. Install Claude Code CLI
+# 3. Install Claude Code CLI (always install latest — non-negotiable)
 echo "[3/3] Installing Claude Code..."
 npm install -g @anthropic-ai/claude-code
 

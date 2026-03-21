@@ -275,6 +275,12 @@ def call_browser_agent(frontend_url, email, password, features):
     # Preserve screenshot URLs from top-level response (browser agent puts them outside smokeTestResults)
     if "screenshotUrls" in body and "screenshotUrls" not in smoke:
         smoke["screenshotUrls"] = body["screenshotUrls"]
+    # Preserve console messages from browser (page errors, failed requests, JS exceptions)
+    if "consoleMessages" in body and "consoleMessages" not in smoke:
+        smoke["consoleMessages"] = body["consoleMessages"]
+        errors = [m for m in body["consoleMessages"] if m.get("type") in ("error", "pageerror", "requestfailed")]
+        if errors:
+            log(f"  Browser console: {len(errors)} error(s) out of {len(body['consoleMessages'])} messages")
     # Preserve top-level error field (browser agent crash reason lives here, not inside smokeTestResults)
     if "error" in body and "error" not in smoke:
         smoke["error"] = body["error"]
