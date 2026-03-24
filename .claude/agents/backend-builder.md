@@ -61,11 +61,13 @@ Loop until no more backend features are pending:
 - Do NOT mark a feature complete unless `pytest -v` passes
 - Commit messages MUST use the real feature name (e.g. "feat: implement tags-crud"),
   NEVER a placeholder like "<feature-name>"
-- When a feature requires NEW database tables or columns not in the existing schema,
-  create or update the SQLAlchemy models in `src/fixture/db_models.py` AND
-  ensure `Base.metadata.create_all(bind=engine)` runs at startup. If the app uses
-  Alembic, create a migration. Do NOT assume tables exist just because an ORM model
-  references them.
+- When a feature requires NEW database tables, columns, or CHECK constraints not in
+  the existing schema, create or update the SQLAlchemy models in
+  `src/fixture/db_models.py` AND call `create_tables()` from
+  `src/fixture/database.py` to apply them. After adding any new model,
+  verify the table exists by running:
+  python3 -c "from fixture.database import create_tables; create_tables()"
+  Do NOT assume tables exist just because an ORM model references them.
 
 ## When Done
 

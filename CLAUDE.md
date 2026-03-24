@@ -57,7 +57,7 @@ Agent teams are enabled (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`). You MUST use
 
 ### Workflow
 
-1. **Phase 0 + Phase 1** (you, sequential): Complete ALL environment features, then build foundations — database schema/migrations, auth module, frontend project setup (`npx create-next-app@14` — use Next.js 14 for stability; do NOT use latest/canary). Commit and push after each feature. IMPORTANT: The database-schema feature must define ALL tables needed by ALL features in the app (read the full features.json to identify every table). Later features should NOT need to create new tables — the schema should be complete from Phase 1.
+1. **Phase 0 + Phase 1** (you, sequential): Complete ALL environment features, then build foundations — database schema/migrations, auth module, frontend project setup. Commit and push after each feature. IMPORTANT: The database-schema feature must define ALL tables needed by ALL features in the app (read the full features.json to identify every table). Later features should NOT need to create new tables — the schema should be complete from Phase 1.
    - **Environment features (`tests/integration/`)**: Run these tests directly with `pytest tests/integration/test_*.py -v`.
 
 2. **Phase 2+** (parallel agents): Spawn both builders:
@@ -174,22 +174,15 @@ All tools use file locking for safe concurrent access from multiple agents.
 ## Development Guidelines
 
 ### Code Style
-- Follow PEP 8
-- Use type hints on all functions
-- Write docstrings for public APIs
+- Follow PEP 8, use type hints, write docstrings for public APIs
 - Keep functions focused and small
-- **FastAPI lifecycle**: Use `lifespan` context manager (NOT `@app.on_event("startup")` which is deprecated). Example: `@asynccontextmanager async def lifespan(app): yield` then `app = FastAPI(lifespan=lifespan)`
 
 ### Testing
-- Write tests for all new features
-- Run `pytest -v` before marking complete
-- Maintain >80% code coverage
-- **Integration testing is mandatory for auth and frontend features**: Start the backend (`python3 -m uvicorn src.fixture.main:app --port 8000 &`), then verify signup and login work end-to-end via HTTP requests (e.g. `httpx.post("http://localhost:8000/api/auth/register", json={...})`). A feature is NOT complete if it only passes unit tests but fails against the running API.
-- **Frontend tests**: Run `cd frontend && npm test` for component tests. If no test runner is configured, set up Jest + React Testing Library and write tests for key user flows (login form submission, registration, dashboard rendering).
-- **Frontend build validation**: After adding or modifying frontend pages, run `cd frontend && NODE_ENV=production npm run build` to verify the production build succeeds. `next start` only serves pre-built pages — any page added after the last build will 404 in production.
-- **Database schema validation**: If using a shared database that may have pre-existing tables from other projects, verify your ORM models match the actual schema after creating them. Mismatches between SQLAlchemy models and the real DB columns cause 409 Conflict or 500 errors at runtime. Run `ALTER TABLE ... ADD COLUMN` migrations for any missing columns rather than assuming the DB is empty.
-- **Frontend API client**: API calls from frontend must work without CORS errors. Do NOT hardcode `localhost:8000` — it breaks when the app is accessed remotely. Use Next.js rewrites or an equivalent proxy approach.
-- **Frontend jest.config**: When creating `jest.config.js` or `jest.config.ts`, never define the same key twice (e.g., two `transform` or two `moduleNameMapper` entries). JavaScript objects silently drop duplicate keys, causing test configuration to break.
+- Write tests for all new features — run `pytest -v` before marking complete
+- Integration test auth and API features against a running server, not just unit tests
+- Frontend: `npm test` for component tests, `npm run build` to verify production build
+- Do NOT hardcode `localhost:8000` in frontend API calls — it breaks when accessed remotely
+- Do NOT define duplicate keys in jest.config.js — JavaScript silently drops them
 
 ### Committing
 - Commit and push after each completed feature (`git add . && git commit -m "..." && git push`)

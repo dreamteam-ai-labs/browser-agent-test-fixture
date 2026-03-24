@@ -1,16 +1,16 @@
 {
   "project": "browser-agent-test-fixture-environment-setup",
   "version": "0.1.0",
-  "last_updated": "2026-03-21T17:23:16.507Z",
+  "last_updated": "2026-03-24T16:51:31.558Z",
   "features": [
     {
       "id": "verify-anthropic-api",
       "name": "Verify Anthropic API Access",
       "phase": 0,
-      "status": "completed",
+      "status": "pending",
       "description": "Verify ANTHROPIC_API_KEY is set and Claude API is accessible. Run the validation command below.",
       "files": [],
-      "tests_pass": true,
+      "tests_pass": false,
       "dependencies": [],
       "validation": {
         "test_command": "python3 -c \"import os; assert os.environ.get('ANTHROPIC_API_KEY'), 'ANTHROPIC_API_KEY not set'; print('OK')\"",
@@ -24,12 +24,12 @@
       "id": "verify-browser-agent",
       "name": "Verify Browser Agent End-to-End",
       "phase": 0,
-      "status": "completed",
+      "status": "pending",
       "description": "3-stage verification: (1) health check, (2) /diagnose navigates to codespace URL + screenshot, (3) direct URL reachability. Run: python3 tests/integration/test_browser_agent.py",
       "files": [
         "tests/integration/test_browser_agent.py"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "dependencies": [],
       "validation": {
         "test_command": "python3 tests/integration/test_browser_agent.py",

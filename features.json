@@ -1,19 +1,19 @@
 {
   "project": "browser-agent-test-fixture",
   "version": "0.1.0",
-  "last_updated": "2026-03-21T17:23:16.507Z",
+  "last_updated": "2026-03-24T16:51:31.557Z",
   "features": [
     {
       "id": "database-schema",
       "name": "SQLite Database Schema",
       "phase": 1,
-      "status": "completed",
+      "status": "pending",
       "description": "SQLAlchemy ORM models for users, projects, and tasks. Uses SQLite with file-based storage. Models: User (email, hashed_password, name), Project (name, description, owner_id), Task (title, description, project_id, assignee_id, status).",
       "files": [
         "src/fixture/models.py",
         "src/fixture/database.py"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "dependencies": [],
       "validation": {
         "test_command": "python3 -c \"from fixture.models import User, Project, Task; print('OK')\"",
@@ -29,12 +29,12 @@
       "id": "health-endpoint",
       "name": "Health Check and App Config",
       "phase": 1,
-      "status": "completed",
+      "status": "pending",
       "description": "GET /api/health returns {status: \"healthy\"}. Backend entry point at src/fixture/main.py.",
       "files": [
         "src/fixture/main.py"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "dependencies": [
         "database-schema"
       ],
@@ -52,13 +52,13 @@
       "id": "user-auth",
       "name": "User Authentication",
       "phase": 1,
-      "status": "completed",
+      "status": "pending",
       "description": "POST /api/auth/register accepts {email, password, name}, creates user with bcrypt-hashed password, returns JWT. POST /api/auth/login validates credentials, returns {token}. GET /api/users/me returns current user profile. JWT middleware extracts user from Authorization: Bearer header.",
       "files": [
         "src/fixture/auth.py",
         "src/fixture/routers/auth.py"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "dependencies": [
         "database-schema"
       ],
@@ -76,14 +76,14 @@
       "id": "frontend-setup",
       "name": "Frontend Project Setup",
       "phase": 1,
-      "status": "completed",
+      "status": "pending",
       "description": "Next.js 14 app with Tailwind CSS. App Router structure with pages for login, register, dashboard, projects, and tasks. API client using axios with empty baseURL and Next.js rewrites to proxy /api/* to backend port 8000. Use next.config.mjs (not .ts).",
       "files": [
         "frontend/src/app/",
         "frontend/src/lib/api.ts",
         "frontend/next.config.mjs"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "dependencies": [],
       "validation": {
         "test_command": "cd frontend && NODE_ENV=production npm run build",
@@ -99,13 +99,13 @@
       "id": "project-management",
       "name": "Project Management",
       "phase": 2,
-      "status": "completed",
+      "status": "pending",
       "description": "Full CRUD for projects. POST /api/projects creates project with owner_id from auth. GET /api/projects lists user's projects. GET /api/projects/{id} returns single project. DELETE /api/projects/{id} removes project. Frontend pages: /projects (list), /projects/new (create form).",
       "files": [
         "src/fixture/routers/projects.py",
         "frontend/src/app/projects/"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "dependencies": [
         "user-auth",
         "database-schema",
@@ -125,13 +125,13 @@
       "id": "task-management",
       "name": "Task Management",
       "phase": 2,
-      "status": "completed",
+      "status": "pending",
       "description": "Full CRUD for tasks with project assignment. POST /api/tasks creates task with project_id. GET /api/tasks lists user's tasks. DELETE /api/tasks/{id} removes task. Frontend pages: /tasks (list), /tasks/new (create form with project selector).",
       "files": [
         "src/fixture/routers/tasks.py",
         "frontend/src/app/tasks/"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "dependencies": [
         "user-auth",
         "database-schema",
@@ -152,12 +152,12 @@
       "id": "dashboard",
       "name": "Dashboard",
       "phase": 2,
-      "status": "completed",
+      "status": "pending",
       "description": "Overview page at /dashboard showing project and task counts with quick links.",
       "files": [
         "frontend/src/app/dashboard/page.tsx"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "dependencies": [
         "user-auth",
         "frontend-setup"
@@ -176,14 +176,14 @@
       "id": "navigation",
       "name": "Navigation and Layout",
       "phase": 2,
-      "status": "completed",
+      "status": "pending",
       "description": "Sidebar navigation with route highlighting and logout button. AuthGuard component protects authenticated routes. Layout component wraps all authenticated pages.",
       "files": [
         "frontend/src/components/Sidebar.tsx",
         "frontend/src/components/AuthGuard.tsx",
         "frontend/src/components/Layout.tsx"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "dependencies": [
         "user-auth",
         "frontend-setup"

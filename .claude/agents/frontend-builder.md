@@ -60,16 +60,9 @@ Watch for these — they recur across builds:
 
 2. **Auth token storage**: Prefer httpOnly cookies or `Authorization` header over `localStorage` for auth tokens — `localStorage` is vulnerable to XSS and inaccessible to server-side code in Next.js.
 
-## Tailwind CSS Size Validation
+## Tailwind CSS Validation
 
-After `npm run build` succeeds, check CSS output size:
-```bash
-find frontend/.next -name "*.css" -exec wc -c {} + 2>/dev/null | tail -1
-```
-If total CSS is less than 1000 bytes, Tailwind is likely purging all classes.
-Check that `tailwind.config` content paths match your actual page locations
-(e.g., `"./src/**/*.{js,ts,jsx,tsx}"` not `"./app/**/*.{js,ts,jsx,tsx}"`).
-Fix the paths and rebuild before completing the feature.
+After `npm run build`, verify CSS output is not suspiciously small (<1KB total). If Tailwind is purging all classes, the `content` paths in `tailwind.config` likely don't match your actual file locations. Fix paths and rebuild.
 
 ## Rules
 
