@@ -1,7 +1,12 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
-name = "browser-agent-test-fixture"
+name = "fixture"
 version = "1.0.0"
 description = "Standalone test fixture for validating the browser agent + QA smoke test"
+readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.115.0",
@@ -12,6 +17,14 @@ dependencies = [
     "pydantic[email]>=2.10.0",
 ]
 
-[build-system]
-requires = ["setuptools>=75.0"]
-build-backend = "setuptools.build_meta"
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "httpx>=0.25",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fixture"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
