@@ -3,6 +3,7 @@ name: frontend-builder
 description: Builds frontend features from features.json — works in frontend/ only
 skills: ["web-app", "testing-strategy", "progress-tracking"]
 memory: project
+initialPrompt: "Start building. Call get_next_feature() to find the first pending frontend feature and begin implementing it."
 hooks:
   PreToolUse:
     - matcher: "Write|Edit|MultiEdit"
@@ -66,6 +67,7 @@ After `npm run build`, verify CSS output is not suspiciously small (<1KB total).
 
 ## Rules
 
+- Do NOT set `output: "export"` in `next.config` — the production deployment uses `next start` (SSR mode). Static export breaks the deployment pipeline.
 - Work ONLY in `frontend/` — do NOT touch `src/` (backend)
 - `get_next_feature()` respects dependencies — it only returns features whose deps are met. No need to manually check dependency status.
 - Use the MCP tools (`start_feature`, `touch_feature`, `complete_feature`) for all status updates — they use file locking so concurrent access from other agents is safe

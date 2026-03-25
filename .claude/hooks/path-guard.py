@@ -43,6 +43,21 @@ AGENT_RULES = {
         "allow": ["qa-report.json", "qa-smoke-results.json"],
         "deny": ["src/", "tests/", "frontend/"],
     },
+    "deployment-prep": {
+        "allow": [
+            "pyproject.toml",
+            "frontend/next.config.mjs",
+            "frontend/next.config.js",
+            "frontend/src/app/page.tsx",
+            "README.md",
+            ".gitignore",
+            "Dockerfile",
+            "docker-compose.yml",
+            "docker-compose.yaml",
+        ],
+        "deny": ["src/", "tests/", "frontend/src/components/", "frontend/src/lib/",
+                 "frontend/src/app/api/", "alembic/"],
+    },
 }
 
 

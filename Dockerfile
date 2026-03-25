@@ -23,19 +23,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get install -y --no-install-recommends nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy backend source + deps
-COPY pyproject.toml README.md ./
+# Copy everything needed for pip install (README.md optional via wildcard)
+COPY pyproject.toml README* ./
 COPY src/ ./src/
 RUN pip install --no-cache-dir .
 
 # Validate all imports resolve — fail the build if deps are missing.
-# This catches ghost dependencies and incomplete pyproject.toml before
-# the container ever starts.
 RUN python -c "from fixture.main import app; print('Import validation passed')"
 
-# Copy alembic (if present)
-COPY alembic/ ./alembic/
-COPY alembic.ini ./
+# Copy alembic if present — wildcard matches nothing gracefully
+COPY alembic.in[i] ./
+COPY alembi[c]/ ./alembic/
 
 # Copy built frontend
 COPY --from=frontend-build /app/frontend/ ./frontend/

@@ -79,6 +79,12 @@ IMPORT_TO_PACKAGE = {
     "google": "google-cloud-core",
     "firebase_admin": "firebase-admin",
     "sqlalchemy": "SQLAlchemy",
+    "pythonjsonlogger": "python-json-logger",
+    "passlib": "passlib",
+    "multipart": "python-multipart",
+    "uvicorn": "uvicorn",
+    "starlette": "starlette",
+    "stripe_module": "stripe",
 }
 
 

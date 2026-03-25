@@ -4,6 +4,7 @@ description: Builds backend features from features.json — works in src/ and te
 model: sonnet
 skills: ["backend-api", "testing-strategy", "progress-tracking"]
 memory: project
+initialPrompt: "Start building. Call get_next_feature() to find the first pending backend feature and begin implementing it."
 hooks:
   PreToolUse:
     - matcher: "Write|Edit|MultiEdit"
