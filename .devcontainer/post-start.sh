@@ -86,7 +86,6 @@ check_secret() {
 }
 
 check_secret "CLAUDE_CODE_OAUTH_TOKEN"
-check_secret "ANTHROPIC_API_KEY"
 check_secret "GCP_API_KEY"
 check_secret "GCPIP_TENANT_ID"
 check_secret "LINEAR_API_KEY"

@@ -10,7 +10,7 @@
  *
  * Requirements:
  *   - gh CLI authenticated
- *   - ANTHROPIC_API_KEY set (or codespace secret)
+ *   - CLAUDE_CODE_OAUTH_TOKEN set (or codespace secret)
  */
 
 const { execSync, spawn } = require("child_process");

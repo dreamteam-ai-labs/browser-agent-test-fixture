@@ -4,23 +4,6 @@
   "last_updated": "2026-03-25T16:59:24.258Z",
   "features": [
     {
-      "id": "verify-anthropic-api",
-      "name": "Verify Anthropic API Access",
-      "phase": 0,
-      "status": "pending",
-      "description": "Verify ANTHROPIC_API_KEY is set and Claude API is accessible. Run the validation command below.",
-      "files": [],
-      "tests_pass": false,
-      "dependencies": [],
-      "validation": {
-        "test_command": "python3 -c \"import os; assert os.environ.get('ANTHROPIC_API_KEY'), 'ANTHROPIC_API_KEY not set'; print('OK')\"",
-        "success_criteria": "Anthropic API accessible"
-      },
-      "environment_variables": [
-        "ANTHROPIC_API_KEY"
-      ]
-    },
-    {
       "id": "verify-browser-agent",
       "name": "Verify Browser Agent End-to-End",
       "phase": 0,
