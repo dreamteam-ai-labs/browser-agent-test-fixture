@@ -76,11 +76,23 @@
     "PostToolUse": [
       {
         "matcher": "Bash",
+        "if": "Bash(pip *)|Bash(pip3 *)|Bash(npm *)|Bash(pnpm *)",
         "hooks": [
           {
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/dep-guard.py\"",
             "timeout": 10
+          }
+        ]
+      }
+    ],
+    "TaskCreated": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/task-logger.py\"",
+            "timeout": 5
           }
         ]
       }

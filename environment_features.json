@@ -1,7 +1,7 @@
 {
   "project": "browser-agent-test-fixture-environment-setup",
   "version": "0.1.0",
-  "last_updated": "2026-03-25T16:59:24.258Z",
+  "last_updated": "2026-03-27T14:56:32.599Z",
   "features": [
     {
       "id": "verify-browser-agent",

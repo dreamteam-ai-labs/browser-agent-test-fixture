@@ -60,6 +60,7 @@ Loop until no more backend features are pending:
 - Every router you create MUST be registered in `src/fixture/main.py` — import it and add `app.include_router(router, prefix="/api/...")`
 - Use the MCP tools (`start_feature`, `touch_feature`, `complete_feature`) for all status updates — they use file locking so concurrent access from other agents is safe
 - Do NOT mark a feature complete unless `pytest -v` passes
+- If a tool call is denied (permission or auto-mode classifier), try an alternative approach — do NOT retry the same command
 - Commit messages MUST use the real feature name (e.g. "feat: implement tags-crud"),
   NEVER a placeholder like "<feature-name>"
 - When a feature requires NEW database tables, columns, or CHECK constraints not in

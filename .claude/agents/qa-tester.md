@@ -157,3 +157,4 @@ Message the lead with:
 - The browser smoke test runs on EVERY cycle — no exceptions
 - Keep iterating until zero critical issues or the lead tells you to stop
 - Kill background processes when done: `pkill -f uvicorn; pkill -f 'next dev'`
+- If a tool call is denied (permission or auto-mode classifier), try an alternative approach — do NOT retry the same command

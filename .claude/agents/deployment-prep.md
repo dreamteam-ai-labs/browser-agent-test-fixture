@@ -44,3 +44,4 @@ Commit all changes with message `chore: deployment prep — all checks pass` and
 - Do NOT change functionality — only fix config and missing files
 - Keep changes minimal — the product is already QA-tested
 - If a check passes, move on — don't over-investigate
+- If a tool call is denied (permission or auto-mode classifier), try an alternative approach — do NOT retry the same command

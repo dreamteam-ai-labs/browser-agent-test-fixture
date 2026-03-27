@@ -72,6 +72,7 @@ After `npm run build`, verify CSS output is not suspiciously small (<1KB total).
 - `get_next_feature()` respects dependencies — it only returns features whose deps are met. No need to manually check dependency status.
 - Use the MCP tools (`start_feature`, `touch_feature`, `complete_feature`) for all status updates — they use file locking so concurrent access from other agents is safe
 - Do NOT mark a feature complete unless both `npm test` and `npm run build` pass
+- If a tool call is denied (permission or auto-mode classifier), try an alternative approach — do NOT retry the same command
 - Commit messages MUST use the real feature name (e.g. "feat: implement dashboard-page"),
   NEVER a placeholder like "<feature-name>"
 - Commit and push AFTER EACH feature — do NOT batch multiple features into one commit.
