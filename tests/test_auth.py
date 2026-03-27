@@ -58,7 +58,7 @@ def test_me_authenticated(client, auth_headers):
 
 def test_me_unauthenticated(client):
     resp = client.get("/api/auth/me")
-    assert resp.status_code == 403
+    assert resp.status_code == 401
 
 
 def test_users_me_route(client, auth_headers):

@@ -54,7 +54,7 @@ def test_delete_task(client, auth_headers):
 
 def test_tasks_require_auth(client):
     resp = client.get("/api/tasks")
-    assert resp.status_code == 403
+    assert resp.status_code == 401
 
 
 def test_task_isolation(client):

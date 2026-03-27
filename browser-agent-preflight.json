@@ -1,0 +1,27 @@
+{
+  "checked_at": "2026-03-27T16:36:09Z",
+  "browser_agent_url": "https://browser.dreamteamlabs.co.uk",
+  "stages": {
+    "health": {
+      "pass": true,
+      "version": "2.2.1",
+      "attempts": 1
+    },
+    "diagnose": {
+      "pass": true,
+      "final_url": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-8000.app.github.dev/api/health",
+      "screenshot_url": "https://litter.catbox.moe/9scxc2.png",
+      "elapsed_ms": 3987,
+      "test_url": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-8000.app.github.dev/api/health"
+    },
+    "url_reachable": {
+      "pass": true,
+      "status": 200,
+      "url": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-8000.app.github.dev/api/health",
+      "attempts": 1
+    }
+  },
+  "codespace_name": "fixture-push-test-4-jjwjwxwvxp6gfqxj6",
+  "overall": "pass",
+  "screenshot_url": "https://litter.catbox.moe/9scxc2.png"
+}

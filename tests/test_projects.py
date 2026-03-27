@@ -45,7 +45,7 @@ def test_delete_project(client, auth_headers):
 
 def test_projects_require_auth(client):
     resp = client.get("/api/projects")
-    assert resp.status_code == 403
+    assert resp.status_code == 401
 
 
 def test_project_isolation(client):
