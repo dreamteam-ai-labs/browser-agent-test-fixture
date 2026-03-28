@@ -1,6 +1,6 @@
 ---
 name: deployment-prep
-description: Prepares the product for Coolify deployment — verifies all files committed, deps declared, config uses env vars
+description: Prepares the product for Coolify deployment — deps declared, imports valid, config uses env vars
 tools: Read, Bash, Glob, Grep, Edit, Write
 model: sonnet
 maxTurns: 30
@@ -20,19 +20,17 @@ The frontend runs as a separate container with `NEXT_PUBLIC_API_URL` pointing to
 
 ## Checks (fix any that fail)
 
-1. **All files committed** — run `git add -A && git status`. If there are uncommitted files, commit them.
+1. **Dependencies declared** — run `python3 .claude/hooks/audit-deps.py`. If it reports undeclared deps, add them to `pyproject.toml` and re-run until clean.
 
-2. **Dependencies declared** — run `python3 .claude/hooks/audit-deps.py`. If it reports undeclared deps, add them to `pyproject.toml` and re-run until clean.
+2. **Import validation** — run `python -c "from fixture.main import app"`. If it fails, the missing module must be created or the import removed.
 
-3. **Import validation** — run `python -c "from fixture.main import app"`. If it fails, the missing module must be created or the import removed.
+3. **Frontend API config** — check `frontend/next.config.*` for any hardcoded `localhost` URLs. The config must read `process.env.NEXT_PUBLIC_API_URL` with `localhost` as fallback only. Fix if hardcoded.
 
-4. **Frontend API config** — check `frontend/next.config.*` for any hardcoded `localhost` URLs. The config must read `process.env.NEXT_PUBLIC_API_URL` with `localhost` as fallback only. Fix if hardcoded.
+4. **Root page** — check `frontend/src/app/page.tsx`. If it's the default Next.js boilerplate (contains "Get started by editing"), replace it with a redirect to `/login`.
 
-5. **Root page** — check `frontend/src/app/page.tsx`. If it's the default Next.js boilerplate (contains "Get started by editing"), replace it with a redirect to `/login`.
+5. **Frontend builds** — run `cd frontend && npm run build`. Must pass.
 
-6. **Frontend builds** — run `cd frontend && npm run build`. Must pass.
-
-7. **README.md exists** — `pyproject.toml` references it. Create a one-line file if missing.
+6. **README.md exists** — `pyproject.toml` references it. Create a one-line file if missing.
 
 ## When done
 

@@ -57,12 +57,15 @@ def _parse_response_body(raw: str):
     return {"raw": raw[:500]}
 
 
-def http_post(url, data, timeout=30):
+def http_post(url, data, timeout=30, headers=None):
     """POST JSON, return (status_code, parsed_body). Handles both JSON and NDJSON responses."""
     body = json.dumps(data).encode("utf-8")
+    hdrs = {"Content-Type": "application/json"}
+    if headers:
+        hdrs.update(headers)
     req = urllib.request.Request(
         url, data=body,
-        headers={"Content-Type": "application/json"},
+        headers=hdrs,
         method="POST",
     )
     try:
@@ -171,6 +174,29 @@ def run_auth_test():
     result["token_verified"] = (200 <= status < 300)
 
     return result
+
+
+# ── Step 1.5: Seed sample data ──────────────────────────────────────────────
+
+
+def seed_sample_data(token):
+    """Best-effort: create sample items so browser agent sees populated pages."""
+    log("\nSTEP 1.5: Seeding sample data for browser test")
+    auth_headers = {"Authorization": f"Bearer {token}"}
+    seed_endpoints = [
+        ("/api/projects", {"name": "QA Test Project", "description": "Seeded by QA smoke test"}),
+        ("/api/tasks", {"title": "QA Test Task", "description": "Seeded by QA", "status": "pending"}),
+        ("/api/accomplishments", {"title": "QA Test Achievement", "description": "Seeded by QA"}),
+    ]
+    for path, body in seed_endpoints:
+        try:
+            status, resp = http_post(f"{BACKEND_URL}{path}", body, timeout=10, headers=auth_headers)
+            if status in (200, 201):
+                log(f"  Seeded: {path} — {status}")
+            else:
+                log(f"  Skip: {path} — {status}")
+        except Exception:
+            pass
 
 
 # ── Step 2: Make ports public ───────────────────────────────────────────────
@@ -362,6 +388,15 @@ def main():
         email = auth["email"]
         password = auth["password"]
         log(f"\nQA TEST CREDENTIALS: email={email} password={password}")
+
+        # ── Seed data ──
+        token = auth.get("steps", {}).get("login", {}).get("token") or auth.get("token")
+        if not token:
+            # Try extracting from register response
+            reg = auth.get("steps", {}).get("register", {}).get("response", {})
+            token = reg.get("token") or reg.get("access_token")
+        if token:
+            seed_sample_data(token)
 
         # ── Frontend check ──
         if not os.path.isdir("frontend"):
