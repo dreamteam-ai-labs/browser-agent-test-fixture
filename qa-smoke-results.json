@@ -1,19 +1,19 @@
 {
-  "timestamp": "2026-03-27T16:39:58Z",
+  "timestamp": "2026-03-28T10:01:38Z",
   "auth": {
     "success": true,
-    "email": "qa-tester-1774629598@test.example.com",
+    "email": "qa-tester-1774692098@test.example.com",
     "password": "TestPass123!",
     "steps": {
       "register": {
         "status": 200,
         "response": {
           "user": {
-            "id": 5,
-            "email": "qa-tester-1774629598@test.example.com",
+            "id": 3,
+            "email": "qa-tester-1774692098@test.example.com",
             "display_name": "QA Tester"
           },
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1IiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3NDYyOTU5OEB0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzc0NzE1OTk4fQ.x5zt2Ek9OsX5Fcg0H_urEC6H3qzPxuTmpjreiVvcSoI"
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3NDY5MjA5OEB0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzc0Nzc4NDk4fQ.0znThU4x5iVio55nDw7DPA8Rq3iwaoAoS_bUAaUceFY"
         }
       },
       "login": {
@@ -30,238 +30,276 @@
     "overall": "pass",
     "tests": [
       {
-        "feature": "SQLite Database Schema",
+        "feature": "Login",
         "status": "pass",
-        "notes": "All CRUD operations work properly. Data persistence confirmed across sessions."
-      },
-      {
-        "feature": "Frontend Project Setup",
-        "status": "pass",
-        "notes": "React application loads and functions correctly. All UI components render properly, forms work, navigation is smooth."
-      },
-      {
-        "feature": "Health Check and App Config",
-        "status": "pass",
-        "notes": "Application loads successfully at the provided URL. No server errors, all endpoints responsive."
-      },
-      {
-        "feature": "User Authentication",
-        "status": "pass",
-        "notes": "Successfully logged in with provided credentials. Session management functional, logout button present."
+        "notes": "Successfully logged in with provided credentials. Proper redirect to dashboard with welcome message displayed."
       },
       {
         "feature": "Dashboard",
         "status": "pass",
-        "notes": "Dashboard loads with clean layout, shows welcome message, displays project and task counters."
+        "notes": "Dashboard loads correctly with proper styling, navigation sidebar, and overview cards for Projects (1) and Tasks (1)."
       },
       {
-        "feature": "Navigation and Layout",
+        "feature": "Project Management - View",
         "status": "pass",
-        "notes": "Sidebar navigation works perfectly. All navigation links functional (Dashboard, Projects, Tasks). Responsive design with consistent styling."
+        "notes": "Projects page displays existing projects in a well-formatted table with Name, Description, and Actions columns."
       },
       {
-        "feature": "Project Management",
+        "feature": "Project Management - Create",
         "status": "pass",
-        "notes": "Full project lifecycle tested: creation form works, project listing functional, deletion works immediately. Color selection and description fields operational."
+        "notes": "Successfully created new project 'QA Test Project 2' with description. Form validation and submission working correctly."
       },
       {
-        "feature": "Task Management",
+        "feature": "Project Management - Delete",
         "status": "pass",
-        "notes": "Complete task management tested: creation with title/status/project assignment works, task listing displays properly, status options (To Do/In Progress/Done) available, deletion functional, empty state handling correct."
+        "notes": "Delete functionality works immediately and seamlessly. Successfully deleted the test project."
+      },
+      {
+        "feature": "Project Management - Edit",
+        "status": "skip",
+        "notes": "No edit functionality available. Project names are not clickable and there's no edit button."
+      },
+      {
+        "feature": "Task Management - View",
+        "status": "pass",
+        "notes": "Tasks page loads correctly showing existing tasks with Title, Status, and Actions columns."
+      },
+      {
+        "feature": "Task Management - Create",
+        "status": "pass",
+        "notes": "New task form loads with proper fields (Title, Project dropdown, Status dropdown). Form accepts input correctly."
+      },
+      {
+        "feature": "CSS Styling",
+        "status": "pass",
+        "notes": "All pages have consistent, professional styling with proper color scheme, spacing, and visual hierarchy."
+      },
+      {
+        "feature": "Navigation",
+        "status": "pass",
+        "notes": "Sidebar navigation works correctly between Dashboard, Projects, and Tasks pages."
       }
     ],
-    "critical_issues": [],
+    "critical_issues": [
+      "No project edit functionality available - users cannot modify existing projects after creation"
+    ],
     "login_successful": true,
     "pages_tested": 5,
-    "total_issues": 2,
+    "total_issues": 1,
     "service_reachable": true,
     "screenshotUrls": [
       {
         "step": 0,
         "action": "initial_load",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/omfewi.png"
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/login",
+        "imageUrl": "https://litter.catbox.moe/rcokyh.png"
       },
       {
         "step": 1,
         "action": "screenshot",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/y877wd.png"
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/login",
+        "imageUrl": "https://litter.catbox.moe/j1q4zv.png"
       },
       {
         "step": 2,
         "action": "left_click",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/o9ljmq.png"
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/login",
+        "imageUrl": "https://litter.catbox.moe/67sla4.png"
       },
       {
         "step": 3,
         "action": "key",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/klqs86.png"
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/login",
+        "imageUrl": "https://litter.catbox.moe/p84z78.png"
       },
       {
         "step": 4,
         "action": "type",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/tnxlrb.png"
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/login",
+        "imageUrl": "https://litter.catbox.moe/p9aema.png"
       },
       {
         "step": 5,
         "action": "left_click",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/cjbwgw.png"
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/login",
+        "imageUrl": "https://litter.catbox.moe/mdsxpj.png"
       },
       {
         "step": 6,
         "action": "type",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/login",
-        "imageUrl": null
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/login",
+        "imageUrl": "https://litter.catbox.moe/cgdakg.png"
       },
       {
         "step": 7,
         "action": "left_click",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/dashboard",
-        "imageUrl": "https://litter.catbox.moe/y2o7pq.png"
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/dashboard",
+        "imageUrl": "https://litter.catbox.moe/ivdjp5.png"
       },
       {
         "step": 8,
         "action": "left_click",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/projects",
-        "imageUrl": "https://litter.catbox.moe/7yq4lh.png"
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects",
+        "imageUrl": null
       },
       {
         "step": 9,
         "action": "left_click",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/projects/new",
-        "imageUrl": null
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects/new",
+        "imageUrl": "https://litter.catbox.moe/7p0z6a.png"
       },
       {
         "step": 10,
         "action": "left_click",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/projects/new",
-        "imageUrl": "https://litter.catbox.moe/na4eke.png"
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects/new",
+        "imageUrl": "https://litter.catbox.moe/2d2l75.png"
       },
       {
         "step": 11,
         "action": "key",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/projects/new",
-        "imageUrl": "https://litter.catbox.moe/56jcgw.png"
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects/new",
+        "imageUrl": "https://litter.catbox.moe/1vtst9.png"
       },
       {
         "step": 12,
         "action": "type",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/projects/new",
-        "imageUrl": "https://litter.catbox.moe/m4d9n9.png"
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects/new",
+        "imageUrl": "https://litter.catbox.moe/1par8f.png"
       },
       {
         "step": 13,
         "action": "left_click",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/projects/new",
-        "imageUrl": "https://litter.catbox.moe/5bv1ey.png"
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects/new",
+        "imageUrl": "https://litter.catbox.moe/zw7ylm.png"
       },
       {
         "step": 14,
-        "action": "type",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/projects/new",
-        "imageUrl": "https://litter.catbox.moe/siuxo6.png"
+        "action": "key",
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects/new",
+        "imageUrl": "https://litter.catbox.moe/1m71p1.png"
       },
       {
         "step": 15,
-        "action": "left_click",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/projects",
-        "imageUrl": "https://litter.catbox.moe/kfoyj5.png"
+        "action": "type",
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects/new",
+        "imageUrl": "https://litter.catbox.moe/ccuzlm.png"
       },
       {
         "step": 16,
         "action": "left_click",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/projects",
-        "imageUrl": "https://litter.catbox.moe/90jg2f.png"
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects",
+        "imageUrl": null
       },
       {
         "step": 17,
         "action": "left_click",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/tasks",
-        "imageUrl": null
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects",
+        "imageUrl": "https://litter.catbox.moe/dg0ww1.png"
       },
       {
         "step": 18,
         "action": "left_click",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/tasks/new",
-        "imageUrl": null
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects",
+        "imageUrl": "https://litter.catbox.moe/qdc2lv.png"
       },
       {
         "step": 19,
         "action": "left_click",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/tasks/new",
-        "imageUrl": "https://litter.catbox.moe/vwoz3u.png"
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/tasks",
+        "imageUrl": null
       },
       {
         "step": 20,
-        "action": "key",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/tasks/new",
-        "imageUrl": "https://litter.catbox.moe/4dz3kq.png"
+        "action": "left_click",
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/tasks/new",
+        "imageUrl": "https://litter.catbox.moe/o6j2zf.png"
       },
       {
         "step": 21,
-        "action": "type",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/tasks/new",
-        "imageUrl": "https://litter.catbox.moe/ye1095.png"
+        "action": "left_click",
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/tasks/new",
+        "imageUrl": "https://litter.catbox.moe/nuaj6n.png"
       },
       {
         "step": 22,
-        "action": "left_click",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/tasks/new",
-        "imageUrl": "https://litter.catbox.moe/jbex50.png"
+        "action": "key",
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/tasks/new",
+        "imageUrl": "https://litter.catbox.moe/mrvclh.png"
       },
       {
         "step": 23,
-        "action": "left_click",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/tasks",
-        "imageUrl": "https://litter.catbox.moe/y9zu8b.png"
+        "action": "type",
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/tasks/new",
+        "imageUrl": "https://litter.catbox.moe/l6ayki.png"
       },
       {
         "step": 24,
         "action": "left_click",
-        "pageUrl": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/tasks",
-        "imageUrl": "https://litter.catbox.moe/wd858n.png"
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/tasks/new",
+        "imageUrl": "https://litter.catbox.moe/xh8cw4.png"
+      },
+      {
+        "step": 25,
+        "action": "left_click",
+        "pageUrl": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/tasks",
+        "imageUrl": "https://litter.catbox.moe/zngfk4.png"
       }
     ],
     "consoleMessages": [
       {
         "type": "error",
         "text": "Failed to load resource: the server responded with a status of 404 ()",
-        "url": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/favicon.ico"
+        "url": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/favicon.ico"
       },
       {
         "type": "requestfailed",
-        "text": "net::ERR_ABORTED: https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/dashboard?_rsc=3y0gy",
-        "url": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/dashboard?_rsc=3y0gy"
+        "text": "net::ERR_ABORTED: https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/dashboard?_rsc=16djb",
+        "url": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/dashboard?_rsc=16djb"
       },
       {
         "type": "requestfailed",
-        "text": "net::ERR_ABORTED: https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/projects?_rsc=1lc1r",
-        "url": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/projects?_rsc=1lc1r"
+        "text": "net::ERR_ABORTED: https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/dashboard?_rsc=3y0gy",
+        "url": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/dashboard?_rsc=3y0gy"
       },
       {
         "type": "requestfailed",
-        "text": "net::ERR_ABORTED: https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/projects/new?_rsc=v9w5b",
-        "url": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/projects/new?_rsc=v9w5b"
+        "text": "net::ERR_ABORTED: https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects?_rsc=1538b",
+        "url": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects?_rsc=1538b"
       },
       {
         "type": "requestfailed",
-        "text": "net::ERR_ABORTED: https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/projects?_rsc=zym4a",
-        "url": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/projects?_rsc=zym4a"
+        "text": "net::ERR_ABORTED: https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects?_rsc=1lc1r",
+        "url": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects?_rsc=1lc1r"
       },
       {
         "type": "requestfailed",
-        "text": "net::ERR_ABORTED: https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/tasks?_rsc=udws7",
-        "url": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/tasks?_rsc=udws7"
+        "text": "net::ERR_ABORTED: https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects/new?_rsc=v9w5b",
+        "url": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects/new?_rsc=v9w5b"
       },
       {
         "type": "requestfailed",
-        "text": "net::ERR_ABORTED: https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/tasks/new?_rsc=1ferm",
-        "url": "https://fixture-push-test-4-jjwjwxwvxp6gfqxj6-3000.app.github.dev/tasks/new?_rsc=1ferm"
+        "text": "net::ERR_ABORTED: https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects?_rsc=zym4a",
+        "url": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/projects?_rsc=zym4a"
+      },
+      {
+        "type": "requestfailed",
+        "text": "net::ERR_ABORTED: https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/tasks?_rsc=udws7",
+        "url": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/tasks?_rsc=udws7"
+      },
+      {
+        "type": "requestfailed",
+        "text": "net::ERR_ABORTED: https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/tasks/new?_rsc=1gufx",
+        "url": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/tasks/new?_rsc=1gufx"
+      },
+      {
+        "type": "requestfailed",
+        "text": "net::ERR_ABORTED: https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/tasks/new?_rsc=1ferm",
+        "url": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/tasks/new?_rsc=1ferm"
+      },
+      {
+        "type": "requestfailed",
+        "text": "net::ERR_ABORTED: https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/tasks?_rsc=1i1rw",
+        "url": "https://fixture-crud-test-pjqjqxq4x54rf7g5v-3000.app.github.dev/tasks?_rsc=1i1rw"
       }
     ]
   },
