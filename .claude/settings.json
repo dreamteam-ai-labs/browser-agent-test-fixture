@@ -103,6 +103,17 @@
         ]
       }
     ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/build-gate.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "StopFailure": [
       {
         "hooks": [

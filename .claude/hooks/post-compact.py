@@ -77,6 +77,41 @@ def get_progress_summary() -> str:
     lines.append("")
     lines.append("Call get_progress() for full details, or get_next_feature() to continue.")
 
+    # If features are done but QA hasn't passed, inject strong stay-alive directive
+    if not pending and not in_progress and completed:
+        qa_path = Path("qa-report.json")
+        if not qa_path.exists():
+            lines.append("")
+            lines.append("CRITICAL: All features complete but QA has not run yet.")
+            lines.append("You MUST spawn the qa-tester agent and wait for it to finish.")
+            lines.append("Do NOT exit. Keep polling: cat qa-report.json")
+        else:
+            try:
+                qa = json.loads(qa_path.read_text(encoding="utf-8"))
+                verdict = qa.get("verdict", "").lower()
+                overall = qa.get("overall_result", "").lower()
+                if verdict not in ("pass", "passed") and overall not in ("pass", "passed"):
+                    lines.append("")
+                    lines.append("CRITICAL: QA has not passed yet. Do NOT exit.")
+                    lines.append("Keep polling: cat qa-report.json")
+                    lines.append("After QA passes, spawn the deployment-prep agent.")
+                else:
+                    # QA passed — check if deployment-prep has run
+                    import subprocess
+                    try:
+                        git_result = subprocess.run(
+                            ["git", "log", "--oneline", "-30"],
+                            capture_output=True, text=True, timeout=5,
+                        )
+                        if "deployment prep" not in git_result.stdout.lower():
+                            lines.append("")
+                            lines.append("CRITICAL: QA passed but deployment-prep has NOT run.")
+                            lines.append("You MUST spawn the deployment-prep agent NOW.")
+                    except (subprocess.TimeoutExpired, OSError):
+                        pass
+            except (json.JSONDecodeError, OSError):
+                pass
+
     return "\n".join(lines)
 
 

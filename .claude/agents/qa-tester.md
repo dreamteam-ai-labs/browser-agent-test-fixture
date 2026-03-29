@@ -77,9 +77,14 @@ For non-CRUD features (export, report, etc.), test with valid input and verify a
 
 Record every step: feature name, endpoint, method, request body, expected status, actual status, PASS/FAIL.
 
-### Step 5: Browser Smoke Test (mandatory)
+### Step 5: Browser Smoke Test (mandatory — but only on final iteration)
 
-**You MUST attempt this step. Do NOT skip it for any reason.**
+**Only run the browser smoke test when Steps 1-4 and Step 6 have ZERO critical issues.** The browser test costs real money (Computer Use API calls with screenshots). Running it on every iteration wastes budget when you're retesting backend fixes that curl already verified.
+
+- If this is the first iteration: run Steps 1-4, Step 6 first. If zero critical issues, run Step 5. If critical issues exist, skip Step 5, report the issues, and wait for fixes.
+- If this is a retest iteration: only run Step 5 after confirming all previous critical issues are resolved via Steps 1-4 and Step 6.
+
+**You MUST run this step at least once before reporting zero critical issues.**
 
 Verify prerequisites: `CODESPACE_NAME` is set, `scripts/qa-smoke-test.py` exists. If either is missing → **CRITICAL**.
 
@@ -99,7 +104,9 @@ Review `screenshotUrls` — if any page renders as raw unstyled HTML (no colours
 
 ### Step 6: Frontend Page Checks
 
-Discover pages from `frontend/src/app/` directory structure, curl each one. A 404 is NON-CRITICAL but should be reported.
+Discover pages from `frontend/src/app/` directory structure, curl each one.
+For features with CRUD operations: `/[resource]`, `/[resource]/new`, and `/[resource]/[id]` MUST exist. Missing CRUD page → **CRITICAL**.
+For non-CRUD features: a 404 is NON-CRITICAL but should be reported.
 
 Also check: any feature tagged `"ui"` in features.json must have a component test in `frontend/src/__tests__/` or colocated `*.test.tsx`. Missing UI test → **CRITICAL**.
 

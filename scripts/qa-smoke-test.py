@@ -180,23 +180,71 @@ def run_auth_test():
 
 
 def seed_sample_data(token):
-    """Best-effort: create sample items so browser agent sees populated pages."""
+    """Discover API endpoints from OpenAPI spec and seed sample data."""
     log("\nSTEP 1.5: Seeding sample data for browser test")
     auth_headers = {"Authorization": f"Bearer {token}"}
-    seed_endpoints = [
-        ("/api/projects", {"name": "QA Test Project", "description": "Seeded by QA smoke test"}),
-        ("/api/tasks", {"title": "QA Test Task", "description": "Seeded by QA", "status": "pending"}),
-        ("/api/accomplishments", {"title": "QA Test Achievement", "description": "Seeded by QA"}),
-    ]
-    for path, body in seed_endpoints:
-        try:
-            status, resp = http_post(f"{BACKEND_URL}{path}", body, timeout=10, headers=auth_headers)
-            if status in (200, 201):
-                log(f"  Seeded: {path} — {status}")
+
+    # Discover endpoints from OpenAPI spec
+    try:
+        status, spec = http_get(f"{BACKEND_URL}/openapi.json")
+        if status != 200:
+            log("  Could not fetch OpenAPI spec — skipping seed")
+            return
+
+        for path, methods in spec.get("paths", {}).items():
+            if "post" not in methods:
+                continue
+            if any(skip in path for skip in ["/auth", "/login", "/register", "/logout", "/export", "/extract"]):
+                continue
+
+            post_op = methods["post"]
+            body = _build_sample_body(post_op, spec)
+            if not body:
+                continue
+
+            try:
+                s, resp = http_post(f"{BACKEND_URL}{path}", body, timeout=10, headers=auth_headers)
+                if s in (200, 201):
+                    log(f"  Seeded: {path} — {s}")
+                else:
+                    log(f"  Skip: {path} — {s}")
+            except Exception:
+                pass
+    except Exception as e:
+        log(f"  Seed discovery failed: {e}")
+
+
+def _build_sample_body(post_op, spec):
+    """Build a minimal request body from OpenAPI schema."""
+    request_body = post_op.get("requestBody", {})
+    content = request_body.get("content", {}).get("application/json", {})
+    schema = content.get("schema", {})
+
+    if "$ref" in schema:
+        ref_path = schema["$ref"].replace("#/components/schemas/", "")
+        schema = spec.get("components", {}).get("schemas", {}).get(ref_path, {})
+
+    if not schema.get("properties"):
+        return None
+
+    body = {}
+    for prop, prop_schema in schema.get("properties", {}).items():
+        prop_type = prop_schema.get("type", "string")
+        if prop_type == "string":
+            if "date" in prop.lower():
+                body[prop] = "2026-03-29"
+            elif "email" in prop.lower():
+                body[prop] = "seed@example.com"
+            elif "url" in prop.lower():
+                body[prop] = "https://example.com"
             else:
-                log(f"  Skip: {path} — {status}")
-        except Exception:
-            pass
+                body[prop] = f"QA Seed {prop}"
+        elif prop_type in ("number", "integer"):
+            body[prop] = 100
+        elif prop_type == "boolean":
+            body[prop] = True
+
+    return body if body else None
 
 
 # ── Step 2: Make ports public ───────────────────────────────────────────────

@@ -93,6 +93,7 @@ Agent teams are enabled (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`). You MUST use
 - **Share discovered values**: Use `set_state(key, value)` to share environment info (e.g. `CODESPACE_NAME`, `DATABASE_URL`) and `get_state(key)` to read it — avoids agents re-discovering what another agent already found
 - **No overlapping files**: backend-builder owns `src/` + `tests/`, frontend-builder owns `frontend/`. You (lead) handle `main.py` router registration and cross-cutting concerns
 - **Commit per feature**: Every agent MUST commit and push after completing EACH feature — never batch multiple features into one commit. This is critical for debugging and rollback. Each commit = exactly one feature.
+- **CRUD pages required**: For every feature with CRUD operations, the frontend MUST have: a list page (`/[resource]`), a create page (`/[resource]/new`), and a detail/edit page (`/[resource]/[id]`). A feature is NOT complete until all its pages exist.
 
 ---
 
@@ -202,3 +203,14 @@ Custom slash commands are in `.claude/commands/`:
 
 - `reliable-ai` - Core agent patterns and utilities
 - See `pyproject.toml` for full list
+
+---
+
+## Known Issues & Workarounds
+
+- When running `next dev`, ensure NODE_ENV is NOT set to "production" (breaks Tailwind PostCSS). Use `env -u NODE_ENV npx next dev -p 3000`
+- When creating `frontend/tsconfig.json`, exclude `__tests__` from compilation
+- For the frontend API client (`frontend/src/lib/api.ts`), set `baseURL` to `process.env.NEXT_PUBLIC_API_URL || ''`
+- `pytest` is at `/usr/local/py-utils/bin/pytest` in codespaces — use that path directly if `pytest` is not on PATH
+- For auth and frontend features: verify signup/login via real HTTP requests — unit tests alone are not enough
+- For frontend pages: ensure `npm test` passes, then `npm run build` to verify production build

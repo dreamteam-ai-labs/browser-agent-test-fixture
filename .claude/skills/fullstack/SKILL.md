@@ -238,9 +238,9 @@ const nextConfig: NextConfig = {
 };
 ```
 ```typescript
-// frontend/src/lib/api.ts — use empty baseURL (relative paths)
+// frontend/src/lib/api.ts — use NEXT_PUBLIC_API_URL for production, empty for dev
 const api = axios.create({
-  baseURL: '',  // requests go to /api/* → Next.js rewrites → backend
+  baseURL: process.env.NEXT_PUBLIC_API_URL || '',  // production: real backend URL, dev: Next.js rewrites
   headers: { 'Content-Type': 'application/json' },
 });
 ```

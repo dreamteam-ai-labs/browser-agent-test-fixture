@@ -9,6 +9,10 @@ WORKDIR /app/frontend
 COPY frontend/package*.json ./
 RUN npm ci --production=false
 COPY frontend/ ./
+# NEXT_PUBLIC_* vars are baked into the JS bundle at build time.
+# Coolify sets this as a build-time env var via is_build_time=true.
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 RUN npm run build
 
 # --- Stage 2: Python backend + static frontend ---
