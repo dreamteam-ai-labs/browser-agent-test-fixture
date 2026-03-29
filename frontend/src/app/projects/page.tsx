@@ -64,7 +64,13 @@ export default function ProjectsPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-gray-600">{project.description}</td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-6 py-4 text-right flex justify-end gap-4">
+                      <Link
+                        href={`/projects/${project.id}`}
+                        className="text-sm text-blue-600 hover:text-blue-800"
+                      >
+                        Edit
+                      </Link>
                       <button
                         onClick={() => handleDelete(project.id)}
                         className="text-sm text-red-600 hover:text-red-800"

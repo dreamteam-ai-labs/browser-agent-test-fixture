@@ -68,7 +68,13 @@ export default function TasksPage() {
                         {task.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-6 py-4 text-right flex justify-end gap-4">
+                      <Link
+                        href={`/tasks/${task.id}`}
+                        className="text-sm text-blue-600 hover:text-blue-800"
+                      >
+                        Edit
+                      </Link>
                       <button
                         onClick={() => handleDelete(task.id)}
                         className="text-sm text-red-600 hover:text-red-800"
