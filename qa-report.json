@@ -1,197 +1,340 @@
 {
-  "iterations": [
-    {
-      "timestamp": "2026-03-29T17:53:00Z",
-      "iteration": 6,
-      "backend_health": "PASS",
-      "frontend_health": "PASS",
-      "auth_flow": {
-        "success": true,
-        "email": "qa_tester_1774806710@test.com",
-        "steps": {
-          "register": {"status": 200},
-          "login": {"status": 200},
-          "verify_token": {"status": 200, "path": "/api/auth/me"}
-        },
-        "token_verified": true
-      },
-      "functional_tests": {
-        "auth": {
-          "register": "PASS",
-          "login": "PASS",
-          "token_works": "PASS"
-        },
-        "features_tested": 2,
-        "features_passed": 2,
-        "features_failed": 0,
-        "flows": [
-          {
-            "feature": "project-management",
-            "steps": [
-              {"action": "CREATE", "endpoint": "POST /api/projects", "status": 201, "result": "PASS"},
-              {"action": "READ", "endpoint": "GET /api/projects/{id}", "status": 200, "result": "PASS"},
-              {"action": "LIST", "endpoint": "GET /api/projects", "status": 200, "result": "PASS"},
-              {"action": "UPDATE", "endpoint": "PUT /api/projects/{id}", "status": 200, "result": "PASS"},
-              {"action": "VERIFY_UPDATE", "endpoint": "GET /api/projects/{id}", "status": 200, "result": "PASS"},
-              {"action": "DELETE", "endpoint": "DELETE /api/projects/{id}", "status": 204, "result": "PASS"},
-              {"action": "VERIFY_DELETE", "endpoint": "GET /api/projects/{id}", "status": 404, "result": "PASS"}
-            ],
-            "overall": "PASS"
-          },
-          {
-            "feature": "task-management",
-            "steps": [
-              {"action": "CREATE", "endpoint": "POST /api/tasks", "status": 201, "result": "PASS"},
-              {"action": "READ", "endpoint": "GET /api/tasks/{id}", "status": 200, "result": "PASS"},
-              {"action": "LIST", "endpoint": "GET /api/tasks", "status": 200, "result": "PASS"},
-              {"action": "UPDATE", "endpoint": "PUT /api/tasks/{id}", "status": 200, "result": "PASS"},
-              {"action": "VERIFY_UPDATE", "endpoint": "GET /api/tasks/{id}", "status": 200, "result": "PASS"},
-              {"action": "DELETE", "endpoint": "DELETE /api/tasks/{id}", "status": 204, "result": "PASS"},
-              {"action": "VERIFY_DELETE", "endpoint": "GET /api/tasks/{id}", "status": 404, "result": "PASS"}
-            ],
-            "overall": "PASS"
-          }
-        ]
-      },
-      "browser_smoke_test": {
-        "overall": "pass",
-        "exit_code": 0,
-        "tests": [
-          {"feature": "Authentication/Login", "status": "pass", "notes": "Successfully logged in with provided credentials. Login redirects to dashboard correctly."},
-          {"feature": "Dashboard", "status": "pass", "notes": "Dashboard loads properly, shows welcome message, displays correct project/task counts (1 project, 0 tasks), proper CSS styling."},
-          {"feature": "Navigation and Layout", "status": "pass", "notes": "Left sidebar navigation functional, proper highlighting of current page, all navigation links accessible, logout button present."},
-          {"feature": "Project Management - Read", "status": "pass", "notes": "Projects list page displays existing projects correctly, proper formatting and styling."},
-          {"feature": "Project Management - Create", "status": "pass", "notes": "Successfully created new project 'QA Test Project' with description. Form validation and submission working correctly."},
-          {"feature": "Project Management - Update/Edit", "status": "pass", "notes": "Edit form loads with pre-populated data, form fields are editable, proper form styling and layout."},
-          {"feature": "Visual/CSS Quality", "status": "pass", "notes": "All pages have consistent styling, proper colors, spacing, and professional layout. No visual issues detected."},
-          {"feature": "Data Persistence", "status": "pass", "notes": "Seed data present, newly created projects appear in listings, data persists across page navigation."}
-        ],
-        "critical_issues": [],
-        "total_issues": 0,
-        "console_errors": [
-          {"type": "error", "text": "Failed to load resource: 404 favicon.ico", "severity": "non-critical"},
-          {"type": "requestfailed", "text": "ERR_ABORTED on RSC navigation requests (normal Next.js behavior)", "severity": "non-critical"}
-        ],
-        "no_pageerror": true,
-        "screenshots": [
-          "https://litter.catbox.moe/nwux6l.png",
-          "https://litter.catbox.moe/8p2czc.png",
-          "https://litter.catbox.moe/28h4lp.png",
-          "https://litter.catbox.moe/7s8orq.png",
-          "https://litter.catbox.moe/77kckp.png"
-        ]
-      },
-      "summary": {
-        "endpoints_passed": 16,
-        "endpoints_total": 16,
-        "critical_issues": [],
-        "overall": "PASS",
-        "notes": "All 14 CRUD tests pass (7 for projects, 7 for tasks). Browser smoke test pass. No pageerror or JS exceptions in console. favicon.ico 404 and RSC ERR_ABORTED events are non-critical."
-      }
+  "latest": {
+    "timestamp": "2026-03-30T16:55:30Z",
+    "iteration": 8,
+    "summary": {
+      "critical_issues": [],
+      "warnings": [
+        "favicon.ico returns 404 (minor — missing icon file)",
+        "Pydantic V2 deprecation warnings for class-based Config in auth.py, projects.py, tasks.py — use ConfigDict instead",
+        "No frontend component tests exist (but no features are tagged 'ui' so not CRITICAL per QA rules)"
+      ],
+      "passed": [
+        "Backend health check",
+        "User registration",
+        "User login",
+        "JWT auth /api/auth/me",
+        "Project CRUD: CREATE",
+        "Project CRUD: READ",
+        "Project CRUD: LIST",
+        "Project CRUD: UPDATE",
+        "Project CRUD: VERIFY UPDATE",
+        "Project CRUD: DELETE",
+        "Project CRUD: VERIFY DELETE (404)",
+        "Task CRUD: CREATE",
+        "Task CRUD: READ",
+        "Task CRUD: LIST",
+        "Task CRUD: UPDATE",
+        "Task CRUD: VERIFY UPDATE",
+        "Task CRUD: DELETE",
+        "Task CRUD: VERIFY DELETE (404)",
+        "Frontend page / (200)",
+        "Frontend page /dashboard (200)",
+        "Frontend page /login (200)",
+        "Frontend page /register (200)",
+        "Frontend page /projects (200)",
+        "Frontend page /projects/new (200)",
+        "Frontend page /projects/1 (200)",
+        "Frontend page /tasks (200)",
+        "Frontend page /tasks/new (200)",
+        "Frontend page /tasks/1 (200)",
+        "Browser smoke test: PASS (exit code 0, overall=pass)",
+        "All 26 pytest tests pass"
+      ],
+      "endpoints_passed": 13,
+      "endpoints_total": 13
     },
-    {
-      "timestamp": "2026-03-30T16:33:00Z",
-      "iteration": 7,
-      "backend_health": "PASS",
-      "frontend_health": "PASS",
-      "auth_flow": {
-        "success": true,
-        "email": "qa-tester-1774887979@test.com",
-        "steps": {
-          "register": {"status": 200},
-          "login": {"status": 200},
-          "verify_token": {"status": 200, "path": "/api/users/me"}
+    "details": {
+      "step1_servers": {
+        "backend_health": "PASS",
+        "backend_url": "http://localhost:8000",
+        "frontend_url": "http://localhost:3000",
+        "health_response": {
+          "status": "healthy",
+          "version": "1.0.0",
+          "service": "browser-agent-test-fixture"
+        }
+      },
+      "step2_auth": {
+        "register": {
+          "status": "PASS",
+          "endpoint": "POST /api/auth/register",
+          "email": "qa-tester-1774889608@test.example.com",
+          "response_status": 200,
+          "user_id": 4
         },
-        "token_verified": true
-      },
-      "functional_tests": {
-        "auth": {
-          "register": "PASS",
-          "login": "PASS",
-          "token_works": "PASS"
+        "login": {
+          "status": "PASS",
+          "endpoint": "POST /api/auth/login",
+          "response_status": 200,
+          "token_received": true
         },
-        "features_tested": 2,
-        "features_passed": 2,
-        "features_failed": 0,
-        "flows": [
-          {
-            "feature": "project-management",
-            "steps": [
-              {"action": "CREATE", "endpoint": "POST /api/projects", "status": 201, "result": "PASS", "body": {"name": "QA Test Project", "description": "A project for QA testing", "color": "#ef4444"}},
-              {"action": "READ", "endpoint": "GET /api/projects/{id}", "status": 200, "result": "PASS"},
-              {"action": "LIST", "endpoint": "GET /api/projects", "status": 200, "result": "PASS"},
-              {"action": "UPDATE", "endpoint": "PUT /api/projects/{id}", "status": 200, "result": "PASS", "body": {"name": "QA Test Project Updated", "description": "Updated description", "color": "#22c55e"}},
-              {"action": "VERIFY_UPDATE", "endpoint": "GET /api/projects/{id}", "status": 200, "result": "PASS"},
-              {"action": "DELETE", "endpoint": "DELETE /api/projects/{id}", "status": 204, "result": "PASS"},
-              {"action": "VERIFY_DELETE", "endpoint": "GET /api/projects/{id}", "status": 404, "result": "PASS"}
-            ],
-            "overall": "PASS"
-          },
-          {
-            "feature": "task-management",
-            "steps": [
-              {"action": "CREATE", "endpoint": "POST /api/tasks", "status": 201, "result": "PASS", "body": {"title": "QA Test Task", "project_id": 1, "status": "todo"}},
-              {"action": "READ", "endpoint": "GET /api/tasks/{id}", "status": 200, "result": "PASS"},
-              {"action": "LIST", "endpoint": "GET /api/tasks", "status": 200, "result": "PASS"},
-              {"action": "UPDATE", "endpoint": "PUT /api/tasks/{id}", "status": 200, "result": "PASS", "body": {"title": "QA Task Updated", "project_id": 1, "status": "in_progress"}},
-              {"action": "VERIFY_UPDATE", "endpoint": "GET /api/tasks/{id}", "status": 200, "result": "PASS"},
-              {"action": "DELETE", "endpoint": "DELETE /api/tasks/{id}", "status": 204, "result": "PASS"},
-              {"action": "VERIFY_DELETE", "endpoint": "GET /api/tasks/{id}", "status": 404, "result": "PASS"}
-            ],
-            "overall": "PASS"
-          }
-        ]
+        "me": {
+          "status": "PASS",
+          "endpoint": "GET /api/auth/me",
+          "response_status": 200,
+          "fields_verified": ["id", "email", "display_name"]
+        }
       },
-      "frontend_page_checks": {
-        "pages_tested": [
-          {"page": "/login", "status": 200, "result": "PASS"},
-          {"page": "/dashboard", "status": 200, "result": "PASS"},
-          {"page": "/projects", "status": 200, "result": "PASS"},
-          {"page": "/projects/new", "status": 200, "result": "PASS"},
-          {"page": "/projects/1", "status": 500, "result": "FAIL", "notes": "CRITICAL: Cannot find module './vendor-chunks/axios.js' - stale .next build cache"},
-          {"page": "/tasks", "status": 200, "result": "PASS"},
-          {"page": "/tasks/new", "status": 200, "result": "PASS"},
-          {"page": "/tasks/1", "status": 500, "result": "FAIL", "notes": "CRITICAL: Same axios vendor chunk module not found error"}
-        ]
-      },
-      "browser_smoke_test": {
-        "overall": "fail",
-        "exit_code": 1,
-        "run_1_result": "fail",
-        "run_1_notes": "Login POST returned 401 via public tunnel - possible transient tunnel issue or frontend was down during test",
-        "run_2_result": "error",
-        "run_2_notes": "Browser agent returned 'Unknown key: LEFT' infrastructure error; but console showed pageerror: Cannot find module './vendor-chunks/axios.js' on /projects/[id]",
-        "critical_console_errors": [
-          {
-            "type": "pageerror",
-            "text": "Cannot find module './vendor-chunks/axios.js' - Require stack: .next/server/webpack-runtime.js -> .next/server/app/projects/[id]/page.js",
-            "severity": "critical"
-          },
-          {
-            "type": "error",
-            "text": "HTTP 500 on /projects/2 and /projects/2?_rsc=v9w5b",
-            "severity": "critical"
-          },
-          {
-            "type": "error",
-            "text": "CSS served as text/html (MIME mismatch) - layout.css returns HTML instead of CSS",
-            "severity": "critical"
-          }
-        ]
-      },
-      "summary": {
-        "endpoints_passed": 14,
-        "endpoints_total": 16,
-        "critical_issues": [
-          "CRITICAL: /projects/[id] returns HTTP 500 - Cannot find module './vendor-chunks/axios.js' in .next build cache. The .next directory has stale webpack chunk references. Fix: delete frontend/.next directory and restart the dev server.",
-          "CRITICAL: /tasks/[id] returns HTTP 500 - Same stale .next build cache issue with missing axios vendor chunk.",
-          "CRITICAL: Browser smoke test failed - pageerror in console for axios module not found on /projects/[id]. Browser agent infrastructure issue ('Unknown key: LEFT') prevented full completion but real errors were captured.",
-          "CRITICAL: CSS served as text/html MIME type when navigating to /projects/new - Next.js sending wrong content-type for static CSS assets (symptom of same stale build cache issue)."
+      "step3_endpoint_map": {
+        "auth": [
+          {"method": "POST", "path": "/api/auth/register"},
+          {"method": "POST", "path": "/api/auth/login"},
+          {"method": "GET", "path": "/api/auth/me"}
         ],
-        "overall": "FAIL",
-        "notes": "All backend API CRUD tests pass. Frontend list/create pages work. Detail/edit pages (/projects/[id], /tasks/[id]) return 500 due to stale .next build cache missing axios vendor chunk. Root cause: the .next directory was built at some point without axios, but axios was added to node_modules later. Fix: rm -rf frontend/.next && restart next dev."
+        "projects": [
+          {"method": "GET", "path": "/api/projects"},
+          {"method": "POST", "path": "/api/projects"},
+          {"method": "GET", "path": "/api/projects/{project_id}"},
+          {"method": "PUT", "path": "/api/projects/{project_id}"},
+          {"method": "DELETE", "path": "/api/projects/{project_id}"}
+        ],
+        "tasks": [
+          {"method": "GET", "path": "/api/tasks"},
+          {"method": "POST", "path": "/api/tasks"},
+          {"method": "GET", "path": "/api/tasks/{task_id}"},
+          {"method": "PUT", "path": "/api/tasks/{task_id}"},
+          {"method": "DELETE", "path": "/api/tasks/{task_id}"}
+        ],
+        "misc": [
+          {"method": "GET", "path": "/api/health"},
+          {"method": "GET", "path": "/api/users/me"},
+          {"method": "POST", "path": "/api/admin/reset"}
+        ]
+      },
+      "step4_functional_tests": {
+        "project-management": {
+          "feature": "Project Management",
+          "overall": "PASS",
+          "crud_steps": [
+            {
+              "step": "CREATE",
+              "method": "POST",
+              "path": "/api/projects",
+              "request": {"name": "QA Test Project", "description": "A project for QA testing", "color": "#ff5733"},
+              "expected_status": 201,
+              "actual_status": 201,
+              "result": "PASS",
+              "notes": "Returned project with id=4"
+            },
+            {
+              "step": "READ",
+              "method": "GET",
+              "path": "/api/projects/4",
+              "expected_status": 200,
+              "actual_status": 200,
+              "result": "PASS",
+              "notes": "Fields matched: id, name, description, color, user_id"
+            },
+            {
+              "step": "LIST",
+              "method": "GET",
+              "path": "/api/projects",
+              "expected_status": 200,
+              "actual_status": 200,
+              "result": "PASS",
+              "notes": "Returned array containing created project"
+            },
+            {
+              "step": "UPDATE",
+              "method": "PUT",
+              "path": "/api/projects/4",
+              "request": {"name": "QA Test Project UPDATED", "description": "Updated description", "color": "#00ff00"},
+              "expected_status": 200,
+              "actual_status": 200,
+              "result": "PASS"
+            },
+            {
+              "step": "VERIFY UPDATE",
+              "method": "GET",
+              "path": "/api/projects/4",
+              "expected_status": 200,
+              "actual_status": 200,
+              "result": "PASS",
+              "notes": "name updated to 'QA Test Project UPDATED', color updated to '#00ff00'"
+            },
+            {
+              "step": "DELETE",
+              "method": "DELETE",
+              "path": "/api/projects/4",
+              "expected_status": 204,
+              "actual_status": 204,
+              "result": "PASS"
+            },
+            {
+              "step": "VERIFY DELETE",
+              "method": "GET",
+              "path": "/api/projects/4",
+              "expected_status": 404,
+              "actual_status": 404,
+              "result": "PASS"
+            }
+          ]
+        },
+        "task-management": {
+          "feature": "Task Management",
+          "overall": "PASS",
+          "crud_steps": [
+            {
+              "step": "CREATE",
+              "method": "POST",
+              "path": "/api/tasks",
+              "request": {"title": "QA Test Task", "project_id": 4, "status": "todo"},
+              "expected_status": 201,
+              "actual_status": 201,
+              "result": "PASS",
+              "notes": "Returned task with id=1"
+            },
+            {
+              "step": "READ",
+              "method": "GET",
+              "path": "/api/tasks/1",
+              "expected_status": 200,
+              "actual_status": 200,
+              "result": "PASS",
+              "notes": "Fields matched: id, title, status, project_id, user_id"
+            },
+            {
+              "step": "LIST",
+              "method": "GET",
+              "path": "/api/tasks",
+              "expected_status": 200,
+              "actual_status": 200,
+              "result": "PASS",
+              "notes": "Returned array containing created task"
+            },
+            {
+              "step": "UPDATE",
+              "method": "PUT",
+              "path": "/api/tasks/1",
+              "request": {"title": "QA Test Task UPDATED", "project_id": 4, "status": "in_progress"},
+              "expected_status": 200,
+              "actual_status": 200,
+              "result": "PASS"
+            },
+            {
+              "step": "VERIFY UPDATE",
+              "method": "GET",
+              "path": "/api/tasks/1",
+              "expected_status": 200,
+              "actual_status": 200,
+              "result": "PASS",
+              "notes": "title updated to 'QA Test Task UPDATED', status updated to 'in_progress'"
+            },
+            {
+              "step": "DELETE",
+              "method": "DELETE",
+              "path": "/api/tasks/1",
+              "expected_status": 204,
+              "actual_status": 204,
+              "result": "PASS"
+            },
+            {
+              "step": "VERIFY DELETE",
+              "method": "GET",
+              "path": "/api/tasks/1",
+              "expected_status": 404,
+              "actual_status": 404,
+              "result": "PASS"
+            }
+          ]
+        },
+        "user-auth": {
+          "feature": "User Authentication",
+          "overall": "PASS",
+          "notes": "Register, login, /api/auth/me all verified. JWT bearer token works correctly. Duplicate email returns 409 (verified in pytest suite)."
+        },
+        "health-endpoint": {
+          "feature": "Health Check",
+          "overall": "PASS",
+          "notes": "GET /api/health returns {status: healthy, version: 1.0.0}"
+        },
+        "dashboard": {
+          "feature": "Dashboard",
+          "overall": "PASS",
+          "notes": "Frontend page /dashboard returns 200. Browser smoke test verified it loads with correct content."
+        },
+        "navigation": {
+          "feature": "Navigation and Layout",
+          "overall": "PASS",
+          "notes": "Browser smoke test confirmed sidebar navigation, route highlighting, and logout work correctly."
+        }
+      },
+      "step5_browser_smoke": {
+        "overall": "PASS",
+        "exit_code": 0,
+        "auth_pass": true,
+        "browser_overall": "pass",
+        "tests_passed": 11,
+        "tests_failed": 0,
+        "critical_issues": [],
+        "console_errors": {
+          "pageerrors": 0,
+          "requestfailed": 7,
+          "requestfailed_notes": "All are Next.js RSC prefetch requests (_rsc= params) aborted during navigation — expected behavior, not errors",
+          "resource_404": 1,
+          "resource_404_notes": "favicon.ico 404 — non-critical, just missing icon"
+        },
+        "visual_quality": "PASS - proper CSS styling, professional design, responsive layout confirmed",
+        "browser_test_results": [
+          {"feature": "Login System", "status": "pass"},
+          {"feature": "Visual Quality & Styling", "status": "pass"},
+          {"feature": "Navigation", "status": "pass"},
+          {"feature": "Dashboard", "status": "pass"},
+          {"feature": "Project Management - Read", "status": "pass"},
+          {"feature": "Project Management - Create", "status": "pass"},
+          {"feature": "Project Management - Update", "status": "pass"},
+          {"feature": "Project Management - Delete", "status": "pass"},
+          {"feature": "Task Management - Interface", "status": "pass"},
+          {"feature": "Task Management - Create Form", "status": "pass"},
+          {"feature": "Database Schema & Data Persistence", "status": "pass"}
+        ],
+        "screenshot_urls": [
+          "https://litter.catbox.moe/mb9ou9.png",
+          "https://litter.catbox.moe/rvjfg3.png",
+          "https://litter.catbox.moe/i0z8xj.png",
+          "https://litter.catbox.moe/40ca6z.png",
+          "https://litter.catbox.moe/reweth.png",
+          "https://litter.catbox.moe/r8k9b6.png",
+          "https://litter.catbox.moe/lvoexc.png"
+        ]
+      },
+      "step6_frontend_pages": {
+        "pages_checked": [
+          {"path": "/", "status": 200, "result": "PASS"},
+          {"path": "/dashboard", "status": 200, "result": "PASS"},
+          {"path": "/login", "status": 200, "result": "PASS"},
+          {"path": "/register", "status": 200, "result": "PASS"},
+          {"path": "/projects", "status": 200, "result": "PASS"},
+          {"path": "/projects/new", "status": 200, "result": "PASS"},
+          {"path": "/projects/1", "status": 200, "result": "PASS"},
+          {"path": "/tasks", "status": 200, "result": "PASS"},
+          {"path": "/tasks/new", "status": 200, "result": "PASS"},
+          {"path": "/tasks/1", "status": 200, "result": "PASS"}
+        ],
+        "ui_component_tests": "No features tagged 'ui' in features.json — no component test requirement enforced",
+        "all_crud_pages_present": true
+      },
+      "step_pytest": {
+        "result": "PASS",
+        "total": 26,
+        "passed": 26,
+        "failed": 0,
+        "warnings": 3,
+        "warning_details": "Pydantic V2 deprecation for class-based Config in auth.py, projects.py, tasks.py"
       }
     }
-  ],
-  "latest": 1
+  },
+  "history": [
+    {
+      "iteration": 8,
+      "timestamp": "2026-03-30T16:55:30Z",
+      "critical_issues": [],
+      "endpoints_passed": 13,
+      "endpoints_total": 13,
+      "browser_smoke": "pass",
+      "pytest_passed": 26,
+      "pytest_total": 26
+    }
+  ]
 }
