@@ -1,14 +1,14 @@
 {
   "latest": {
-    "timestamp": "2026-03-30T18:16:00Z",
-    "iteration": 9,
+    "timestamp": "2026-03-30T18:42:00Z",
+    "iteration": 10,
     "summary": {
       "critical_issues": [],
       "warnings": [
         "favicon.ico returns 404 (minor — missing icon file)",
         "Pydantic V2 deprecation warnings for class-based Config in auth.py, projects.py, tasks.py — use ConfigDict instead",
-        "Backend requires DATABASE_URL=sqlite:///fixture.db override when starting (shared PostgreSQL has conflicting users table schema without hashed_password column)",
-        "Task seed in smoke test seeder returned 422 (expected — auto-generated body sent project_id=100 which doesn't exist; tasks still work correctly)"
+        "Backend must be started with DATABASE_URL=sqlite:///fixture.db override when using shared PostgreSQL (shared DB has conflicting users/projects/tasks table schemas without hashed_password column)",
+        "Task seed in smoke test seeder returned 422 (expected — auto-generated body sent project_id that may not exist; tasks still work correctly with real data)"
       ],
       "passed": [
         "Backend health check",
@@ -40,7 +40,6 @@
         "Frontend page /tasks/new (200)",
         "Frontend page /tasks/1 (200)",
         "Browser smoke test: PASS (exit code 0, overall=pass)",
-        "All 26 pytest tests pass",
         "UI component tests found: dashboard, navigation, projects, tasks, Sidebar"
       ],
       "endpoints_passed": 15,
@@ -62,7 +61,7 @@
         "register": {
           "status": "PASS",
           "endpoint": "POST /api/auth/register",
-          "email": "qa-test-20260330181150@example.com",
+          "email": "qa-test-20260330183823@example.com",
           "response_status": 200,
           "user_id": 3
         },
@@ -186,7 +185,7 @@
               "expected_status": 201,
               "actual_status": 201,
               "result": "PASS",
-              "notes": "Returned task with id=1"
+              "notes": "Returned task with id=1, project_id=4 (Task Test Project)"
             },
             {
               "step": "READ",
@@ -268,7 +267,7 @@
         "exit_code": 0,
         "auth_pass": true,
         "browser_overall": "pass",
-        "tests_passed": 9,
+        "tests_passed": 10,
         "tests_failed": 0,
         "critical_issues": [],
         "console_errors": {
@@ -280,24 +279,38 @@
         },
         "visual_quality": "PASS - proper CSS styling confirmed",
         "browser_test_results": [
-          {"feature": "Login Authentication", "status": "pass", "notes": "Successfully logged in with provided credentials. Proper redirect to dashboard, welcome message displayed, session maintained."},
-          {"feature": "Dashboard", "status": "pass", "notes": "Dashboard loads correctly with proper styling, shows welcome message, displays project/task counters (1 project, 0 tasks initially)."},
-          {"feature": "Navigation", "status": "pass", "notes": "Sidebar navigation works correctly. All menu items (Dashboard, Projects, Tasks) are accessible and functional."},
-          {"feature": "Project Management - Read", "status": "pass", "notes": "Projects list displays correctly with proper table structure, shows existing seed project with actions."},
-          {"feature": "Project Management - Create", "status": "pass", "notes": "New project creation works perfectly. Form validation, submission, and redirect back to list all function correctly."},
-          {"feature": "Project Management - Update", "status": "pass", "notes": "Edit functionality works correctly. Form pre-populates with existing data, saves changes successfully."},
-          {"feature": "Project Management - Delete", "status": "pass", "notes": "Delete functionality works immediately and correctly removes projects from the list."},
-          {"feature": "Task Management - Interface", "status": "pass", "notes": "Tasks page loads correctly, displays proper empty state message, New Task button is functional."},
-          {"feature": "Task Management - Create Form", "status": "pass", "notes": "New Task form loads with proper fields (Title, Project, Status), good styling and default values."}
+          {"feature": "Login Authentication", "status": "pass", "notes": "Successfully logged in with provided credentials. URL redirected properly, dashboard loaded with personalized greeting, proper session handling."},
+          {"feature": "Dashboard Navigation", "status": "pass", "notes": "Dashboard displays correctly with project/task counts, navigation menu functional, clean UI styling, logout button present."},
+          {"feature": "Project Management - Create", "status": "pass", "notes": "Successfully created 'QA Test Project' with description and color selection. Form validation working, proper redirection after creation."},
+          {"feature": "Project Management - Read", "status": "pass", "notes": "Projects list displays correctly in table format with all project details, seed data visible, proper styling and layout."},
+          {"feature": "Project Management - Update", "status": "pass", "notes": "Edit functionality works perfectly. Pre-populated form, successful save operation, updated data reflected in list view."},
+          {"feature": "Project Management - Delete", "status": "pass", "notes": "Delete operation successful. Project removed from list immediately, no errors encountered."},
+          {"feature": "Task Management - Navigation", "status": "pass", "notes": "Tasks page loads correctly, shows proper empty state message, 'New Task' button available and functional."},
+          {"feature": "Task Management - Create Form", "status": "pass", "notes": "New task form displays properly with title field, project dropdown, status dropdown. Form validation and styling working correctly."},
+          {"feature": "UI/UX and Styling", "status": "pass", "notes": "Consistent styling throughout application, proper focus states, responsive design, good color scheme and typography."},
+          {"feature": "Database Integration", "status": "pass", "notes": "CRUD operations persist correctly, seed data present, real-time updates working across all features."}
         ],
         "screenshot_urls": [
-          "https://litter.catbox.moe/pgftfl.png",
-          "https://litter.catbox.moe/uj0ihk.png",
-          "https://litter.catbox.moe/qnouo7.png",
-          "https://litter.catbox.moe/p02gux.png",
-          "https://litter.catbox.moe/s2xubm.png",
-          "https://litter.catbox.moe/qb0vhw.png",
-          "https://litter.catbox.moe/yflbls.png"
+          "https://litter.catbox.moe/ikqr5c.png",
+          "https://litter.catbox.moe/grxeqw.png",
+          "https://litter.catbox.moe/ktbksu.png",
+          "https://litter.catbox.moe/ln9mwu.png",
+          "https://litter.catbox.moe/4sy6l8.png",
+          "https://litter.catbox.moe/1pbbst.png",
+          "https://litter.catbox.moe/sedxrw.png",
+          "https://litter.catbox.moe/92wgzw.png",
+          "https://litter.catbox.moe/91xkwn.png",
+          "https://litter.catbox.moe/hfibe4.png",
+          "https://litter.catbox.moe/b6viwb.png",
+          "https://litter.catbox.moe/q71xy2.png",
+          "https://litter.catbox.moe/m6e7ya.png",
+          "https://litter.catbox.moe/5i3fiu.png",
+          "https://litter.catbox.moe/kywjwc.png",
+          "https://litter.catbox.moe/17r8lq.png",
+          "https://litter.catbox.moe/9jf928.png",
+          "https://litter.catbox.moe/qddpw7.png",
+          "https://litter.catbox.moe/i7c5oz.png",
+          "https://litter.catbox.moe/3gsgje.png"
         ]
       },
       "step6_frontend_pages": {
@@ -324,14 +337,6 @@
           "result": "PASS"
         },
         "all_crud_pages_present": true
-      },
-      "step_pytest": {
-        "result": "PASS",
-        "total": 26,
-        "passed": 26,
-        "failed": 0,
-        "warnings": 3,
-        "warning_details": "Pydantic V2 deprecation for class-based Config in auth.py, projects.py, tasks.py"
       }
     }
   },
@@ -355,6 +360,14 @@
       "browser_smoke": "pass",
       "pytest_passed": 26,
       "pytest_total": 26
+    },
+    {
+      "iteration": 10,
+      "timestamp": "2026-03-30T18:42:00Z",
+      "critical_issues": [],
+      "endpoints_passed": 15,
+      "endpoints_total": 15,
+      "browser_smoke": "pass"
     }
   ]
 }
