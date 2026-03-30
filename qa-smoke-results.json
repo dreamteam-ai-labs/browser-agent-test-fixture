@@ -1,19 +1,19 @@
 {
-  "timestamp": "2026-03-30T20:02:01Z",
+  "timestamp": "2026-03-30T21:07:11Z",
   "auth": {
     "success": true,
-    "email": "qa-tester-1774900921@test.example.com",
+    "email": "qa-tester-1774904832@test.example.com",
     "password": "TestPass123!",
     "steps": {
       "register": {
         "status": 200,
         "response": {
           "user": {
-            "id": 3,
-            "email": "qa-tester-1774900921@test.example.com",
+            "id": 6,
+            "email": "qa-tester-1774904832@test.example.com",
             "display_name": "QA Tester"
           },
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3NDkwMDkyMUB0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzc0OTg3MzIxfQ.Xt-gmmLx9wjnpBeSYBrugNIgmD8UMP4P7sdskLyMeZE"
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3NDkwNDgzMkB0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzc0OTkxMjMyfQ.O0lJQF4C80EdT7SHtcHDUs3PjumKCBZrgdeiTPW-CHM"
         }
       },
       "login": {
@@ -30,59 +30,39 @@
     "overall": "pass",
     "tests": [
       {
-        "feature": "User Authentication",
+        "feature": "User Authentication/Login",
         "status": "pass",
-        "notes": "Login successful with provided credentials. Redirected to dashboard with welcome message. Logout button available."
+        "notes": "Successfully logged in with test credentials. Email and password fields work correctly, proper form validation, redirect to dashboard after successful login."
       },
       {
         "feature": "Dashboard",
         "status": "pass",
-        "notes": "Dashboard displays correctly with summary cards showing project/task counts. Clean UI with proper navigation sidebar."
+        "notes": "Dashboard loads properly with welcome message, shows project/task counts (1 project, 0 tasks), navigation links functional, proper styling and layout."
       },
       {
-        "feature": "Project Creation",
+        "feature": "Navigation and Layout",
         "status": "pass",
-        "notes": "Successfully created new project 'QA Test Project' with description and color selection. Form validation and submission working properly."
+        "notes": "Left sidebar navigation works correctly, proper page routing, clean UI design with consistent styling, logout button present."
       },
       {
-        "feature": "Project Read/Display",
+        "feature": "Project Management - List View",
         "status": "pass",
-        "notes": "Projects displayed in clean table format with proper columns (Name, Description, Actions). Shows both seed data and newly created projects."
+        "notes": "Projects page loads successfully, displays existing project data in table format, shows CRUD action buttons (New Project, Edit, Delete)."
       },
       {
-        "feature": "Project Edit",
+        "feature": "Project Management - Create Form",
         "status": "pass",
-        "notes": "Edit functionality works correctly. Form pre-populates with existing data, successfully saved changes to project name."
+        "notes": "New Project form loads with proper fields (Name, Description, Color), form styling consistent, color picker functionality present, Create button available."
       },
       {
-        "feature": "Project Delete",
-        "status": "pass",
-        "notes": "Delete functionality works properly. Project removed from list immediately after deletion."
-      },
-      {
-        "feature": "Task Management Navigation",
-        "status": "pass",
-        "notes": "Tasks page loads successfully with proper styling. Shows empty state message and 'New Task' button."
-      },
-      {
-        "feature": "Task Creation Form",
-        "status": "pass",
-        "notes": "New Task form loads with proper fields: Title, Project dropdown, Status dropdown, and Create button. Form styling is consistent."
-      },
-      {
-        "feature": "UI/UX Quality",
-        "status": "pass",
-        "notes": "Excellent CSS styling throughout. Blue color scheme, proper focus states, responsive design, and consistent visual elements."
-      },
-      {
-        "feature": "Navigation",
-        "status": "pass",
-        "notes": "Sidebar navigation works properly between Dashboard, Projects, and Tasks sections. Clean transitions and proper page loading."
+        "feature": "Task Management",
+        "status": "skip",
+        "notes": "Task functionality visible in navigation but not fully tested in this session."
       }
     ],
     "critical_issues": [],
     "login_successful": true,
-    "pages_tested": 5,
+    "pages_tested": 4,
     "total_issues": 0,
     "service_reachable": true,
     "screenshotUrls": [
@@ -90,157 +70,61 @@
         "step": 0,
         "action": "initial_load",
         "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/v5drv3.png"
+        "imageUrl": "https://litter.catbox.moe/f7kxm5.png"
       },
       {
         "step": 1,
         "action": "screenshot",
         "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/nqqyd0.png"
+        "imageUrl": "https://litter.catbox.moe/gp1ego.png"
       },
       {
         "step": 2,
         "action": "left_click",
         "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/a25ogv.png"
+        "imageUrl": "https://litter.catbox.moe/jltamp.png"
       },
       {
         "step": 3,
         "action": "key",
         "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/unp40s.png"
+        "imageUrl": "https://litter.catbox.moe/my0fih.png"
       },
       {
         "step": 4,
         "action": "type",
         "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/49jhat.png"
+        "imageUrl": "https://litter.catbox.moe/k0i9po.png"
       },
       {
         "step": 5,
         "action": "left_click",
         "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/j7lyl0.png"
+        "imageUrl": "https://litter.catbox.moe/hoio5p.png"
       },
       {
         "step": 6,
         "action": "type",
         "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/6q1l2h.png"
+        "imageUrl": null
       },
       {
         "step": 7,
         "action": "left_click",
         "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/dashboard",
-        "imageUrl": "https://litter.catbox.moe/bb3mg4.png"
+        "imageUrl": null
       },
       {
         "step": 8,
         "action": "left_click",
         "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects",
-        "imageUrl": null
+        "imageUrl": "https://litter.catbox.moe/4kcgix.png"
       },
       {
         "step": 9,
         "action": "left_click",
         "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/new",
-        "imageUrl": "https://litter.catbox.moe/1ift80.png"
-      },
-      {
-        "step": 10,
-        "action": "triple_click",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/new",
-        "imageUrl": "https://litter.catbox.moe/lybap4.png"
-      },
-      {
-        "step": 11,
-        "action": "type",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/new",
-        "imageUrl": null
-      },
-      {
-        "step": 12,
-        "action": "left_click",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/new",
-        "imageUrl": "https://litter.catbox.moe/964qwq.png"
-      },
-      {
-        "step": 13,
-        "action": "type",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/new",
-        "imageUrl": "https://litter.catbox.moe/y3it31.png"
-      },
-      {
-        "step": 14,
-        "action": "left_click",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects",
-        "imageUrl": "https://litter.catbox.moe/tlfput.png"
-      },
-      {
-        "step": 15,
-        "action": "left_click",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/2",
-        "imageUrl": "https://litter.catbox.moe/l46f5o.png"
-      },
-      {
-        "step": 16,
-        "action": "triple_click",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/2",
-        "imageUrl": "https://litter.catbox.moe/8etmh3.png"
-      },
-      {
-        "step": 17,
-        "action": "type",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/2",
-        "imageUrl": "https://litter.catbox.moe/xan2e6.png"
-      },
-      {
-        "step": 18,
-        "action": "triple_click",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/2",
-        "imageUrl": "https://litter.catbox.moe/mii2xz.png"
-      },
-      {
-        "step": 19,
-        "action": "key",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/2",
-        "imageUrl": null
-      },
-      {
-        "step": 20,
-        "action": "key",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/2",
-        "imageUrl": null
-      },
-      {
-        "step": 21,
-        "action": "type",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/2",
-        "imageUrl": "https://litter.catbox.moe/tg5mmx.png"
-      },
-      {
-        "step": 22,
-        "action": "left_click",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects",
-        "imageUrl": "https://litter.catbox.moe/opwdaj.png"
-      },
-      {
-        "step": 23,
-        "action": "left_click",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects",
-        "imageUrl": "https://litter.catbox.moe/48nhu8.png"
-      },
-      {
-        "step": 24,
-        "action": "left_click",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/tasks",
-        "imageUrl": "https://litter.catbox.moe/5uh8bu.png"
-      },
-      {
-        "step": 25,
-        "action": "left_click",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/tasks/new",
-        "imageUrl": "https://litter.catbox.moe/j1dob6.png"
+        "imageUrl": "https://litter.catbox.moe/f3gv7e.png"
       }
     ],
     "consoleMessages": [
@@ -251,6 +135,11 @@
       },
       {
         "type": "requestfailed",
+        "text": "net::ERR_ABORTED: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/dashboard?_rsc=3y0gy",
+        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/dashboard?_rsc=3y0gy"
+      },
+      {
+        "type": "requestfailed",
         "text": "net::ERR_ABORTED: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects?_rsc=1lc1r",
         "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects?_rsc=1lc1r"
       },
@@ -258,26 +147,6 @@
         "type": "requestfailed",
         "text": "net::ERR_ABORTED: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/new?_rsc=1d7rs",
         "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/new?_rsc=1d7rs"
-      },
-      {
-        "type": "requestfailed",
-        "text": "net::ERR_ABORTED: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects?_rsc=zym4a",
-        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects?_rsc=zym4a"
-      },
-      {
-        "type": "requestfailed",
-        "text": "net::ERR_ABORTED: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/2?_rsc=jnvu0",
-        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/2?_rsc=jnvu0"
-      },
-      {
-        "type": "requestfailed",
-        "text": "net::ERR_ABORTED: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/tasks?_rsc=udws7",
-        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/tasks?_rsc=udws7"
-      },
-      {
-        "type": "requestfailed",
-        "text": "net::ERR_ABORTED: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/tasks/new?_rsc=1ferm",
-        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/tasks/new?_rsc=1ferm"
       }
     ]
   },
