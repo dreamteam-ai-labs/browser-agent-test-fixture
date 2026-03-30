@@ -1,290 +1,202 @@
 {
   "project": "browser-agent-test-fixture",
   "version": "0.1.0",
-  "last_updated": "2026-03-30T18:34:24.197659",
+  "last_updated": "2026-03-30T19:48:58.876Z",
   "features": [
     {
       "id": "database-schema",
       "name": "SQLite Database Schema",
-      "description": "SQLAlchemy ORM models for users, projects, and tasks. Uses SQLite with file-based storage. Models: User (email, hashed_password, name), Project (name, description, owner_id), Task (title, description, project_id, assignee_id, status).",
-      "status": "completed",
       "phase": 1,
+      "status": "pending",
+      "description": "SQLAlchemy ORM models for users, projects, and tasks. Uses SQLite with file-based storage. Models: User (email, hashed_password, name), Project (name, description, owner_id), Task (title, description, project_id, assignee_id, status).",
       "files": [
         "src/fixture/models.py",
         "src/fixture/database.py"
       ],
+      "tests_pass": false,
       "dependencies": [],
-      "tests_pass": true,
+      "validation": {
+        "test_command": "python3 -c \"from fixture.models import User, Project, Task; print('OK')\"",
+        "success_criteria": "All models importable, relationships defined"
+      },
       "metadata": {
         "complexity": "medium",
         "category": "Data",
-        "priority": "high",
-        "completion_warning": "Completed in 8s (threshold: 600s)"
-      },
-      "started_at": "2026-03-30T18:32:04.567684",
-      "completed_at": "2026-03-30T18:32:12.885666",
-      "last_touched_at": "2026-03-30T18:32:04.567687",
-      "iteration_count": 1,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-30T18:32:12.885666",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
+        "priority": "high"
+      }
+    },
+    {
+      "id": "health-endpoint",
+      "name": "Health Check and App Config",
+      "phase": 1,
+      "status": "pending",
+      "description": "GET /api/health returns {status: \"healthy\"}. Backend entry point at src/fixture/main.py.",
+      "files": [
+        "src/fixture/main.py"
       ],
-      "completion_notes": "Models User, Project, Task all importable. SQLAlchemy ORM with SQLite, all relationships defined.",
-      "tags": []
+      "tests_pass": false,
+      "dependencies": [
+        "database-schema"
+      ],
+      "validation": {
+        "test_command": "curl -s http://localhost:8000/api/health",
+        "success_criteria": "Health endpoint returns 200 with status healthy"
+      },
+      "metadata": {
+        "complexity": "simple",
+        "category": "API",
+        "priority": "high"
+      }
+    },
+    {
+      "id": "user-auth",
+      "name": "User Authentication",
+      "phase": 1,
+      "status": "pending",
+      "description": "POST /api/auth/register accepts {email, password, name}, creates user with bcrypt-hashed password, returns JWT. POST /api/auth/login validates credentials, returns {token}. GET /api/users/me returns current user profile. JWT middleware extracts user from Authorization: Bearer header.",
+      "files": [
+        "src/fixture/auth.py",
+        "src/fixture/routers/auth.py"
+      ],
+      "tests_pass": false,
+      "dependencies": [
+        "database-schema"
+      ],
+      "validation": {
+        "test_command": "curl -s -X POST http://localhost:8000/api/auth/register -H \"Content-Type: application/json\" -d '{\"email\":\"test@test.com\",\"password\":\"Test123!\",\"name\":\"Test\"}'",
+        "success_criteria": "Register creates user, login returns token, protected endpoints reject unauthenticated requests"
+      },
+      "metadata": {
+        "complexity": "complex",
+        "category": "Auth",
+        "priority": "high"
+      }
     },
     {
       "id": "frontend-setup",
       "name": "Frontend Project Setup",
-      "description": "Next.js 14 app with Tailwind CSS. App Router structure with pages for login, register, dashboard, projects, and tasks. API client using axios with empty baseURL and Next.js rewrites to proxy /api/* to backend port 8000. Use next.config.mjs (not .ts).",
-      "status": "completed",
       "phase": 1,
+      "status": "pending",
+      "description": "Next.js 14 app with Tailwind CSS. App Router structure with pages for login, register, dashboard, projects, and tasks. API client using axios with empty baseURL and Next.js rewrites to proxy /api/* to backend port 8000. Use next.config.mjs (not .ts).",
       "files": [
         "frontend/src/app/",
         "frontend/src/lib/api.ts",
         "frontend/next.config.mjs"
       ],
+      "tests_pass": false,
       "dependencies": [],
-      "tests_pass": true,
+      "validation": {
+        "test_command": "cd frontend && NODE_ENV=production npm run build",
+        "success_criteria": "Production build succeeds"
+      },
       "metadata": {
         "complexity": "medium",
         "category": "Frontend",
-        "priority": "high",
-        "completion_warning": "Completed in 29s (threshold: 600s)"
-      },
-      "started_at": "2026-03-30T18:32:21.793667",
-      "completed_at": "2026-03-30T18:32:50.963580",
-      "last_touched_at": "2026-03-30T18:32:21.793670",
-      "iteration_count": 1,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-30T18:32:50.963581",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "Next.js 14 with Tailwind, App Router, all pages exist. 21 frontend tests pass. Production build succeeds.",
-      "tags": []
-    },
-    {
-      "id": "health-endpoint",
-      "name": "Health Check and App Config",
-      "description": "GET /api/health returns {status: \"healthy\"}. Backend entry point at src/fixture/main.py.",
-      "status": "completed",
-      "phase": 1,
-      "files": [
-        "src/fixture/main.py"
-      ],
-      "dependencies": [
-        "database-schema"
-      ],
-      "tests_pass": true,
-      "metadata": {
-        "complexity": "simple",
-        "category": "API",
-        "priority": "high",
-        "completion_warning": "Completed in 27s (threshold: 600s)"
-      },
-      "started_at": "2026-03-30T18:32:21.799301",
-      "completed_at": "2026-03-30T18:32:49.193766",
-      "last_touched_at": "2026-03-30T18:32:21.799303",
-      "iteration_count": 1,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-30T18:32:49.193767",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "GET /api/health returns {status: healthy}. 26 backend tests pass.",
-      "tags": []
-    },
-    {
-      "id": "user-auth",
-      "name": "User Authentication",
-      "description": "POST /api/auth/register accepts {email, password, name}, creates user with bcrypt-hashed password, returns JWT. POST /api/auth/login validates credentials, returns {token}. GET /api/users/me returns current user profile. JWT middleware extracts user from Authorization: Bearer header.",
-      "status": "completed",
-      "phase": 1,
-      "files": [
-        "src/fixture/auth.py",
-        "src/fixture/routers/auth.py"
-      ],
-      "dependencies": [
-        "database-schema"
-      ],
-      "tests_pass": true,
-      "metadata": {
-        "complexity": "complex",
-        "category": "Auth",
-        "priority": "high",
-        "completion_warning": "Completed in 28s (threshold: 600s)"
-      },
-      "started_at": "2026-03-30T18:32:21.804674",
-      "completed_at": "2026-03-30T18:32:50.023293",
-      "last_touched_at": "2026-03-30T18:32:21.804677",
-      "iteration_count": 1,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-30T18:32:50.023294",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "JWT register/login/me endpoints with bcrypt. 7 auth tests pass.",
-      "tags": []
-    },
-    {
-      "id": "dashboard",
-      "name": "Dashboard",
-      "description": "Overview page at /dashboard showing project and task counts with quick links.",
-      "status": "completed",
-      "phase": 2,
-      "files": [
-        "frontend/src/app/dashboard/page.tsx"
-      ],
-      "dependencies": [
-        "user-auth",
-        "frontend-setup"
-      ],
-      "tests_pass": true,
-      "metadata": {
-        "complexity": "simple",
-        "category": "Frontend",
-        "priority": "low",
-        "completion_warning": "Completed in 5s (threshold: 600s)"
-      },
-      "started_at": "2026-03-30T18:34:01.401369",
-      "completed_at": "2026-03-30T18:34:06.427784",
-      "last_touched_at": "2026-03-30T18:34:01.401371",
-      "iteration_count": 1,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-30T18:34:06.427785",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "Dashboard page at /dashboard showing project and task counts. Tests pass (21/21), build verified.",
-      "tags": []
-    },
-    {
-      "id": "navigation",
-      "name": "Navigation and Layout",
-      "description": "Sidebar navigation with route highlighting and logout button. AuthGuard component protects authenticated routes. Layout component wraps all authenticated pages.",
-      "status": "completed",
-      "phase": 2,
-      "files": [
-        "frontend/src/components/Sidebar.tsx",
-        "frontend/src/components/AuthGuard.tsx",
-        "frontend/src/components/Layout.tsx"
-      ],
-      "dependencies": [
-        "user-auth",
-        "frontend-setup"
-      ],
-      "tests_pass": true,
-      "metadata": {
-        "complexity": "simple",
-        "category": "Frontend",
-        "priority": "low",
-        "completion_warning": "Completed in 6s (threshold: 600s)"
-      },
-      "started_at": "2026-03-30T18:34:18.145309",
-      "completed_at": "2026-03-30T18:34:24.197655",
-      "last_touched_at": "2026-03-30T18:34:18.145311",
-      "iteration_count": 1,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-30T18:34:24.197655",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "Sidebar, AuthGuard, and Layout components implemented. Route highlighting, logout button, and auth protection all working. Tests pass, build verified.",
-      "tags": []
+        "priority": "high"
+      }
     },
     {
       "id": "project-management",
       "name": "Project Management",
-      "description": "Full CRUD for projects. POST /api/projects creates project with owner_id from auth. GET /api/projects lists user's projects. GET /api/projects/{id} returns single project. DELETE /api/projects/{id} removes project. Frontend pages: /projects (list), /projects/new (create form).",
-      "status": "completed",
       "phase": 2,
+      "status": "pending",
+      "description": "Full CRUD for projects. POST /api/projects creates project with owner_id from auth. GET /api/projects lists user's projects. GET /api/projects/{id} returns single project. DELETE /api/projects/{id} removes project. Frontend pages: /projects (list), /projects/new (create form).",
       "files": [
         "src/fixture/routers/projects.py",
         "frontend/src/app/projects/"
       ],
+      "tests_pass": false,
       "dependencies": [
         "user-auth",
         "database-schema",
         "frontend-setup"
       ],
-      "tests_pass": true,
+      "validation": {
+        "test_command": "curl -s http://localhost:8000/api/projects -H \"Authorization: Bearer $TOKEN\"",
+        "success_criteria": "All CRUD operations work, auth enforced"
+      },
       "metadata": {
         "complexity": "medium",
         "category": "Feature",
-        "priority": "medium",
-        "completion_warning": "Completed in 7s (threshold: 600s)"
-      },
-      "started_at": "2026-03-30T18:33:30.435328",
-      "completed_at": "2026-03-30T18:33:37.724758",
-      "last_touched_at": "2026-03-30T18:33:30.435331",
-      "iteration_count": 1,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-30T18:33:37.724759",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "CRUD endpoints implemented: POST/GET/GET/{id}/DELETE /api/projects. All 6 project tests passing including auth protection and user isolation.",
-      "tags": []
+        "priority": "medium"
+      }
     },
     {
       "id": "task-management",
       "name": "Task Management",
-      "description": "Full CRUD for tasks with project assignment. POST /api/tasks creates task with project_id. GET /api/tasks lists user's tasks. DELETE /api/tasks/{id} removes task. Frontend pages: /tasks (list), /tasks/new (create form with project selector).",
-      "status": "completed",
       "phase": 2,
+      "status": "pending",
+      "description": "Full CRUD for tasks with project assignment. POST /api/tasks creates task with project_id. GET /api/tasks lists user's tasks. DELETE /api/tasks/{id} removes task. Frontend pages: /tasks (list), /tasks/new (create form with project selector).",
       "files": [
         "src/fixture/routers/tasks.py",
         "frontend/src/app/tasks/"
       ],
+      "tests_pass": false,
       "dependencies": [
         "user-auth",
         "database-schema",
         "project-management",
         "frontend-setup"
       ],
-      "tests_pass": true,
+      "validation": {
+        "test_command": "curl -s http://localhost:8000/api/tasks -H \"Authorization: Bearer $TOKEN\"",
+        "success_criteria": "All CRUD operations work, project assignment works"
+      },
       "metadata": {
         "complexity": "medium",
         "category": "Feature",
-        "priority": "medium",
-        "completion_warning": "Completed in 4s (threshold: 600s)"
-      },
-      "started_at": "2026-03-30T18:33:40.168190",
-      "completed_at": "2026-03-30T18:33:43.868718",
-      "last_touched_at": "2026-03-30T18:33:40.168193",
-      "iteration_count": 1,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-30T18:33:43.868718",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
+        "priority": "medium"
+      }
+    },
+    {
+      "id": "dashboard",
+      "name": "Dashboard",
+      "phase": 2,
+      "status": "pending",
+      "description": "Overview page at /dashboard showing project and task counts with quick links.",
+      "files": [
+        "frontend/src/app/dashboard/page.tsx"
       ],
-      "completion_notes": "CRUD endpoints implemented: POST/GET/GET/{id}/DELETE /api/tasks. All 8 task tests passing including auth protection, user isolation, and project association.",
-      "tags": []
+      "tests_pass": false,
+      "dependencies": [
+        "user-auth",
+        "frontend-setup"
+      ],
+      "validation": {
+        "test_command": "curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/dashboard",
+        "success_criteria": "Dashboard page renders"
+      },
+      "metadata": {
+        "complexity": "simple",
+        "category": "Frontend",
+        "priority": "low"
+      }
+    },
+    {
+      "id": "navigation",
+      "name": "Navigation and Layout",
+      "phase": 2,
+      "status": "pending",
+      "description": "Sidebar navigation with route highlighting and logout button. AuthGuard component protects authenticated routes. Layout component wraps all authenticated pages.",
+      "files": [
+        "frontend/src/components/Sidebar.tsx",
+        "frontend/src/components/AuthGuard.tsx",
+        "frontend/src/components/Layout.tsx"
+      ],
+      "tests_pass": false,
+      "dependencies": [
+        "user-auth",
+        "frontend-setup"
+      ],
+      "validation": {
+        "test_command": "curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/",
+        "success_criteria": "Layout renders with sidebar"
+      },
+      "metadata": {
+        "complexity": "simple",
+        "category": "Frontend",
+        "priority": "low"
+      }
     }
   ]
 }

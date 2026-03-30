@@ -1,7 +1,7 @@
 {
   "project": "browser-agent-test-fixture-environment-setup",
   "version": "0.1.0",
-  "last_updated": "2026-03-30T18:31:36.345800",
+  "last_updated": "2026-03-30T19:52:59.110924",
   "features": [
     {
       "id": "verify-browser-agent",
@@ -17,19 +17,19 @@
       "metadata": {
         "completion_warning": "Completed in 32s (threshold: 600s)"
       },
-      "started_at": "2026-03-30T18:31:04.120993",
-      "completed_at": "2026-03-30T18:31:36.345794",
-      "last_touched_at": "2026-03-30T18:31:04.120996",
+      "started_at": "2026-03-30T19:52:26.612633",
+      "completed_at": "2026-03-30T19:52:59.110918",
+      "last_touched_at": "2026-03-30T19:52:26.612637",
       "iteration_count": 1,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-30T18:31:36.345795",
+          "timestamp": "2026-03-30T19:52:59.110919",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "All 3 stages passed. Browser agent v2.2.1, navigated to codespace URL, screenshot captured. Stage 3 direct URL had 502 (warning only).",
+      "completion_notes": "3-stage verification passed: health v2.2.1, browser navigation to codespace URL successful, screenshot captured. Stage 3 direct URL got 502 but browser agent navigation worked (non-blocking).",
       "tags": []
     }
   ]
