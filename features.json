@@ -1,7 +1,7 @@
 {
   "project": "browser-agent-test-fixture",
   "version": "0.1.0",
-  "last_updated": "2026-03-30T21:51:41.088937",
+  "last_updated": "2026-03-30T21:53:02.712724",
   "features": [
     {
       "id": "database-schema",
@@ -199,7 +199,7 @@
       "id": "project-management",
       "name": "Project Management",
       "description": "Full CRUD for projects. POST /api/projects creates project with owner_id from auth. GET /api/projects lists user's projects. GET /api/projects/{id} returns single project. DELETE /api/projects/{id} removes project. Frontend pages: /projects (list), /projects/new (create form).",
-      "status": "pending",
+      "status": "completed",
       "phase": 2,
       "files": [
         "src/fixture/routers/projects.py",
@@ -210,25 +210,33 @@
         "database-schema",
         "frontend-setup"
       ],
-      "tests_pass": false,
+      "tests_pass": true,
       "metadata": {
         "complexity": "medium",
         "category": "Feature",
-        "priority": "medium"
+        "priority": "medium",
+        "completion_warning": "Completed in 9s (threshold: 600s)"
       },
-      "started_at": null,
-      "completed_at": null,
-      "last_touched_at": null,
-      "iteration_count": 0,
-      "work_history": [],
-      "completion_notes": null,
+      "started_at": "2026-03-30T21:52:49.099849",
+      "completed_at": "2026-03-30T21:52:58.558311",
+      "last_touched_at": "2026-03-30T21:52:49.099850",
+      "iteration_count": 1,
+      "work_history": [
+        {
+          "iteration": 1,
+          "timestamp": "2026-03-30T21:52:58.558312",
+          "note": "COMPLETED",
+          "tests_pass": true
+        }
+      ],
+      "completion_notes": "Projects CRUD router at /api/projects with list, create, get, update, delete endpoints. Auth-protected with user isolation. 7 tests pass in test_projects.py. All 26 pytest tests passing.",
       "tags": []
     },
     {
       "id": "task-management",
       "name": "Task Management",
       "description": "Full CRUD for tasks with project assignment. POST /api/tasks creates task with project_id. GET /api/tasks lists user's tasks. DELETE /api/tasks/{id} removes task. Frontend pages: /tasks (list), /tasks/new (create form with project selector).",
-      "status": "pending",
+      "status": "completed",
       "phase": 2,
       "files": [
         "src/fixture/routers/tasks.py",
@@ -240,18 +248,26 @@
         "project-management",
         "frontend-setup"
       ],
-      "tests_pass": false,
+      "tests_pass": true,
       "metadata": {
         "complexity": "medium",
         "category": "Feature",
-        "priority": "medium"
+        "priority": "medium",
+        "completion_warning": "Completed in 2s (threshold: 600s)"
       },
-      "started_at": null,
-      "completed_at": null,
-      "last_touched_at": null,
-      "iteration_count": 0,
-      "work_history": [],
-      "completion_notes": null,
+      "started_at": "2026-03-30T21:53:00.322745",
+      "completed_at": "2026-03-30T21:53:02.712720",
+      "last_touched_at": "2026-03-30T21:53:00.322748",
+      "iteration_count": 1,
+      "work_history": [
+        {
+          "iteration": 1,
+          "timestamp": "2026-03-30T21:53:02.712721",
+          "note": "COMPLETED",
+          "tests_pass": true
+        }
+      ],
+      "completion_notes": "Tasks CRUD router at /api/tasks with list, create, get, update, delete endpoints. Auth-protected with user isolation. Supports optional project_id for task-project assignment. 8 tests pass in test_tasks.py. All 26 pytest tests passing.",
       "tags": []
     }
   ]
