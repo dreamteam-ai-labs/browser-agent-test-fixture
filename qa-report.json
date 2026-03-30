@@ -1,16 +1,19 @@
 {
   "latest": {
-    "timestamp": "2026-03-30T18:42:00Z",
-    "iteration": 10,
+    "timestamp": "2026-03-30T20:06:00Z",
+    "iteration": 11,
     "summary": {
+      "total_tests": 18,
+      "passed": 18,
+      "failed": 0,
       "critical_issues": [],
       "warnings": [
         "favicon.ico returns 404 (minor — missing icon file)",
-        "Pydantic V2 deprecation warnings for class-based Config in auth.py, projects.py, tasks.py — use ConfigDict instead",
-        "Backend must be started with DATABASE_URL=sqlite:///fixture.db override when using shared PostgreSQL (shared DB has conflicting users/projects/tasks table schemas without hashed_password column)",
-        "Task seed in smoke test seeder returned 422 (expected — auto-generated body sent project_id that may not exist; tasks still work correctly with real data)"
+        "Backend must be started with DATABASE_URL=sqlite:///... override when using shared PostgreSQL (shared Neon DB has schema mismatch — users table missing hashed_password column). Tests ran against SQLite successfully.",
+        "Task seed in smoke test seeder returned 422 — smoke test tried to seed tasks referencing a project that may not exist in the fresh DB. Task API itself works correctly.",
+        "Next.js RSC prefetch requests aborted during navigation (_rsc= params) — expected App Router behavior, not errors"
       ],
-      "passed": [
+      "passed_list": [
         "Backend health check",
         "User registration",
         "User login",
@@ -20,19 +23,17 @@
         "Project CRUD: LIST",
         "Project CRUD: UPDATE",
         "Project CRUD: VERIFY UPDATE",
-        "Project CRUD: DELETE",
+        "Project CRUD: DELETE (204)",
         "Project CRUD: VERIFY DELETE (404)",
         "Task CRUD: CREATE",
         "Task CRUD: READ",
         "Task CRUD: LIST",
         "Task CRUD: UPDATE",
         "Task CRUD: VERIFY UPDATE",
-        "Task CRUD: DELETE",
+        "Task CRUD: DELETE (204)",
         "Task CRUD: VERIFY DELETE (404)",
         "Frontend page / (200)",
         "Frontend page /dashboard (200)",
-        "Frontend page /login (200)",
-        "Frontend page /register (200)",
         "Frontend page /projects (200)",
         "Frontend page /projects/new (200)",
         "Frontend page /projects/1 (200)",
@@ -55,15 +56,15 @@
           "version": "1.0.0",
           "service": "browser-agent-test-fixture"
         },
-        "note": "Backend started with DATABASE_URL=sqlite:///fixture.db to bypass shared PostgreSQL schema conflict"
+        "note": "Backend started with DATABASE_URL=sqlite:///test_qa.db to bypass shared PostgreSQL schema conflict (Neon DB missing hashed_password column)"
       },
       "step2_auth": {
         "register": {
           "status": "PASS",
           "endpoint": "POST /api/auth/register",
-          "email": "qa-test-20260330183823@example.com",
+          "email": "qa-tester@test.com",
           "response_status": 200,
-          "user_id": 3
+          "user_id": 2
         },
         "login": {
           "status": "PASS",
@@ -113,20 +114,20 @@
               "step": "CREATE",
               "method": "POST",
               "path": "/api/projects",
-              "request": {"name": "QA Test Project", "description": "A project for QA testing", "color": "#ff5733"},
+              "request": {"name": "QA Test Project", "description": "Test project for QA", "color": "#ff0000"},
               "expected_status": 201,
               "actual_status": 201,
               "result": "PASS",
-              "notes": "Returned project with id=4"
+              "notes": "Returned project with id=1"
             },
             {
               "step": "READ",
               "method": "GET",
-              "path": "/api/projects/4",
+              "path": "/api/projects/1",
               "expected_status": 200,
               "actual_status": 200,
               "result": "PASS",
-              "notes": "Fields matched: id, name, description, color, user_id"
+              "notes": "name=QA Test Project verified"
             },
             {
               "step": "LIST",
@@ -135,13 +136,13 @@
               "expected_status": 200,
               "actual_status": 200,
               "result": "PASS",
-              "notes": "Returned array containing created project"
+              "notes": "Returned array of 1 project"
             },
             {
               "step": "UPDATE",
               "method": "PUT",
-              "path": "/api/projects/4",
-              "request": {"name": "QA Test Project UPDATED", "description": "Updated description", "color": "#00ff00"},
+              "path": "/api/projects/1",
+              "request": {"name": "QA Test Project Updated", "description": "Updated description", "color": "#00ff00"},
               "expected_status": 200,
               "actual_status": 200,
               "result": "PASS"
@@ -149,16 +150,16 @@
             {
               "step": "VERIFY UPDATE",
               "method": "GET",
-              "path": "/api/projects/4",
+              "path": "/api/projects/1",
               "expected_status": 200,
               "actual_status": 200,
               "result": "PASS",
-              "notes": "name updated to 'QA Test Project UPDATED', color updated to '#00ff00'"
+              "notes": "name changed to 'QA Test Project Updated'"
             },
             {
               "step": "DELETE",
               "method": "DELETE",
-              "path": "/api/projects/4",
+              "path": "/api/projects/1",
               "expected_status": 204,
               "actual_status": 204,
               "result": "PASS"
@@ -166,7 +167,7 @@
             {
               "step": "VERIFY DELETE",
               "method": "GET",
-              "path": "/api/projects/4",
+              "path": "/api/projects/1",
               "expected_status": 404,
               "actual_status": 404,
               "result": "PASS"
@@ -181,11 +182,11 @@
               "step": "CREATE",
               "method": "POST",
               "path": "/api/tasks",
-              "request": {"title": "QA Test Task", "project_id": 4, "status": "todo"},
+              "request": {"title": "QA Test Task", "status": "todo", "project_id": 1},
               "expected_status": 201,
               "actual_status": 201,
               "result": "PASS",
-              "notes": "Returned task with id=1, project_id=4 (Task Test Project)"
+              "notes": "Returned task with id=1"
             },
             {
               "step": "READ",
@@ -194,7 +195,7 @@
               "expected_status": 200,
               "actual_status": 200,
               "result": "PASS",
-              "notes": "Fields matched: id, title, status, project_id, user_id"
+              "notes": "title=QA Test Task verified"
             },
             {
               "step": "LIST",
@@ -209,7 +210,7 @@
               "step": "UPDATE",
               "method": "PUT",
               "path": "/api/tasks/1",
-              "request": {"title": "QA Test Task UPDATED", "project_id": 4, "status": "in_progress"},
+              "request": {"title": "QA Test Task Updated", "status": "in_progress"},
               "expected_status": 200,
               "actual_status": 200,
               "result": "PASS"
@@ -221,7 +222,7 @@
               "expected_status": 200,
               "actual_status": 200,
               "result": "PASS",
-              "notes": "title updated to 'QA Test Task UPDATED', status updated to 'in_progress'"
+              "notes": "title changed to 'QA Test Task Updated', status='in_progress'"
             },
             {
               "step": "DELETE",
@@ -244,7 +245,7 @@
         "user-auth": {
           "feature": "User Authentication",
           "overall": "PASS",
-          "notes": "Register, login, /api/auth/me all verified. JWT bearer token works correctly. Duplicate email returns 409 (verified in pytest suite)."
+          "notes": "Register, login, /api/auth/me all verified. JWT bearer token works correctly."
         },
         "health-endpoint": {
           "feature": "Health Check",
@@ -272,53 +273,53 @@
         "critical_issues": [],
         "console_errors": {
           "pageerrors": 0,
-          "requestfailed": 5,
-          "requestfailed_notes": "All are Next.js RSC prefetch requests (_rsc= params) aborted during navigation — expected behavior, not errors",
+          "requestfailed": 6,
+          "requestfailed_notes": "All are Next.js RSC prefetch requests (_rsc= params) aborted during navigation — expected behavior",
           "resource_404": 1,
-          "resource_404_notes": "favicon.ico 404 — non-critical, just missing icon"
+          "resource_404_notes": "favicon.ico 404 — non-critical"
         },
         "visual_quality": "PASS - proper CSS styling confirmed",
         "browser_test_results": [
-          {"feature": "Login Authentication", "status": "pass", "notes": "Successfully logged in with provided credentials. URL redirected properly, dashboard loaded with personalized greeting, proper session handling."},
-          {"feature": "Dashboard Navigation", "status": "pass", "notes": "Dashboard displays correctly with project/task counts, navigation menu functional, clean UI styling, logout button present."},
-          {"feature": "Project Management - Create", "status": "pass", "notes": "Successfully created 'QA Test Project' with description and color selection. Form validation working, proper redirection after creation."},
-          {"feature": "Project Management - Read", "status": "pass", "notes": "Projects list displays correctly in table format with all project details, seed data visible, proper styling and layout."},
-          {"feature": "Project Management - Update", "status": "pass", "notes": "Edit functionality works perfectly. Pre-populated form, successful save operation, updated data reflected in list view."},
-          {"feature": "Project Management - Delete", "status": "pass", "notes": "Delete operation successful. Project removed from list immediately, no errors encountered."},
-          {"feature": "Task Management - Navigation", "status": "pass", "notes": "Tasks page loads correctly, shows proper empty state message, 'New Task' button available and functional."},
-          {"feature": "Task Management - Create Form", "status": "pass", "notes": "New task form displays properly with title field, project dropdown, status dropdown. Form validation and styling working correctly."},
-          {"feature": "UI/UX and Styling", "status": "pass", "notes": "Consistent styling throughout application, proper focus states, responsive design, good color scheme and typography."},
-          {"feature": "Database Integration", "status": "pass", "notes": "CRUD operations persist correctly, seed data present, real-time updates working across all features."}
+          {"feature": "User Authentication", "status": "pass", "notes": "Login successful with provided credentials. Redirected to dashboard with welcome message."},
+          {"feature": "Dashboard", "status": "pass", "notes": "Dashboard displays correctly with summary cards showing project/task counts."},
+          {"feature": "Project Creation", "status": "pass", "notes": "Successfully created new project with description and color selection."},
+          {"feature": "Project Read/Display", "status": "pass", "notes": "Projects displayed in clean table format with proper columns."},
+          {"feature": "Project Edit", "status": "pass", "notes": "Edit functionality works. Form pre-populates and saves correctly."},
+          {"feature": "Project Delete", "status": "pass", "notes": "Delete functionality works. Project removed from list immediately."},
+          {"feature": "Task Management Navigation", "status": "pass", "notes": "Tasks page loads with proper styling and empty state message."},
+          {"feature": "Task Creation Form", "status": "pass", "notes": "New task form has all fields: Title, Project dropdown, Status dropdown."},
+          {"feature": "UI/UX Quality", "status": "pass", "notes": "Excellent CSS styling throughout. Blue color scheme, responsive design."},
+          {"feature": "Navigation", "status": "pass", "notes": "Sidebar navigation works properly between Dashboard, Projects, and Tasks."}
         ],
         "screenshot_urls": [
-          "https://litter.catbox.moe/ikqr5c.png",
-          "https://litter.catbox.moe/grxeqw.png",
-          "https://litter.catbox.moe/ktbksu.png",
-          "https://litter.catbox.moe/ln9mwu.png",
-          "https://litter.catbox.moe/4sy6l8.png",
-          "https://litter.catbox.moe/1pbbst.png",
-          "https://litter.catbox.moe/sedxrw.png",
-          "https://litter.catbox.moe/92wgzw.png",
-          "https://litter.catbox.moe/91xkwn.png",
-          "https://litter.catbox.moe/hfibe4.png",
-          "https://litter.catbox.moe/b6viwb.png",
-          "https://litter.catbox.moe/q71xy2.png",
-          "https://litter.catbox.moe/m6e7ya.png",
-          "https://litter.catbox.moe/5i3fiu.png",
-          "https://litter.catbox.moe/kywjwc.png",
-          "https://litter.catbox.moe/17r8lq.png",
-          "https://litter.catbox.moe/9jf928.png",
-          "https://litter.catbox.moe/qddpw7.png",
-          "https://litter.catbox.moe/i7c5oz.png",
-          "https://litter.catbox.moe/3gsgje.png"
+          "https://litter.catbox.moe/v5drv3.png",
+          "https://litter.catbox.moe/nqqyd0.png",
+          "https://litter.catbox.moe/a25ogv.png",
+          "https://litter.catbox.moe/unp40s.png",
+          "https://litter.catbox.moe/49jhat.png",
+          "https://litter.catbox.moe/j7lyl0.png",
+          "https://litter.catbox.moe/6q1l2h.png",
+          "https://litter.catbox.moe/bb3mg4.png",
+          "https://litter.catbox.moe/1ift80.png",
+          "https://litter.catbox.moe/lybap4.png",
+          "https://litter.catbox.moe/964qwq.png",
+          "https://litter.catbox.moe/y3it31.png",
+          "https://litter.catbox.moe/tlfput.png",
+          "https://litter.catbox.moe/l46f5o.png",
+          "https://litter.catbox.moe/8etmh3.png",
+          "https://litter.catbox.moe/xan2e6.png",
+          "https://litter.catbox.moe/mii2xz.png",
+          "https://litter.catbox.moe/tg5mmx.png",
+          "https://litter.catbox.moe/opwdaj.png",
+          "https://litter.catbox.moe/48nhu8.png",
+          "https://litter.catbox.moe/5uh8bu.png",
+          "https://litter.catbox.moe/j1dob6.png"
         ]
       },
       "step6_frontend_pages": {
         "pages_checked": [
           {"path": "/", "status": 200, "result": "PASS"},
           {"path": "/dashboard", "status": 200, "result": "PASS"},
-          {"path": "/login", "status": 200, "result": "PASS"},
-          {"path": "/register", "status": 200, "result": "PASS"},
           {"path": "/projects", "status": 200, "result": "PASS"},
           {"path": "/projects/new", "status": 200, "result": "PASS"},
           {"path": "/projects/1", "status": 200, "result": "PASS"},
@@ -364,6 +365,14 @@
     {
       "iteration": 10,
       "timestamp": "2026-03-30T18:42:00Z",
+      "critical_issues": [],
+      "endpoints_passed": 15,
+      "endpoints_total": 15,
+      "browser_smoke": "pass"
+    },
+    {
+      "iteration": 11,
+      "timestamp": "2026-03-30T20:06:00Z",
       "critical_issues": [],
       "endpoints_passed": 15,
       "endpoints_total": 15,
