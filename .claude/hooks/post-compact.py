@@ -1,14 +1,51 @@
 #!/usr/bin/env python3
-"""Post-compact hook — re-injects feature progress after context compaction.
+"""Post-compact hook — re-injects feature progress and phase directive after compaction.
 
 When Claude's context is compacted, agents lose track of which features
 are done, in-progress, or pending. This hook fires after compaction and
-returns a progress summary as a message, ensuring agents stay oriented.
+returns a phase-specific directive + progress summary, ensuring agents
+stay oriented.
+
+OBSOLESCENCE: Remove when Anthropic ships native compaction-aware context
+injection. See Hook Dependency Watchlist in memory/sync-status.md.
 """
 import json
 import sys
 from datetime import datetime
 from pathlib import Path
+
+STATE_FILE = Path("project-state.json")
+
+# Phase-specific directives — focused, actionable, short
+PHASE_DIRECTIVES = {
+    "foundations": (
+        "You are building FOUNDATIONS (Phase 0+1). "
+        "Call get_next_feature(max_phase=1) to find the next feature. "
+        "Build it, test it, complete it. Repeat until no more Phase 0+1 features remain. "
+        "Then call set_state(key='build_phase', value='builders') to advance."
+    ),
+    "builders": (
+        "BUILDERS are running as teammates. "
+        "Monitor progress with get_progress(). Wait for them to finish. "
+        "Do NOT build features yourself — the builders handle Phase 2+."
+    ),
+    "verification": (
+        "All features built. Run verification: pytest -v && cd frontend && npm test. "
+        "If tests pass, the build phase is complete."
+    ),
+    "qa": (
+        "QA phase. Spawn qa-tester if not already running. "
+        "Check qa-report.json for results. If critical issues, fix them and retest."
+    ),
+    "deploy": (
+        "QA passed. Spawn deployment-prep agent if not already running. "
+        "Wait for it to commit."
+    ),
+    "done": (
+        "Build complete. All features built, QA passed, deployment-prep done. "
+        "You can exit."
+    ),
+}
 
 
 def log_hook(hook_name: str, agent_id: str, action: str, detail: str = ""):
@@ -22,7 +59,16 @@ def log_hook(hook_name: str, agent_id: str, action: str, detail: str = ""):
         with open(log_path, "a", encoding="utf-8") as f:
             f.write(line + "\n")
     except OSError:
-        pass  # Best-effort logging — never break the hook
+        pass
+
+
+def read_build_phase() -> str:
+    """Read build_phase from project-state.json."""
+    try:
+        data = json.loads(STATE_FILE.read_text(encoding="utf-8"))
+        return data.get("build_phase", "")
+    except (OSError, json.JSONDecodeError):
+        return ""
 
 
 def get_progress_summary() -> str:
@@ -40,7 +86,7 @@ def get_progress_summary() -> str:
             if done < total:
                 lines.append(f"ENV PREREQUISITES: {done}/{total} complete (BLOCKING)")
             else:
-                lines.append(f"ENV PREREQUISITES: {done}/{total} complete ✓")
+                lines.append(f"ENV PREREQUISITES: {done}/{total} complete")
         except (json.JSONDecodeError, OSError):
             pass
 
@@ -68,7 +114,6 @@ def get_progress_summary() -> str:
 
     if pending:
         lines.append(f"PENDING: {len(pending)} features remaining")
-        # Show next few pending
         for f in pending[:3]:
             lines.append(f"  - {f['id']}: {f['name']}")
         if len(pending) > 3:
@@ -76,41 +121,6 @@ def get_progress_summary() -> str:
 
     lines.append("")
     lines.append("Call get_progress() for full details, or get_next_feature() to continue.")
-
-    # If features are done but QA hasn't passed, inject strong stay-alive directive
-    if not pending and not in_progress and completed:
-        qa_path = Path("qa-report.json")
-        if not qa_path.exists():
-            lines.append("")
-            lines.append("CRITICAL: All features complete but QA has not run yet.")
-            lines.append("You MUST spawn the qa-tester agent and wait for it to finish.")
-            lines.append("Do NOT exit. Keep polling: cat qa-report.json")
-        else:
-            try:
-                qa = json.loads(qa_path.read_text(encoding="utf-8"))
-                verdict = qa.get("verdict", "").lower()
-                overall = qa.get("overall_result", "").lower()
-                if verdict not in ("pass", "passed") and overall not in ("pass", "passed"):
-                    lines.append("")
-                    lines.append("CRITICAL: QA has not passed yet. Do NOT exit.")
-                    lines.append("Keep polling: cat qa-report.json")
-                    lines.append("After QA passes, spawn the deployment-prep agent.")
-                else:
-                    # QA passed — check if deployment-prep has run
-                    import subprocess
-                    try:
-                        git_result = subprocess.run(
-                            ["git", "log", "--oneline", "-30"],
-                            capture_output=True, text=True, timeout=5,
-                        )
-                        if "deployment prep" not in git_result.stdout.lower():
-                            lines.append("")
-                            lines.append("CRITICAL: QA passed but deployment-prep has NOT run.")
-                            lines.append("You MUST spawn the deployment-prep agent NOW.")
-                    except (subprocess.TimeoutExpired, OSError):
-                        pass
-            except (json.JSONDecodeError, OSError):
-                pass
 
     return "\n".join(lines)
 
@@ -122,21 +132,37 @@ def main():
         event = {}
 
     agent_id = event.get("agent_id", "unknown") or "unknown"
-    summary = get_progress_summary()
 
-    # Build a compact detail for the log line
+    # Build the recovery message
+    parts = []
+
+    # Phase-specific directive (primary — short, actionable)
+    build_phase = read_build_phase()
+    if build_phase and build_phase in PHASE_DIRECTIVES:
+        parts.append(f"[PHASE: {build_phase.upper()}]")
+        parts.append(PHASE_DIRECTIVES[build_phase])
+        parts.append("")
+
+    # Progress summary (secondary — context)
+    summary = get_progress_summary()
+    parts.append(summary)
+
+    message = "\n".join(parts)
+
+    log_detail = f"phase={build_phase or 'unset'}"
     try:
         data = json.loads(Path("features.json").read_text(encoding="utf-8"))
         features = data.get("features", [])
         done = sum(1 for f in features if f.get("status") == "completed")
-        total = len(features)
-        log_hook("post-compact", agent_id, "RECOVER", f"{done}/{total} features complete")
+        log_detail += f" | {done}/{len(features)} features"
     except (json.JSONDecodeError, OSError, FileNotFoundError):
-        log_hook("post-compact", agent_id, "RECOVER", "could not read features.json")
+        pass
+
+    log_hook("post-compact", agent_id, "RECOVER", log_detail)
 
     json.dump({
         "decision": "allow",
-        "message": f"[Post-compaction state recovery]\n{summary}",
+        "message": f"[Post-compaction state recovery]\n{message}",
     }, sys.stdout)
 
 

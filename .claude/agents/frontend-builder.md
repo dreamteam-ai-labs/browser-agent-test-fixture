@@ -3,7 +3,7 @@ name: frontend-builder
 description: Builds frontend features from features.json — works in frontend/ only
 skills: ["web-app", "testing-strategy", "progress-tracking"]
 memory: project
-initialPrompt: "Start building. Call get_next_feature() to find the first pending frontend feature and begin implementing it."
+initialPrompt: "Start building. Call get_next_feature(min_phase=2) to find the first pending frontend feature and begin implementing it. Phase 0 and 1 are already built."
 hooks:
   PreToolUse:
     - matcher: "Write|Edit|MultiEdit"

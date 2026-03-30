@@ -2,22 +2,28 @@
 """Build gate hook — prevents the lead agent from exiting before the build is complete.
 
 Stop hook that checks features.json and qa-report.json before allowing exit.
-If features are incomplete or QA hasn't passed, blocks the exit and tells the
-agent to keep working. This survives context compaction because it operates at
-the infrastructure level, not the prompt level.
+Uses progress-based stall detection (primary) with block counter fallback.
+Supports BUILD_LEAD_SCOPE for two-session hybrid architecture.
 
 Only blocks the lead session (no agent_type). Teammates and subagents exit freely.
 
-New in Claude Code 2.1.85 (Stop hook with decision: "block").
+OBSOLESCENCE: Remove when Anthropic ships native session exit conditions
+or "lead can't exit while teammates running." See Hook Dependency Watchlist
+in memory/sync-status.md.
 """
 import json
+import os
 import sys
 from datetime import datetime
 from pathlib import Path
 
-# Safety valve — don't block forever if something is truly broken
+# --- Fallback safety valve (validated across production runs) ---
 MAX_BLOCKS = 20
 BLOCK_COUNT_FILE = Path(".claude/hooks/.build-gate-blocks")
+
+# --- Progress-based stall detection ---
+STATE_FILE = Path("project-state.json")
+STALL_THRESHOLD = 5  # consecutive blocks with no progress
 
 
 def log_hook(hook_name: str, agent_id: str, action: str, detail: str = ""):
@@ -34,8 +40,9 @@ def log_hook(hook_name: str, agent_id: str, action: str, detail: str = ""):
         pass
 
 
+# --- Fallback block counter (kept as safety net) ---
+
 def get_block_count() -> int:
-    """Read the current block count from disk."""
     try:
         return int(BLOCK_COUNT_FILE.read_text(encoding="utf-8").strip())
     except (OSError, ValueError):
@@ -43,50 +50,106 @@ def get_block_count() -> int:
 
 
 def increment_block_count() -> int:
-    """Increment and return the block count."""
     count = get_block_count() + 1
     BLOCK_COUNT_FILE.parent.mkdir(parents=True, exist_ok=True)
     BLOCK_COUNT_FILE.write_text(str(count), encoding="utf-8")
     return count
 
 
-def check_features_complete() -> tuple[bool, str]:
-    """Check if all features in features.json are completed.
+# --- State read/write for progress tracking ---
 
-    Returns (all_complete, detail_string).
-    """
+def read_state(key: str, default=None):
+    """Read a value from project-state.json."""
+    try:
+        data = json.loads(STATE_FILE.read_text(encoding="utf-8"))
+        return data.get(key, default)
+    except (OSError, json.JSONDecodeError):
+        return default
+
+
+def write_state(key: str, value) -> None:
+    """Write a value to project-state.json (atomic read-modify-write)."""
+    try:
+        data = json.loads(STATE_FILE.read_text(encoding="utf-8")) if STATE_FILE.exists() else {}
+    except (OSError, json.JSONDecodeError):
+        data = {}
+    data[key] = value
+    tmp = STATE_FILE.with_suffix(".tmp")
+    tmp.write_text(json.dumps(data, indent=2), encoding="utf-8")
+    tmp.replace(STATE_FILE)
+
+
+# --- Progress snapshot ---
+
+def get_progress_snapshot() -> dict:
+    """Get current feature completion counts from features.json."""
     path = Path("features.json")
     if not path.exists():
-        return True, "no features.json"  # No features to track — allow exit
+        return {"completed": 0, "total": 0}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        features = data.get("features", [])
+        completed = sum(1 for f in features if f.get("status") == "completed")
+        return {"completed": completed, "total": len(features)}
+    except (OSError, json.JSONDecodeError):
+        return {"completed": 0, "total": 0}
 
+
+def check_progress_stall() -> tuple[bool, str]:
+    """Check if progress has stalled. Returns (stalled, detail).
+
+    Primary gate: compares current progress against last recorded.
+    If no progress for STALL_THRESHOLD consecutive checks, session is stalled.
+    """
+    try:
+        current = get_progress_snapshot()
+        last = read_state("build_gate_last_progress", {"completed": 0, "total": 0})
+        stall_count = read_state("build_gate_stall_count", 0)
+
+        if current["completed"] > last.get("completed", 0):
+            # Progress made — reset stall counter
+            write_state("build_gate_last_progress", current)
+            write_state("build_gate_stall_count", 0)
+            return False, f"progress: {current['completed']}/{current['total']}"
+
+        # No progress — increment stall counter
+        stall_count += 1
+        write_state("build_gate_stall_count", stall_count)
+        write_state("build_gate_last_progress", current)
+
+        if stall_count >= STALL_THRESHOLD:
+            return True, f"stalled {stall_count} checks at {current['completed']}/{current['total']}"
+
+        return False, f"no progress ({stall_count}/{STALL_THRESHOLD} stalls) at {current['completed']}/{current['total']}"
+    except Exception:
+        # Progress check failed — fall through to block counter
+        return False, "progress check error — using fallback"
+
+
+# --- Completion criteria checks ---
+
+def check_features_complete() -> tuple[bool, str]:
+    path = Path("features.json")
+    if not path.exists():
+        return True, "no features.json"
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (json.JSONDecodeError, OSError):
-        return True, "unreadable features.json"  # Don't block on broken file
-
+        return True, "unreadable features.json"
     features = data.get("features", [])
     if not features:
         return True, "empty features list"
-
     completed = sum(1 for f in features if f.get("status") == "completed")
     in_progress = sum(1 for f in features if f.get("status") == "in_progress")
     pending = sum(1 for f in features if f.get("status") == "pending")
     total = len(features)
-
     if completed == total:
         return True, f"{completed}/{total} features complete"
-
-    detail = f"{completed}/{total} complete, {in_progress} in-progress, {pending} pending"
-    return False, detail
+    return False, f"{completed}/{total} complete, {in_progress} in-progress, {pending} pending"
 
 
 def check_deployment_prep_done() -> tuple[bool, str]:
-    """Check if deployment-prep has run by looking for its commit in git log.
-
-    Returns (prep_done, detail_string).
-    """
     import subprocess
-
     try:
         result = subprocess.run(
             ["git", "log", "--oneline", "-30"],
@@ -94,48 +157,32 @@ def check_deployment_prep_done() -> tuple[bool, str]:
         )
         if result.returncode != 0:
             return True, "git log failed — skipping check"
-
         if "deployment prep" in result.stdout.lower():
             return True, "deployment-prep commit found"
-
         return False, "deployment-prep has not run yet"
     except (subprocess.TimeoutExpired, OSError):
         return True, "git unavailable — skipping check"
 
 
 def check_qa_passed() -> tuple[bool, str]:
-    """Check if qa-report.json exists and has a passing verdict.
-
-    Returns (qa_passed, detail_string).
-    """
     path = Path("qa-report.json")
     if not path.exists():
         return False, "qa-report.json does not exist yet"
-
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (json.JSONDecodeError, OSError):
         return False, "qa-report.json unreadable"
-
-    # Check for passing verdict in multiple formats the QA agent uses
-    # Format 1: top-level "verdict" or "overall_result"
     verdict = data.get("verdict", "").lower()
     overall = data.get("overall_result", "").lower()
-
     if verdict in ("pass", "passed") or overall in ("pass", "passed"):
         return True, f"QA verdict: {verdict or overall}"
-
-    # Format 2: "latest" → "summary" → "critical_issues"
     latest = data.get("latest", {})
     if isinstance(latest, dict):
         summary = latest.get("summary", {})
         if isinstance(summary, dict):
             critical = summary.get("critical_issues", [])
             if isinstance(critical, list) and len(critical) == 0:
-                # Zero critical issues = pass
                 return True, "QA: 0 critical issues"
-
-    # Format 3: iterations array — check last iteration
     iterations = data.get("iterations", [])
     if iterations:
         last = iterations[-1] if isinstance(iterations, list) else None
@@ -145,8 +192,26 @@ def check_qa_passed() -> tuple[bool, str]:
                 critical = iter_summary.get("critical_issues", [])
                 if isinstance(critical, list) and len(critical) == 0:
                     return True, "QA: 0 critical issues (last iteration)"
-
     return False, "QA has not passed yet"
+
+
+# --- Scope configuration ---
+
+def get_scope() -> str:
+    """Get build-lead scope. Determines exit criteria.
+
+    build_only: exit when all features complete (skip QA/deploy checks)
+    full: exit when features + QA + deployment-prep all complete
+    """
+    scope = os.environ.get("BUILD_LEAD_SCOPE", "")
+    if not scope:
+        scope = read_state("build_lead_scope", "")
+    if not scope:
+        # Check session_role — qa-lead sets this to "verify"
+        role = read_state("session_role", "")
+        if role == "verify":
+            return "full"
+    return scope or "full"  # Default to full for backwards compatibility
 
 
 def main():
@@ -164,55 +229,79 @@ def main():
         json.dump({"decision": "allow"}, sys.stdout)
         return
 
-    # Safety valve — don't block forever
+    scope = get_scope()
+
+    # --- Check completion criteria based on scope ---
+    features_ok, features_detail = check_features_complete()
+
+    if scope == "build_only":
+        # Build-only scope: just check features
+        if features_ok:
+            log_hook("build-gate", "lead", "ALLOW", f"scope=build_only | {features_detail}")
+            json.dump({"decision": "allow"}, sys.stdout)
+            return
+    else:
+        # Full scope: check all three conditions
+        qa_ok, qa_detail = check_qa_passed()
+        prep_ok, prep_detail = check_deployment_prep_done()
+
+        if features_ok and qa_ok and prep_ok:
+            log_hook("build-gate", "lead", "ALLOW", f"scope=full | {features_detail} | {qa_detail} | {prep_detail}")
+            json.dump({"decision": "allow"}, sys.stdout)
+            return
+
+    # --- Not complete — check if we should force-allow via stall/safety valve ---
+
+    # Primary: progress-based stall detection
+    stalled, stall_detail = check_progress_stall()
+    if stalled:
+        log_hook("build-gate", "lead", "ALLOW", f"stalled | {stall_detail}")
+        json.dump({"decision": "allow"}, sys.stdout)
+        return
+
+    # Fallback: block counter (safety net if progress check fails or is insufficient)
     block_count = get_block_count()
     if block_count >= MAX_BLOCKS:
-        log_hook("build-gate", "lead", "ALLOW", f"max blocks reached ({MAX_BLOCKS})")
+        log_hook("build-gate", "lead", "ALLOW", f"fallback max blocks ({MAX_BLOCKS})")
         json.dump({"decision": "allow"}, sys.stdout)
         return
 
-    # Check all three completion criteria
-    features_ok, features_detail = check_features_complete()
-    qa_ok, qa_detail = check_qa_passed()
-    prep_ok, prep_detail = check_deployment_prep_done()
-
-    if features_ok and qa_ok and prep_ok:
-        log_hook("build-gate", "lead", "ALLOW", f"{features_detail} | {qa_detail} | {prep_detail}")
-        json.dump({"decision": "allow"}, sys.stdout)
-        return
-
-    # Build is not complete — block the exit
+    # --- Block the exit ---
     count = increment_block_count()
+
     reasons = []
     if not features_ok:
         reasons.append(f"Features: {features_detail}")
-    if not qa_ok:
-        reasons.append(f"QA: {qa_detail}")
-    if not prep_ok:
-        reasons.append(f"Deploy: {prep_detail}")
-
+    if scope != "build_only":
+        if not qa_ok:
+            reasons.append(f"QA: {qa_detail}")
+        if not prep_ok:
+            reasons.append(f"Deploy: {prep_detail}")
     reason_text = ". ".join(reasons)
 
-    # Tailor the directive to what's still needed
-    if not features_ok or not qa_ok:
+    # Tailor directive to what's needed
+    if not features_ok:
+        next_step = "Continue building features. Call get_next_feature() to find remaining work."
+    elif scope != "build_only" and not qa_ok:
         next_step = (
             "Run: cat qa-report.json to check QA status. "
             "If QA agent is still running, wait and check again. "
             "After QA passes, spawn the deployment-prep agent."
         )
-    else:
+    elif scope != "build_only" and not prep_ok:
         next_step = (
             "QA has passed but deployment-prep has not run. "
-            "Spawn the deployment-prep agent NOW. "
-            "It verifies deps are declared, imports work, and frontend builds."
+            "Spawn the deployment-prep agent NOW."
         )
+    else:
+        next_step = "Check get_progress() for current status."
 
     directive = (
-        f"Build not complete ({count}/{MAX_BLOCKS}). {reason_text}. "
+        f"Build not complete (scope={scope}, stall={stall_detail}). {reason_text}. "
         f"Do NOT exit. {next_step}"
     )
 
-    log_hook("build-gate", "lead", "BLOCK", f"block #{count} | {reason_text}")
+    log_hook("build-gate", "lead", "BLOCK", f"block #{count} | scope={scope} | {reason_text}")
 
     json.dump({
         "decision": "block",
