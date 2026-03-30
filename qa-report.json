@@ -1,7 +1,7 @@
 {
   "latest": {
-    "timestamp": "2026-03-30T21:15:00Z",
-    "iteration": 12,
+    "timestamp": "2026-03-30T21:57:30Z",
+    "iteration": 13,
     "summary": {
       "total_tests": 18,
       "passed": 18,
@@ -9,8 +9,7 @@
       "critical_issues": [],
       "warnings": [
         "favicon.ico returns 404 (minor — missing icon file)",
-        "PostgreSQL Neon shared DB had stale users table (missing hashed_password column). Schema was reset via DROP SCHEMA/CREATE SCHEMA before tests. All subsequent tests passed against the correct schema.",
-        "Task seed in smoke test seeder returned 422 — smoke test tried to seed tasks referencing project_id=100 which did not exist. Task API itself works correctly (manually verified full CRUD).",
+        "Task seed in smoke test seeder returned 422 — smoke test tried to seed tasks without a valid project_id. Task API itself works correctly (manually verified full CRUD).",
         "Next.js RSC prefetch requests aborted during navigation (_rsc= params) — expected App Router behavior, not errors"
       ],
       "passed_list": [
@@ -44,7 +43,8 @@
         "UI component tests found: dashboard, navigation, projects, tasks, Sidebar"
       ],
       "endpoints_passed": 15,
-      "endpoints_total": 15
+      "endpoints_total": 15,
+      "note": "Iteration 13: Full QA run against already-running servers (SQLite backend). All CRUD operations verified. Browser smoke test passed with 6 features verified by browser agent."
     },
     "details": {
       "step1_servers": {
@@ -56,15 +56,15 @@
           "version": "1.0.0",
           "service": "browser-agent-test-fixture"
         },
-        "note": "Iteration 12: PostgreSQL schema was reset via DROP SCHEMA/CREATE SCHEMA before starting backend. New tables created from SQLAlchemy models. Backend started cleanly against fresh PostgreSQL schema."
+        "note": "Iteration 13: Both servers already running. Backend on SQLite. Health check confirmed healthy."
       },
       "step2_auth": {
         "register": {
           "status": "PASS",
           "endpoint": "POST /api/auth/register",
-          "email": "qa-tester@test.com",
+          "email": "qa_test_1774907768@example.com",
           "response_status": 200,
-          "user_id": 2
+          "user_id": 10
         },
         "login": {
           "status": "PASS",
@@ -280,45 +280,42 @@
         },
         "visual_quality": "PASS - proper CSS styling confirmed",
         "browser_test_results": [
-          {"feature": "User Authentication", "status": "pass", "notes": "Login successful with provided credentials. Redirected to dashboard with welcome message."},
-          {"feature": "Dashboard", "status": "pass", "notes": "Dashboard displays correctly with summary cards showing project/task counts."},
-          {"feature": "Project Creation", "status": "pass", "notes": "Successfully created new project with description and color selection."},
-          {"feature": "Project Read/Display", "status": "pass", "notes": "Projects displayed in clean table format with proper columns."},
-          {"feature": "Project Edit", "status": "pass", "notes": "Edit functionality works. Form pre-populates and saves correctly."},
-          {"feature": "Project Delete", "status": "pass", "notes": "Delete functionality works. Project removed from list immediately."},
-          {"feature": "Task Management Navigation", "status": "pass", "notes": "Tasks page loads with proper styling and empty state message."},
-          {"feature": "Task Creation Form", "status": "pass", "notes": "New task form has all fields: Title, Project dropdown, Status dropdown."},
-          {"feature": "UI/UX Quality", "status": "pass", "notes": "Excellent CSS styling throughout. Blue color scheme, responsive design."},
-          {"feature": "Navigation", "status": "pass", "notes": "Sidebar navigation works properly between Dashboard, Projects, and Tasks."}
+          {"feature": "Login System", "status": "pass", "notes": "Successfully authenticated. Redirect to dashboard working."},
+          {"feature": "Dashboard", "status": "pass", "notes": "Welcome message displays correctly. Project count shows 1. Proper CSS styling."},
+          {"feature": "Navigation and Layout", "status": "pass", "notes": "Sidebar navigation works. Active states highlighted. Consistent layout."},
+          {"feature": "Project Management", "status": "pass", "notes": "Full CRUD tested: create, read, update, delete all working in browser."},
+          {"feature": "Task Management", "status": "pass", "notes": "Task page loads, empty state shown, new task form renders correctly."},
+          {"feature": "UI/UX Quality", "status": "pass", "notes": "Professional CSS styling throughout. Blue color scheme, responsive design."}
         ],
         "screenshot_urls": [
-          "https://litter.catbox.moe/v5drv3.png",
-          "https://litter.catbox.moe/nqqyd0.png",
-          "https://litter.catbox.moe/a25ogv.png",
-          "https://litter.catbox.moe/unp40s.png",
-          "https://litter.catbox.moe/49jhat.png",
-          "https://litter.catbox.moe/j7lyl0.png",
-          "https://litter.catbox.moe/6q1l2h.png",
-          "https://litter.catbox.moe/bb3mg4.png",
-          "https://litter.catbox.moe/1ift80.png",
-          "https://litter.catbox.moe/lybap4.png",
-          "https://litter.catbox.moe/964qwq.png",
-          "https://litter.catbox.moe/y3it31.png",
-          "https://litter.catbox.moe/tlfput.png",
-          "https://litter.catbox.moe/l46f5o.png",
-          "https://litter.catbox.moe/8etmh3.png",
-          "https://litter.catbox.moe/xan2e6.png",
-          "https://litter.catbox.moe/mii2xz.png",
-          "https://litter.catbox.moe/tg5mmx.png",
-          "https://litter.catbox.moe/opwdaj.png",
-          "https://litter.catbox.moe/48nhu8.png",
-          "https://litter.catbox.moe/5uh8bu.png",
-          "https://litter.catbox.moe/j1dob6.png"
+          "https://litter.catbox.moe/3q65fg.png",
+          "https://litter.catbox.moe/ks8d9t.png",
+          "https://litter.catbox.moe/bjxt3c.png",
+          "https://litter.catbox.moe/0kvs93.png",
+          "https://litter.catbox.moe/2ao99v.png",
+          "https://litter.catbox.moe/0ak1xj.png",
+          "https://litter.catbox.moe/aatqrq.png",
+          "https://litter.catbox.moe/33xvxv.png",
+          "https://litter.catbox.moe/bj9m5r.png",
+          "https://litter.catbox.moe/ypxz0q.png",
+          "https://litter.catbox.moe/rm39z1.png",
+          "https://litter.catbox.moe/99qgh7.png",
+          "https://litter.catbox.moe/z9k0gh.png",
+          "https://litter.catbox.moe/8j4nuc.png",
+          "https://litter.catbox.moe/69609i.png",
+          "https://litter.catbox.moe/qmcnq6.png",
+          "https://litter.catbox.moe/6fzunl.png",
+          "https://litter.catbox.moe/0mawwv.png",
+          "https://litter.catbox.moe/7t40pu.png",
+          "https://litter.catbox.moe/obkdbm.png",
+          "https://litter.catbox.moe/lti38x.png"
         ]
       },
       "step6_frontend_pages": {
         "pages_checked": [
           {"path": "/", "status": 200, "result": "PASS"},
+          {"path": "/login", "status": 200, "result": "PASS"},
+          {"path": "/register", "status": 200, "result": "PASS"},
           {"path": "/dashboard", "status": 200, "result": "PASS"},
           {"path": "/projects", "status": 200, "result": "PASS"},
           {"path": "/projects/new", "status": 200, "result": "PASS"},
@@ -342,6 +339,17 @@
     }
   },
   "history": [
+    {
+      "iteration": 13,
+      "timestamp": "2026-03-30T21:57:30Z",
+      "critical_issues": [],
+      "endpoints_passed": 15,
+      "endpoints_total": 15,
+      "browser_smoke": "pass",
+      "frontend_pages_passed": 10,
+      "frontend_pages_total": 10,
+      "notes": "Full QA run iteration 13. SQLite backend. Both servers pre-running. All CRUD verified. Browser smoke test passed (6/6 features). Zero critical issues."
+    },
     {
       "iteration": 12,
       "timestamp": "2026-03-30T21:15:00Z",
