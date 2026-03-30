@@ -1,19 +1,19 @@
 {
-  "timestamp": "2026-03-30T16:27:09Z",
+  "timestamp": "2026-03-30T16:32:17Z",
   "auth": {
     "success": true,
-    "email": "qa-tester-1774888029@test.example.com",
+    "email": "qa-tester-1774888337@test.example.com",
     "password": "TestPass123!",
     "steps": {
       "register": {
         "status": 200,
         "response": {
           "user": {
-            "id": 3,
-            "email": "qa-tester-1774888029@test.example.com",
+            "id": 2,
+            "email": "qa-tester-1774888337@test.example.com",
             "display_name": "QA Tester"
           },
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3NDg4ODAyOUB0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzc0OTc0NDI5fQ.1a9soEuMXoPglpy1-5J4JcXlcCgorLCNzZ-m77pN6Wg"
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3NDg4ODMzN0B0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzc0OTc0NzM3fQ.us3xkvdW_WNt-F3-srsJBIn_AQTzdqt4DLQDNhKYb8o"
         }
       },
       "login": {
@@ -27,210 +27,12 @@
     "token_verified": true
   },
   "browser_smoke_test": {
-    "overall": "fail",
-    "tests": [
-      {
-        "feature": "Page Loading",
-        "status": "fail",
-        "notes": "Application returns HTTP ERROR 401 immediately upon access"
-      },
-      {
-        "feature": "Login Form Display",
-        "status": "skip",
-        "notes": "Unable to reach login page due to authentication error"
-      },
-      {
-        "feature": "User Authentication",
-        "status": "fail",
-        "notes": "Cannot test login functionality - server returns 401 before reaching login form"
-      },
-      {
-        "feature": "Dashboard Access",
-        "status": "skip",
-        "notes": "Cannot access due to initial authentication failure"
-      },
-      {
-        "feature": "Navigation",
-        "status": "skip",
-        "notes": "Cannot test navigation due to inability to access application"
-      },
-      {
-        "feature": "UI/Styling",
-        "status": "skip",
-        "notes": "Cannot verify UI elements due to persistent error page"
-      },
-      {
-        "feature": "Responsive Design",
-        "status": "skip",
-        "notes": "Cannot test responsiveness due to application unavailability"
-      }
-    ],
+    "overall": "error",
+    "tests": [],
     "critical_issues": [
-      "Application immediately returns HTTP ERROR 401 preventing any access to the login page",
-      "Server authentication configuration appears to be blocking all requests before reaching the application layer"
+      "No response from tester"
     ],
-    "login_successful": false,
-    "pages_tested": 0,
-    "total_issues": 2,
     "service_reachable": true,
-    "screenshotUrls": [
-      {
-        "step": 0,
-        "action": "initial_load",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/zbab0v.png"
-      },
-      {
-        "step": 1,
-        "action": "screenshot",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/woxguq.png"
-      },
-      {
-        "step": 2,
-        "action": "left_click",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/o96vig.png"
-      },
-      {
-        "step": 3,
-        "action": "key",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/2a68qq.png"
-      },
-      {
-        "step": 4,
-        "action": "type",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/ij0yby.png"
-      },
-      {
-        "step": 5,
-        "action": "left_click",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/brpsm7.png"
-      },
-      {
-        "step": 6,
-        "action": "type",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": null
-      },
-      {
-        "step": 7,
-        "action": "left_click",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": "https://litter.catbox.moe/f35f32.png"
-      },
-      {
-        "step": 8,
-        "action": "left_click",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": "https://litter.catbox.moe/1id19j.png"
-      },
-      {
-        "step": 9,
-        "action": "key",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": null
-      },
-      {
-        "step": 10,
-        "action": "left_click",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": "https://litter.catbox.moe/76m6sx.png"
-      },
-      {
-        "step": 11,
-        "action": "key",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": "https://litter.catbox.moe/fx9bva.png"
-      },
-      {
-        "step": 12,
-        "action": "key",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": "https://litter.catbox.moe/20a3xk.png"
-      },
-      {
-        "step": 13,
-        "action": "screenshot",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": "https://litter.catbox.moe/7r34b7.png"
-      },
-      {
-        "step": 14,
-        "action": "key",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": "https://litter.catbox.moe/im5zrs.png"
-      },
-      {
-        "step": 15,
-        "action": "key",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": null
-      },
-      {
-        "step": 16,
-        "action": "key",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": "https://litter.catbox.moe/a2m7r2.png"
-      },
-      {
-        "step": 17,
-        "action": "key",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": null
-      },
-      {
-        "step": 18,
-        "action": "left_click",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": "https://litter.catbox.moe/kizpli.png"
-      },
-      {
-        "step": 19,
-        "action": "screenshot",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": "https://litter.catbox.moe/c1wffm.png"
-      },
-      {
-        "step": 20,
-        "action": "left_click",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": "https://litter.catbox.moe/lpc489.png"
-      },
-      {
-        "step": 21,
-        "action": "key",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": "https://litter.catbox.moe/cq5a7m.png"
-      },
-      {
-        "step": 22,
-        "action": "key",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": "https://litter.catbox.moe/d0fhv9.png"
-      },
-      {
-        "step": 23,
-        "action": "key",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": null
-      },
-      {
-        "step": 24,
-        "action": "type",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": null
-      },
-      {
-        "step": 25,
-        "action": "key",
-        "pageUrl": "chrome-error://chromewebdata/",
-        "imageUrl": null
-      }
-    ],
     "consoleMessages": [
       {
         "type": "error",
@@ -238,41 +40,87 @@
         "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/favicon.ico"
       },
       {
-        "type": "error",
-        "text": "Failed to load resource: the server responded with a status of 401 ()",
-        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/api/auth/login"
+        "type": "requestfailed",
+        "text": "net::ERR_ABORTED: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/dashboard?_rsc=16djb",
+        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/dashboard?_rsc=16djb"
       },
       {
         "type": "requestfailed",
-        "text": "net::ERR_HTTP_RESPONSE_CODE_FAILURE: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login"
-      },
-      {
-        "type": "error",
-        "text": "Failed to load resource: the server responded with a status of 401 ()",
-        "url": "chrome-error://chromewebdata/"
+        "text": "net::ERR_ABORTED: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/dashboard?_rsc=3y0gy",
+        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/dashboard?_rsc=3y0gy"
       },
       {
         "type": "requestfailed",
-        "text": "net::ERR_HTTP_RESPONSE_CODE_FAILURE: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login"
-      },
-      {
-        "type": "error",
-        "text": "Failed to load resource: the server responded with a status of 401 ()",
-        "url": "chrome-error://chromewebdata/"
+        "text": "net::ERR_ABORTED: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects?_rsc=1538b",
+        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects?_rsc=1538b"
       },
       {
         "type": "requestfailed",
-        "text": "net::ERR_HTTP_RESPONSE_CODE_FAILURE: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login"
+        "text": "net::ERR_ABORTED: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/new?_rsc=v9w5b",
+        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/new?_rsc=v9w5b"
       },
       {
         "type": "error",
-        "text": "Failed to load resource: the server responded with a status of 401 ()",
-        "url": "chrome-error://chromewebdata/"
+        "text": "Failed to load resource: the server responded with a status of 500 ()",
+        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects?_rsc=zym4a"
+      },
+      {
+        "type": "requestfailed",
+        "text": "net::ERR_ABORTED: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects?_rsc=123u8",
+        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects?_rsc=123u8"
+      },
+      {
+        "type": "error",
+        "text": "Refused to apply style from 'https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/_next/static/css/app/layout.css?v=1774888447106' because its MIME type ('text/html') is not a supported stylesheet MIME type, and strict MIME checking is enabled.",
+        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/new"
+      },
+      {
+        "type": "requestfailed",
+        "text": "net::ERR_ABORTED: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/_next/static/css/app/layout.css?v=1774888447106",
+        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/_next/static/css/app/layout.css?v=1774888447106"
+      },
+      {
+        "type": "error",
+        "text": "Refused to apply style from 'https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/_next/static/css/app/layout.css?v=1774888447106' because its MIME type ('text/html') is not a supported stylesheet MIME type, and strict MIME checking is enabled.",
+        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/new"
+      },
+      {
+        "type": "requestfailed",
+        "text": "net::ERR_ABORTED: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/_next/static/css/app/layout.css?v=1774888447106",
+        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/_next/static/css/app/layout.css?v=1774888447106"
+      },
+      {
+        "type": "pageerror",
+        "text": "Event",
+        "url": ""
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 500 ()",
+        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/2?_rsc=v9w5b"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 500 ()",
+        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/2"
+      },
+      {
+        "type": "pageerror",
+        "text": "Cannot find module './vendor-chunks/axios.js'\nRequire stack:\n- /workspaces/browser-agent-test-fixture/frontend/.next/server/webpack-runtime.js\n- /workspaces/browser-agent-test-fixture/frontend/.next/server/app/projects/[id]/page.js\n- /workspaces/browser-agent-test-fixture/frontend/node_modules/next/dist/server/require.js\n- /workspaces/browser-agent-test-fixture/frontend/node_modules/next/dist/server/load-components.js\n- /workspaces/browser-agent-test-fixture/frontend/node_modules/next/dist/build/utils.js\n- /workspaces/browser-agent-test-fixture/frontend/node_modules/next/dist/server/dev/static-paths-worker.js\n- /workspaces/browser-agent-test-fixture/frontend/node_modules/next/dist/compiled/jest-worker/processChild.js\nModule._resolveFilename (node:internal/modules/cjs/loader:1207:15)\n<unknown> (file:///workspaces/browser-agent-test-fixture/frontend/node_modules/next/dist/server/require-hook.js:55:36)\nModule._load (node:internal/modules/cjs/loader:1038:27)\nModule.require (node:internal/modules/cjs/loader:1289:19)\nmod.require (file:///workspaces/browser-agent-test-fixture/frontend/node_modules/next/dist/server/require-hook.js:65:28)\nrequire (node:internal/modules/helpers:182:18)\n__webpack_require__.f.require (file:///workspaces/browser-agent-test-fixture/frontend/.next/server/webpack-runtime.js:198:28)\n<unknown> (file:///workspaces/browser-agent-test-fixture/frontend/.next/server/webpack-runtime.js:111:40)",
+        "url": ""
+      },
+      {
+        "type": "requestfailed",
+        "text": "net::ERR_ABORTED: data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBpZD0ic3ZnIj48dGV4dCB4PSIxMCIgeT0iMjAiIGlkPSJzdmctbGluay10ZXh0Ij50ZXh0PC90ZXh0Pjwvc3ZnPg==",
+        "url": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBpZD0ic3ZnIj48dGV4dCB4PSIxMCIgeT0iMjAiIGlkPSJzdmctbGluay10ZXh0Ij50ZXh0PC90ZXh0Pjwvc3ZnPg=="
+      },
+      {
+        "type": "requestfailed",
+        "text": "net::ERR_ABORTED: data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBpZD0ic3ZnIj48dGV4dCB4PSIxMCIgeT0iMjAiIGlkPSJzdmctbGluay10ZXh0Ij50ZXh0PC90ZXh0Pjwvc3ZnPg==",
+        "url": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBpZD0ic3ZnIj48dGV4dCB4PSIxMCIgeT0iMjAiIGlkPSJzdmctbGluay10ZXh0Ij50ZXh0PC90ZXh0Pjwvc3ZnPg=="
       }
-    ]
+    ],
+    "error": "Unknown key: \"LEFT\""
   },
   "exit_code": 1
 }
