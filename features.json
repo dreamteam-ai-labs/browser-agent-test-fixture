@@ -1,7 +1,7 @@
 {
   "project": "browser-agent-test-fixture",
   "version": "0.1.0",
-  "last_updated": "2026-03-30T18:32:50.963584",
+  "last_updated": "2026-03-30T18:33:43.868723",
   "features": [
     {
       "id": "database-schema",
@@ -199,7 +199,7 @@
       "id": "project-management",
       "name": "Project Management",
       "description": "Full CRUD for projects. POST /api/projects creates project with owner_id from auth. GET /api/projects lists user's projects. GET /api/projects/{id} returns single project. DELETE /api/projects/{id} removes project. Frontend pages: /projects (list), /projects/new (create form).",
-      "status": "pending",
+      "status": "completed",
       "phase": 2,
       "files": [
         "src/fixture/routers/projects.py",
@@ -210,25 +210,33 @@
         "database-schema",
         "frontend-setup"
       ],
-      "tests_pass": false,
+      "tests_pass": true,
       "metadata": {
         "complexity": "medium",
         "category": "Feature",
-        "priority": "medium"
+        "priority": "medium",
+        "completion_warning": "Completed in 7s (threshold: 600s)"
       },
-      "started_at": null,
-      "completed_at": null,
-      "last_touched_at": null,
-      "iteration_count": 0,
-      "work_history": [],
-      "completion_notes": null,
+      "started_at": "2026-03-30T18:33:30.435328",
+      "completed_at": "2026-03-30T18:33:37.724758",
+      "last_touched_at": "2026-03-30T18:33:30.435331",
+      "iteration_count": 1,
+      "work_history": [
+        {
+          "iteration": 1,
+          "timestamp": "2026-03-30T18:33:37.724759",
+          "note": "COMPLETED",
+          "tests_pass": true
+        }
+      ],
+      "completion_notes": "CRUD endpoints implemented: POST/GET/GET/{id}/DELETE /api/projects. All 6 project tests passing including auth protection and user isolation.",
       "tags": []
     },
     {
       "id": "task-management",
       "name": "Task Management",
       "description": "Full CRUD for tasks with project assignment. POST /api/tasks creates task with project_id. GET /api/tasks lists user's tasks. DELETE /api/tasks/{id} removes task. Frontend pages: /tasks (list), /tasks/new (create form with project selector).",
-      "status": "pending",
+      "status": "completed",
       "phase": 2,
       "files": [
         "src/fixture/routers/tasks.py",
@@ -240,18 +248,26 @@
         "project-management",
         "frontend-setup"
       ],
-      "tests_pass": false,
+      "tests_pass": true,
       "metadata": {
         "complexity": "medium",
         "category": "Feature",
-        "priority": "medium"
+        "priority": "medium",
+        "completion_warning": "Completed in 4s (threshold: 600s)"
       },
-      "started_at": null,
-      "completed_at": null,
-      "last_touched_at": null,
-      "iteration_count": 0,
-      "work_history": [],
-      "completion_notes": null,
+      "started_at": "2026-03-30T18:33:40.168190",
+      "completed_at": "2026-03-30T18:33:43.868718",
+      "last_touched_at": "2026-03-30T18:33:40.168193",
+      "iteration_count": 1,
+      "work_history": [
+        {
+          "iteration": 1,
+          "timestamp": "2026-03-30T18:33:43.868718",
+          "note": "COMPLETED",
+          "tests_pass": true
+        }
+      ],
+      "completion_notes": "CRUD endpoints implemented: POST/GET/GET/{id}/DELETE /api/tasks. All 8 task tests passing including auth protection, user isolation, and project association.",
       "tags": []
     }
   ]
