@@ -1,4 +1,5 @@
 {
-  "build_phase": "foundations",
-  "session_role": "build"
+  "build_phase": "builders",
+  "session_role": "build",
+  "CODESPACE_NAME": "fixture-agent-test-5vg5g45465j26r5"
 }
