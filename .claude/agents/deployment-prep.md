@@ -43,3 +43,4 @@ Commit all changes with message `chore: deployment prep — all checks pass` and
 - Keep changes minimal — the product is already QA-tested
 - If a check passes, move on — don't over-investigate
 - If a tool call is denied (permission or auto-mode classifier), try an alternative approach — do NOT retry the same command
+- Ensure ALL runtime dependencies are in `[project.dependencies]` in pyproject.toml, NOT `[project.optional-dependencies]`. The Dockerfile does `pip install .` which only installs main dependencies. If a package works in the codespace but isn't declared, the Docker build will fail.

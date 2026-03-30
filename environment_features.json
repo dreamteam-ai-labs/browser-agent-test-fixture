@@ -1,36 +1,26 @@
 {
   "project": "browser-agent-test-fixture-environment-setup",
   "version": "0.1.0",
-  "last_updated": "2026-03-30T16:45:33.782257",
+  "last_updated": "2026-03-30T17:45:01.201Z",
   "features": [
     {
       "id": "verify-browser-agent",
       "name": "Verify Browser Agent End-to-End",
-      "description": "3-stage verification: (1) health check, (2) /diagnose navigates to codespace URL + screenshot, (3) direct URL reachability. Run: python3 tests/integration/test_browser_agent.py",
-      "status": "completed",
       "phase": 0,
+      "status": "pending",
+      "description": "3-stage verification: (1) health check, (2) /diagnose navigates to codespace URL + screenshot, (3) direct URL reachability. Run: python3 tests/integration/test_browser_agent.py",
       "files": [
         "tests/integration/test_browser_agent.py"
       ],
+      "tests_pass": false,
       "dependencies": [],
-      "tests_pass": true,
-      "metadata": {
-        "completion_warning": "Completed in 22s (threshold: 600s)"
+      "validation": {
+        "test_command": "python3 tests/integration/test_browser_agent.py",
+        "success_criteria": "All 3 stages pass: health OK, /diagnose navigates and screenshots codespace URL, direct URL reachable"
       },
-      "started_at": "2026-03-30T16:45:11.793141",
-      "completed_at": "2026-03-30T16:45:33.782250",
-      "last_touched_at": "2026-03-30T16:45:11.793144",
-      "iteration_count": 1,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-30T16:45:33.782251",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "All 3 stages passed: health check v2.2.1, /diagnose navigated to codespace URL with screenshot, direct URL reachable at HTTP 200",
-      "tags": []
+      "environment_variables": [
+        "CODESPACE_NAME"
+      ]
     }
   ]
 }
