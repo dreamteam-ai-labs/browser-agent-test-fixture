@@ -1,7 +1,7 @@
 {
   "project": "browser-agent-test-fixture",
   "version": "0.1.0",
-  "last_updated": "2026-03-30T16:36:58.626618",
+  "last_updated": "2026-03-30T16:47:47.238295",
   "features": [
     {
       "id": "database-schema",
@@ -19,21 +19,26 @@
         "complexity": "medium",
         "category": "Data",
         "priority": "high",
-        "completion_warning": "Completed in 34s (threshold: 600s)"
+        "completion_warning": "Completed in 26s (threshold: 600s)"
       },
-      "started_at": "2026-03-30T16:33:00.655728",
-      "completed_at": "2026-03-30T16:33:34.927677",
-      "last_touched_at": "2026-03-30T16:33:00.655730",
-      "iteration_count": 1,
+      "started_at": "2026-03-30T16:45:40.860259",
+      "completed_at": "2026-03-30T16:46:06.383685",
+      "last_touched_at": "2026-03-30T16:46:00.780319",
+      "iteration_count": 2,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-30T16:33:34.927678",
+          "timestamp": "2026-03-30T16:46:00.780322",
+          "note": "Models verified importable: User, Project, Task with SQLite backend"
+        },
+        {
+          "iteration": 2,
+          "timestamp": "2026-03-30T16:46:06.383687",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "SQLAlchemy ORM models for User, Project, Task already fully implemented with SQLite. All 26 tests pass.",
+      "completion_notes": "SQLAlchemy models for User, Project, Task exist and are importable. SQLite backend configured in database.py.",
       "tags": []
     },
     {
@@ -53,21 +58,26 @@
         "complexity": "medium",
         "category": "Frontend",
         "priority": "high",
-        "completion_warning": "Completed in 34s (threshold: 600s)"
+        "completion_warning": "Completed in 36s (threshold: 600s)"
       },
-      "started_at": "2026-03-30T16:33:43.133288",
-      "completed_at": "2026-03-30T16:34:17.174462",
-      "last_touched_at": "2026-03-30T16:33:43.133291",
-      "iteration_count": 1,
+      "started_at": "2026-03-30T16:46:15.968096",
+      "completed_at": "2026-03-30T16:46:52.415798",
+      "last_touched_at": "2026-03-30T16:46:49.355001",
+      "iteration_count": 2,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-30T16:34:17.174463",
+          "timestamp": "2026-03-30T16:46:49.355005",
+          "note": "Next.js 14 build passes, all pages present: login, register, dashboard, projects, tasks with CRUD routes"
+        },
+        {
+          "iteration": 2,
+          "timestamp": "2026-03-30T16:46:52.415799",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "Next.js 14 + Tailwind already fully set up. App Router with login, register, dashboard, projects, tasks pages. API client with empty baseURL and /api/* rewrites. Build passes.",
+      "completion_notes": "Next.js 14 + Tailwind, App Router with all required pages, API client with empty baseURL, next.config.mjs with rewrites. Production build passes.",
       "tags": []
     },
     {
@@ -87,21 +97,26 @@
         "complexity": "simple",
         "category": "API",
         "priority": "high",
-        "completion_warning": "Completed in 36s (threshold: 600s)"
+        "completion_warning": "Completed in 8s (threshold: 600s)"
       },
-      "started_at": "2026-03-30T16:34:23.935855",
-      "completed_at": "2026-03-30T16:35:00.434611",
-      "last_touched_at": "2026-03-30T16:34:23.935858",
-      "iteration_count": 1,
+      "started_at": "2026-03-30T16:47:02.993232",
+      "completed_at": "2026-03-30T16:47:11.105550",
+      "last_touched_at": "2026-03-30T16:47:07.762729",
+      "iteration_count": 2,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-30T16:35:00.434612",
+          "timestamp": "2026-03-30T16:47:07.762732",
+          "note": "GET /api/health returns {status: healthy} — verified via curl"
+        },
+        {
+          "iteration": 2,
+          "timestamp": "2026-03-30T16:47:11.105551",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "GET /api/health returns {status: healthy, version, timestamp, service}. Endpoint already in main.py. 26/26 tests pass.",
+      "completion_notes": "Health endpoint live at /api/health returning status healthy",
       "tags": []
     },
     {
@@ -122,28 +137,33 @@
         "complexity": "complex",
         "category": "Auth",
         "priority": "high",
-        "completion_warning": "Completed in 17s (threshold: 600s)"
+        "completion_warning": "Completed in 28s (threshold: 600s)"
       },
-      "started_at": "2026-03-30T16:35:08.008843",
-      "completed_at": "2026-03-30T16:35:25.420362",
-      "last_touched_at": "2026-03-30T16:35:08.008845",
-      "iteration_count": 1,
+      "started_at": "2026-03-30T16:47:18.794290",
+      "completed_at": "2026-03-30T16:47:47.238291",
+      "last_touched_at": "2026-03-30T16:47:43.292895",
+      "iteration_count": 2,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-30T16:35:25.420364",
+          "timestamp": "2026-03-30T16:47:43.292898",
+          "note": "Register/login/me endpoints verified with real HTTP requests. JWT auth working. All 26 pytest tests pass."
+        },
+        {
+          "iteration": 2,
+          "timestamp": "2026-03-30T16:47:47.238292",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "register, login, /me endpoints fully implemented with bcrypt + JWT. 7/7 auth tests pass.",
+      "completion_notes": "JWT auth fully working: register, login, /users/me. All 26 pytest tests pass.",
       "tags": []
     },
     {
       "id": "dashboard",
       "name": "Dashboard",
       "description": "Overview page at /dashboard showing project and task counts with quick links.",
-      "status": "in_progress",
+      "status": "pending",
       "phase": 2,
       "files": [
         "frontend/src/app/dashboard/page.tsx"
@@ -158,9 +178,9 @@
         "category": "Frontend",
         "priority": "low"
       },
-      "started_at": "2026-03-30T16:36:07.891655",
+      "started_at": null,
       "completed_at": null,
-      "last_touched_at": "2026-03-30T16:36:07.891658",
+      "last_touched_at": null,
       "iteration_count": 0,
       "work_history": [],
       "completion_notes": null,
@@ -199,7 +219,7 @@
       "id": "project-management",
       "name": "Project Management",
       "description": "Full CRUD for projects. POST /api/projects creates project with owner_id from auth. GET /api/projects lists user's projects. GET /api/projects/{id} returns single project. DELETE /api/projects/{id} removes project. Frontend pages: /projects (list), /projects/new (create form).",
-      "status": "completed",
+      "status": "pending",
       "phase": 2,
       "files": [
         "src/fixture/routers/projects.py",
@@ -210,33 +230,25 @@
         "database-schema",
         "frontend-setup"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "metadata": {
         "complexity": "medium",
         "category": "Feature",
-        "priority": "medium",
-        "completion_warning": "Completed in 7s (threshold: 600s)"
+        "priority": "medium"
       },
-      "started_at": "2026-03-30T16:36:39.045592",
-      "completed_at": "2026-03-30T16:36:46.174454",
-      "last_touched_at": "2026-03-30T16:36:39.045594",
-      "iteration_count": 1,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-30T16:36:46.174455",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "Full CRUD for projects: POST /api/projects, GET /api/projects, GET /api/projects/{id}, PUT /api/projects/{id}, DELETE /api/projects/{id}. Auth-protected, user-scoped. 7 tests pass covering CRUD, auth enforcement, and user isolation.",
+      "started_at": null,
+      "completed_at": null,
+      "last_touched_at": null,
+      "iteration_count": 0,
+      "work_history": [],
+      "completion_notes": null,
       "tags": []
     },
     {
       "id": "task-management",
       "name": "Task Management",
       "description": "Full CRUD for tasks with project assignment. POST /api/tasks creates task with project_id. GET /api/tasks lists user's tasks. DELETE /api/tasks/{id} removes task. Frontend pages: /tasks (list), /tasks/new (create form with project selector).",
-      "status": "completed",
+      "status": "pending",
       "phase": 2,
       "files": [
         "src/fixture/routers/tasks.py",
@@ -248,26 +260,18 @@
         "project-management",
         "frontend-setup"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "metadata": {
         "complexity": "medium",
         "category": "Feature",
-        "priority": "medium",
-        "completion_warning": "Completed in 3s (threshold: 600s)"
+        "priority": "medium"
       },
-      "started_at": "2026-03-30T16:36:55.237264",
-      "completed_at": "2026-03-30T16:36:58.626614",
-      "last_touched_at": "2026-03-30T16:36:55.237266",
-      "iteration_count": 1,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-30T16:36:58.626614",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "Full CRUD for tasks with project assignment: POST /api/tasks, GET /api/tasks, GET /api/tasks/{id}, PUT /api/tasks/{id}, DELETE /api/tasks/{id}. Supports optional project_id FK. Auth-protected, user-scoped. 8 tests pass covering CRUD, project linking, auth enforcement, and user isolation.",
+      "started_at": null,
+      "completed_at": null,
+      "last_touched_at": null,
+      "iteration_count": 0,
+      "work_history": [],
+      "completion_notes": null,
       "tags": []
     }
   ]
