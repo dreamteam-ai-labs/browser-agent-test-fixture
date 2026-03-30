@@ -1,0 +1,1 @@
+2026-03-30T18:00:04.188 | dep-guard | agent=unknown | BLOCK | pm=pip undeclared=[psycopg2-binary, &&, python3, "from, fixture.models, import, User,, Project,, Task;, print('OK')"] manifest=pyproject.toml
