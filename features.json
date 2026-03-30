@@ -1,7 +1,7 @@
 {
   "project": "browser-agent-test-fixture",
   "version": "0.1.0",
-  "last_updated": "2026-03-30T19:54:52.369031",
+  "last_updated": "2026-03-30T19:57:00.269625",
   "features": [
     {
       "id": "database-schema",
@@ -199,7 +199,7 @@
       "id": "project-management",
       "name": "Project Management",
       "description": "Full CRUD for projects. POST /api/projects creates project with owner_id from auth. GET /api/projects lists user's projects. GET /api/projects/{id} returns single project. DELETE /api/projects/{id} removes project. Frontend pages: /projects (list), /projects/new (create form).",
-      "status": "pending",
+      "status": "completed",
       "phase": 2,
       "files": [
         "src/fixture/routers/projects.py",
@@ -210,25 +210,38 @@
         "database-schema",
         "frontend-setup"
       ],
-      "tests_pass": false,
+      "tests_pass": true,
       "metadata": {
         "complexity": "medium",
         "category": "Feature",
-        "priority": "medium"
+        "priority": "medium",
+        "completion_warning": "Completed in 18s (threshold: 600s)"
       },
-      "started_at": null,
-      "completed_at": null,
-      "last_touched_at": null,
-      "iteration_count": 0,
-      "work_history": [],
-      "completion_notes": null,
+      "started_at": "2026-03-30T19:56:28.996826",
+      "completed_at": "2026-03-30T19:56:47.468358",
+      "last_touched_at": "2026-03-30T19:56:39.354702",
+      "iteration_count": 2,
+      "work_history": [
+        {
+          "iteration": 1,
+          "timestamp": "2026-03-30T19:56:39.354706",
+          "note": "Backend already implemented: CRUD endpoints in src/fixture/routers/projects.py, router registered in main.py. Tests in tests/test_projects.py — 7 tests all passing."
+        },
+        {
+          "iteration": 2,
+          "timestamp": "2026-03-30T19:56:47.468358",
+          "note": "COMPLETED",
+          "tests_pass": true
+        }
+      ],
+      "completion_notes": "Full CRUD for projects implemented in src/fixture/routers/projects.py. Router registered in main.py. Endpoints: POST /api/projects, GET /api/projects, GET /api/projects/{id}, PUT /api/projects/{id}, DELETE /api/projects/{id}. Owner enforced via JWT auth. 7 tests passing in tests/test_projects.py including isolation and auth tests.",
       "tags": []
     },
     {
       "id": "task-management",
       "name": "Task Management",
       "description": "Full CRUD for tasks with project assignment. POST /api/tasks creates task with project_id. GET /api/tasks lists user's tasks. DELETE /api/tasks/{id} removes task. Frontend pages: /tasks (list), /tasks/new (create form with project selector).",
-      "status": "pending",
+      "status": "completed",
       "phase": 2,
       "files": [
         "src/fixture/routers/tasks.py",
@@ -240,18 +253,26 @@
         "project-management",
         "frontend-setup"
       ],
-      "tests_pass": false,
+      "tests_pass": true,
       "metadata": {
         "complexity": "medium",
         "category": "Feature",
-        "priority": "medium"
+        "priority": "medium",
+        "completion_warning": "Completed in 9s (threshold: 600s)"
       },
-      "started_at": null,
-      "completed_at": null,
-      "last_touched_at": null,
-      "iteration_count": 0,
-      "work_history": [],
-      "completion_notes": null,
+      "started_at": "2026-03-30T19:56:51.474980",
+      "completed_at": "2026-03-30T19:57:00.269619",
+      "last_touched_at": "2026-03-30T19:56:51.474983",
+      "iteration_count": 1,
+      "work_history": [
+        {
+          "iteration": 1,
+          "timestamp": "2026-03-30T19:57:00.269620",
+          "note": "COMPLETED",
+          "tests_pass": true
+        }
+      ],
+      "completion_notes": "Full CRUD for tasks implemented in src/fixture/routers/tasks.py. Router registered in main.py. Endpoints: POST /api/tasks, GET /api/tasks, GET /api/tasks/{id}, PUT /api/tasks/{id}, DELETE /api/tasks/{id}. Project assignment via project_id field. Owner enforced via JWT auth. 8 tests passing in tests/test_tasks.py including isolation and auth tests.",
       "tags": []
     }
   ]
