@@ -1,1 +1,4 @@
 2026-03-30T18:00:04.188 | dep-guard | agent=unknown | BLOCK | pm=pip undeclared=[psycopg2-binary, &&, python3, "from, fixture.models, import, User,, Project,, Task;, print('OK')"] manifest=pyproject.toml
+2026-03-30T18:02:38.652 | build-gate | agent=build-lead | ALLOW | not lead session
+2026-03-30T18:03:40.656 | dep-guard | agent=a4826e4d5bebb3c90 | BLOCK | pm=npm undeclared=[2>&1, |, tail] manifest=frontend/package.json
+2026-03-30T18:04:21.865 | build-gate | agent=build-lead | ALLOW | not lead session
