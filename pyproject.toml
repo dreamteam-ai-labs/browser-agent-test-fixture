@@ -15,15 +15,13 @@ dependencies = [
     "bcrypt>=4.2.0",
     "pyjwt>=2.10.0",
     "pydantic[email]>=2.10.0",
+    "psycopg2-binary>=2.9.0",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0",
     "httpx>=0.25",
-]
-postgres = [
-    "psycopg2-binary>=2.9.0",
 ]
 
 [tool.hatch.build.targets.wheel]
