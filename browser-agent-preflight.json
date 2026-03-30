@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-03-30T19:52:36Z",
+  "checked_at": "2026-03-30T20:55:42Z",
   "browser_agent_url": "https://browser.dreamteamlabs.co.uk",
   "stages": {
     "health": {
@@ -10,8 +10,8 @@
     "diagnose": {
       "pass": true,
       "final_url": "https://fixture-agent-test-5vg5g45465j26r5-8000.app.github.dev/api/health",
-      "screenshot_url": "https://litter.catbox.moe/dnl7z1.png",
-      "elapsed_ms": 4126,
+      "screenshot_url": "https://litter.catbox.moe/4nsbhk.png",
+      "elapsed_ms": 4171,
       "test_url": "https://fixture-agent-test-5vg5g45465j26r5-8000.app.github.dev/api/health"
     },
     "url_reachable": {
@@ -24,5 +24,5 @@
   },
   "codespace_name": "fixture-agent-test-5vg5g45465j26r5",
   "overall": "pass",
-  "screenshot_url": "https://litter.catbox.moe/dnl7z1.png"
+  "screenshot_url": "https://litter.catbox.moe/4nsbhk.png"
 }
