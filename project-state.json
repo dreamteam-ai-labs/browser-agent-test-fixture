@@ -1,6 +1,6 @@
 {
-  "build_phase": "done",
-  "session_role": "build",
+  "build_phase": "deploy",
+  "session_role": "verify",
   "CODESPACE_NAME": "fixture-agent-test-5vg5g45465j26r5",
   "endpoint_map": "{\"auth\": [{\"method\": \"POST\", \"path\": \"/api/auth/register\"}, {\"method\": \"POST\", \"path\": \"/api/auth/login\"}, {\"method\": \"GET\", \"path\": \"/api/auth/me\"}], \"projects\": [{\"method\": \"GET\", \"path\": \"/api/projects\"}, {\"method\": \"POST\", \"path\": \"/api/projects\"}, {\"method\": \"GET\", \"path\": \"/api/projects/{id}\"}, {\"method\": \"PUT\", \"path\": \"/api/projects/{id}\"}, {\"method\": \"DELETE\", \"path\": \"/api/projects/{id}\"}], \"tasks\": [{\"method\": \"GET\", \"path\": \"/api/tasks\"}, {\"method\": \"POST\", \"path\": \"/api/tasks\"}, {\"method\": \"GET\", \"path\": \"/api/tasks/{id}\"}, {\"method\": \"PUT\", \"path\": \"/api/tasks/{id}\"}, {\"method\": \"DELETE\", \"path\": \"/api/tasks/{id}\"}], \"health\": [{\"method\": \"GET\", \"path\": \"/api/health\"}], \"admin\": [{\"method\": \"POST\", \"path\": \"/api/admin/reset\"}]}"
 }
