@@ -1,7 +1,7 @@
 {
   "project": "browser-agent-test-fixture",
   "version": "0.1.0",
-  "last_updated": "2026-03-30T18:07:53.424017",
+  "last_updated": "2026-03-30T18:32:50.963584",
   "features": [
     {
       "id": "database-schema",
@@ -19,26 +19,21 @@
         "complexity": "medium",
         "category": "Data",
         "priority": "high",
-        "completion_warning": "Completed in 45s (threshold: 600s)"
+        "completion_warning": "Completed in 8s (threshold: 600s)"
       },
-      "started_at": "2026-03-30T17:59:50.516999",
-      "completed_at": "2026-03-30T18:00:35.257133",
-      "last_touched_at": "2026-03-30T18:00:31.772209",
-      "iteration_count": 2,
+      "started_at": "2026-03-30T18:32:04.567684",
+      "completed_at": "2026-03-30T18:32:12.885666",
+      "last_touched_at": "2026-03-30T18:32:04.567687",
+      "iteration_count": 1,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-30T18:00:31.772212",
-          "note": "models.py and database.py exist and verified. User/Project/Task all importable. 26 tests pass. Added psycopg2-binary to core dependencies in pyproject.toml."
-        },
-        {
-          "iteration": 2,
-          "timestamp": "2026-03-30T18:00:35.257134",
+          "timestamp": "2026-03-30T18:32:12.885666",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "SQLAlchemy ORM models for User, Project, Task with SQLite/PostgreSQL support. 26 tests pass.",
+      "completion_notes": "Models User, Project, Task all importable. SQLAlchemy ORM with SQLite, all relationships defined.",
       "tags": []
     },
     {
@@ -58,26 +53,21 @@
         "complexity": "medium",
         "category": "Frontend",
         "priority": "high",
-        "completion_warning": "Completed in 27s (threshold: 600s)"
+        "completion_warning": "Completed in 29s (threshold: 600s)"
       },
-      "started_at": "2026-03-30T18:00:45.399327",
-      "completed_at": "2026-03-30T18:01:12.449832",
-      "last_touched_at": "2026-03-30T18:01:08.651265",
-      "iteration_count": 2,
+      "started_at": "2026-03-30T18:32:21.793667",
+      "completed_at": "2026-03-30T18:32:50.963580",
+      "last_touched_at": "2026-03-30T18:32:21.793670",
+      "iteration_count": 1,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-30T18:01:08.651268",
-          "note": "Next.js 14 app with all required pages, api.ts client, next.config.mjs with rewrites. Build passes."
-        },
-        {
-          "iteration": 2,
-          "timestamp": "2026-03-30T18:01:12.449833",
+          "timestamp": "2026-03-30T18:32:50.963581",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "Next.js 14 app with Tailwind CSS, all pages (login, register, dashboard, projects, tasks), api.ts, next.config.mjs with rewrites. Production build passes.",
+      "completion_notes": "Next.js 14 with Tailwind, App Router, all pages exist. 21 frontend tests pass. Production build succeeds.",
       "tags": []
     },
     {
@@ -97,26 +87,21 @@
         "complexity": "simple",
         "category": "API",
         "priority": "high",
-        "completion_warning": "Completed in 15s (threshold: 600s)"
+        "completion_warning": "Completed in 27s (threshold: 600s)"
       },
-      "started_at": "2026-03-30T18:01:22.025234",
-      "completed_at": "2026-03-30T18:01:36.613160",
-      "last_touched_at": "2026-03-30T18:01:32.968969",
-      "iteration_count": 2,
+      "started_at": "2026-03-30T18:32:21.799301",
+      "completed_at": "2026-03-30T18:32:49.193766",
+      "last_touched_at": "2026-03-30T18:32:21.799303",
+      "iteration_count": 1,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-30T18:01:32.968972",
-          "note": "GET /api/health returns {status: healthy}. main.py has app, routers, lifespan. Test passes."
-        },
-        {
-          "iteration": 2,
-          "timestamp": "2026-03-30T18:01:36.613161",
+          "timestamp": "2026-03-30T18:32:49.193767",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "GET /api/health endpoint returns {status: healthy}. Backend entry point fully configured with routers and lifespan. Test passes.",
+      "completion_notes": "GET /api/health returns {status: healthy}. 26 backend tests pass.",
       "tags": []
     },
     {
@@ -137,33 +122,28 @@
         "complexity": "complex",
         "category": "Auth",
         "priority": "high",
-        "completion_warning": "Completed in 15s (threshold: 600s)"
+        "completion_warning": "Completed in 28s (threshold: 600s)"
       },
-      "started_at": "2026-03-30T18:01:46.164555",
-      "completed_at": "2026-03-30T18:02:01.538773",
-      "last_touched_at": "2026-03-30T18:01:57.910648",
-      "iteration_count": 2,
+      "started_at": "2026-03-30T18:32:21.804674",
+      "completed_at": "2026-03-30T18:32:50.023293",
+      "last_touched_at": "2026-03-30T18:32:21.804677",
+      "iteration_count": 1,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-30T18:01:57.910651",
-          "note": "auth.py with JWT + bcrypt, routers/auth.py with register/login/me. 7 auth tests pass."
-        },
-        {
-          "iteration": 2,
-          "timestamp": "2026-03-30T18:02:01.538775",
+          "timestamp": "2026-03-30T18:32:50.023294",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "JWT auth with bcrypt. POST /api/auth/register, POST /api/auth/login, GET /api/auth/me. 7 tests pass.",
+      "completion_notes": "JWT register/login/me endpoints with bcrypt. 7 auth tests pass.",
       "tags": []
     },
     {
       "id": "dashboard",
       "name": "Dashboard",
       "description": "Overview page at /dashboard showing project and task counts with quick links.",
-      "status": "completed",
+      "status": "pending",
       "phase": 2,
       "files": [
         "frontend/src/app/dashboard/page.tsx"
@@ -172,33 +152,25 @@
         "user-auth",
         "frontend-setup"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "metadata": {
         "complexity": "simple",
         "category": "Frontend",
-        "priority": "low",
-        "completion_warning": "Completed in 8s (threshold: 600s)"
+        "priority": "low"
       },
-      "started_at": "2026-03-30T18:07:36.243819",
-      "completed_at": "2026-03-30T18:07:44.205193",
-      "last_touched_at": "2026-03-30T18:07:36.243822",
-      "iteration_count": 1,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-30T18:07:44.205193",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "Dashboard page at /dashboard shows project and task counts. Tests: 4 passing Jest tests. npm run build passes.",
+      "started_at": null,
+      "completed_at": null,
+      "last_touched_at": null,
+      "iteration_count": 0,
+      "work_history": [],
+      "completion_notes": null,
       "tags": []
     },
     {
       "id": "navigation",
       "name": "Navigation and Layout",
       "description": "Sidebar navigation with route highlighting and logout button. AuthGuard component protects authenticated routes. Layout component wraps all authenticated pages.",
-      "status": "completed",
+      "status": "pending",
       "phase": 2,
       "files": [
         "frontend/src/components/Sidebar.tsx",
@@ -209,33 +181,25 @@
         "user-auth",
         "frontend-setup"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "metadata": {
         "complexity": "simple",
         "category": "Frontend",
-        "priority": "low",
-        "completion_warning": "Completed in 4s (threshold: 600s)"
+        "priority": "low"
       },
-      "started_at": "2026-03-30T18:07:49.650173",
-      "completed_at": "2026-03-30T18:07:53.424013",
-      "last_touched_at": "2026-03-30T18:07:49.650176",
-      "iteration_count": 1,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-30T18:07:53.424013",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "Sidebar with route highlighting and logout. AuthGuard protects routes. Layout wraps authenticated pages. Tests: 6 passing Jest tests covering all components. npm run build passes.",
+      "started_at": null,
+      "completed_at": null,
+      "last_touched_at": null,
+      "iteration_count": 0,
+      "work_history": [],
+      "completion_notes": null,
       "tags": []
     },
     {
       "id": "project-management",
       "name": "Project Management",
       "description": "Full CRUD for projects. POST /api/projects creates project with owner_id from auth. GET /api/projects lists user's projects. GET /api/projects/{id} returns single project. DELETE /api/projects/{id} removes project. Frontend pages: /projects (list), /projects/new (create form).",
-      "status": "completed",
+      "status": "pending",
       "phase": 2,
       "files": [
         "src/fixture/routers/projects.py",
@@ -246,33 +210,25 @@
         "database-schema",
         "frontend-setup"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "metadata": {
         "complexity": "medium",
         "category": "Feature",
-        "priority": "medium",
-        "completion_warning": "Completed in 30s (threshold: 600s)"
+        "priority": "medium"
       },
-      "started_at": "2026-03-30T18:02:58.126343",
-      "completed_at": "2026-03-30T18:03:28.250692",
-      "last_touched_at": "2026-03-30T18:02:58.126346",
-      "iteration_count": 1,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-30T18:03:28.250692",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "Backend: POST /api/projects, GET /api/projects, GET /api/projects/{id}, DELETE /api/projects/{id} — all implemented in src/fixture/routers/projects.py, 7 tests passing in tests/test_projects.py",
+      "started_at": null,
+      "completed_at": null,
+      "last_touched_at": null,
+      "iteration_count": 0,
+      "work_history": [],
+      "completion_notes": null,
       "tags": []
     },
     {
       "id": "task-management",
       "name": "Task Management",
       "description": "Full CRUD for tasks with project assignment. POST /api/tasks creates task with project_id. GET /api/tasks lists user's tasks. DELETE /api/tasks/{id} removes task. Frontend pages: /tasks (list), /tasks/new (create form with project selector).",
-      "status": "completed",
+      "status": "pending",
       "phase": 2,
       "files": [
         "src/fixture/routers/tasks.py",
@@ -284,26 +240,18 @@
         "project-management",
         "frontend-setup"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "metadata": {
         "complexity": "medium",
         "category": "Feature",
-        "priority": "medium",
-        "completion_warning": "Completed in 16s (threshold: 600s)"
+        "priority": "medium"
       },
-      "started_at": "2026-03-30T18:03:31.276896",
-      "completed_at": "2026-03-30T18:03:47.032881",
-      "last_touched_at": "2026-03-30T18:03:31.276898",
-      "iteration_count": 1,
-      "work_history": [
-        {
-          "iteration": 1,
-          "timestamp": "2026-03-30T18:03:47.032881",
-          "note": "COMPLETED",
-          "tests_pass": true
-        }
-      ],
-      "completion_notes": "Backend: POST /api/tasks, GET /api/tasks, GET /api/tasks/{id}, DELETE /api/tasks/{id} — all implemented in src/fixture/routers/tasks.py, 8 tests passing in tests/test_tasks.py",
+      "started_at": null,
+      "completed_at": null,
+      "last_touched_at": null,
+      "iteration_count": 0,
+      "work_history": [],
+      "completion_notes": null,
       "tags": []
     }
   ]

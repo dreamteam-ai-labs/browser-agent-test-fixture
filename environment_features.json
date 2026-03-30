@@ -1,7 +1,7 @@
 {
   "project": "browser-agent-test-fixture-environment-setup",
   "version": "0.1.0",
-  "last_updated": "2026-03-30T17:59:44.646996",
+  "last_updated": "2026-03-30T18:31:36.345800",
   "features": [
     {
       "id": "verify-browser-agent",
@@ -15,26 +15,21 @@
       "dependencies": [],
       "tests_pass": true,
       "metadata": {
-        "completion_warning": "Completed in 29s (threshold: 600s)"
+        "completion_warning": "Completed in 32s (threshold: 600s)"
       },
-      "started_at": "2026-03-30T17:59:15.434752",
-      "completed_at": "2026-03-30T17:59:44.646991",
-      "last_touched_at": "2026-03-30T17:59:39.769612",
-      "iteration_count": 2,
+      "started_at": "2026-03-30T18:31:04.120993",
+      "completed_at": "2026-03-30T18:31:36.345794",
+      "last_touched_at": "2026-03-30T18:31:04.120996",
+      "iteration_count": 1,
       "work_history": [
         {
           "iteration": 1,
-          "timestamp": "2026-03-30T17:59:39.769617",
-          "note": "All 3 stages ran: health check PASS (v2.2.1), browser navigation PASS (screenshot captured), direct URL had 502 but overall result PASS"
-        },
-        {
-          "iteration": 2,
-          "timestamp": "2026-03-30T17:59:44.646992",
+          "timestamp": "2026-03-30T18:31:36.345795",
           "note": "COMPLETED",
           "tests_pass": true
         }
       ],
-      "completion_notes": "Browser agent v2.2.1: health check PASS, navigation/screenshot PASS, direct URL 502 but overall PASS",
+      "completion_notes": "All 3 stages passed. Browser agent v2.2.1, navigated to codespace URL, screenshot captured. Stage 3 direct URL had 502 (warning only).",
       "tags": []
     }
   ]
