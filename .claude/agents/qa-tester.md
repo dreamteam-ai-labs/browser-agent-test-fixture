@@ -35,9 +35,19 @@ Run a repeating cycle: **Test → Report → Wait for fixes → Retest**. You st
 
 ## Test Steps
 
-### Step 1: Start servers
+### Step 1: Verify servers are running
 
-Start the backend (uvicorn on port 8000) and frontend (next dev on port 3000). Verify the health endpoint responds.
+Servers should already be running (started by qa-lead or the harness). Verify:
+```bash
+curl -sf http://localhost:8000/api/health && echo "Backend OK" || echo "Backend DOWN"
+curl -sf http://localhost:3000 > /dev/null && echo "Frontend OK" || echo "Frontend DOWN"
+```
+If servers are NOT running, start them:
+```bash
+python3 -m uvicorn src.fixture.main:app --host 0.0.0.0 --port 8000 &
+cd frontend && ./node_modules/.bin/next dev -p 3000 &
+```
+Wait 10 seconds for startup, then re-check health.
 
 ### Step 2: Register + Get Auth Token
 
@@ -88,7 +98,7 @@ Record every step: feature name, endpoint, method, request body, expected status
 
 Verify prerequisites: `CODESPACE_NAME` is set, `scripts/qa-smoke-test.py` exists. If either is missing → **CRITICAL**.
 
-Run the smoke test:
+Run the smoke test **synchronously in the foreground** (do NOT use &, do NOT background it, do NOT use sleep to poll):
 ```bash
 python3 scripts/qa-smoke-test.py
 echo "Exit code: $?"

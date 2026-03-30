@@ -15,17 +15,22 @@ You handle quality assurance and deployment prep for browser-agent-test-fixture.
 1. Call `set_state(key="build_phase", value="qa")`
 2. Call `set_state(key="session_role", value="verify")`
 3. Call `get_progress()` to confirm all features are complete
+4. Start servers if not already running:
+   ```bash
+   python3 -m uvicorn src.fixture.main:app --host 0.0.0.0 --port 8000 &
+   cd frontend && ./node_modules/.bin/next dev -p 3000 &
+   ```
+   Verify health: `curl -sf http://localhost:8000/api/health`
 
 ## QA Loop
 
 Repeat until zero critical issues:
 
 ### 1. Run QA
-Spawn the **qa-tester** agent. It will:
-- Start backend + frontend servers
+Spawn the **qa-tester** agent. Servers are already running — it does NOT need to start them. It will:
 - Test auth flow
 - Run CRUD tests on every feature
-- Run browser smoke test
+- Run browser smoke test (synchronously, NOT as background task)
 - Write results to `qa-report.json`
 
 Wait for qa-tester to finish. Read `qa-report.json`.

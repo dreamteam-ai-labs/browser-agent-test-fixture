@@ -131,9 +131,15 @@ def scan_imports(src_dir: Path) -> dict[str, set[str]]:
                 for alias in node.names:
                     module = alias.name.split(".")[0]
             elif isinstance(node, ast.ImportFrom) and node.module:
+                # Skip explicit relative imports (from .auth import ...)
+                if node.level and node.level > 0:
+                    continue
                 module = node.module.split(".")[0]
 
             if module:
+                # Skip implicit relative imports (from auth import ... where auth.py exists in package)
+                if (src_dir / module).exists() or (src_dir / module / "__init__.py").exists() or (src_dir / f"{module}.py").exists():
+                    continue
                 if module not in imports:
                     imports[module] = set()
                 imports[module].add(str(py_file))
