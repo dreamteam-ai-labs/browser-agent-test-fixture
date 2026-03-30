@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-03-30T20:55:42Z",
+  "checked_at": "2026-03-30T21:50:05Z",
   "browser_agent_url": "https://browser.dreamteamlabs.co.uk",
   "stages": {
     "health": {
@@ -10,19 +10,18 @@
     "diagnose": {
       "pass": true,
       "final_url": "https://fixture-agent-test-5vg5g45465j26r5-8000.app.github.dev/api/health",
-      "screenshot_url": "https://litter.catbox.moe/4nsbhk.png",
-      "elapsed_ms": 4171,
+      "screenshot_url": "https://litter.catbox.moe/j93mhr.png",
+      "elapsed_ms": 4145,
       "test_url": "https://fixture-agent-test-5vg5g45465j26r5-8000.app.github.dev/api/health"
     },
     "url_reachable": {
-      "pass": false,
-      "status": 502,
+      "pass": true,
+      "status": 200,
       "url": "https://fixture-agent-test-5vg5g45465j26r5-8000.app.github.dev/api/health",
-      "error": "HTTP Error 502: Bad Gateway",
-      "warning": true
+      "attempts": 1
     }
   },
   "codespace_name": "fixture-agent-test-5vg5g45465j26r5",
   "overall": "pass",
-  "screenshot_url": "https://litter.catbox.moe/4nsbhk.png"
+  "screenshot_url": "https://litter.catbox.moe/j93mhr.png"
 }
