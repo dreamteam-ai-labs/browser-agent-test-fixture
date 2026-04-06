@@ -17,17 +17,19 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+PROJECT_DIR = Path(os.environ.get("CLAUDE_PROJECT_DIR", "."))
+
 # --- Fallback safety valve (validated across production runs) ---
 MAX_BLOCKS = 20
-BLOCK_COUNT_FILE = Path(".claude/hooks/.build-gate-blocks")
+BLOCK_COUNT_FILE = PROJECT_DIR / ".claude" / "hooks" / ".build-gate-blocks"
 
 # --- Progress-based stall detection ---
-STATE_FILE = Path("project-state.json")
+STATE_FILE = PROJECT_DIR / "project-state.json"
 STALL_THRESHOLD = 5  # consecutive blocks with no progress
 
 
 def log_hook(hook_name: str, agent_id: str, action: str, detail: str = ""):
-    log_path = Path(".claude/hooks/hook-log.txt")
+    log_path = PROJECT_DIR / ".claude" / "hooks" / "hook-log.txt"
     log_path.parent.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().isoformat(timespec="milliseconds")
     line = f"{timestamp} | {hook_name} | agent={agent_id} | {action}"
@@ -83,7 +85,7 @@ def write_state(key: str, value) -> None:
 
 def get_progress_snapshot() -> dict:
     """Get current feature completion counts from features.json."""
-    path = Path("features.json")
+    path = PROJECT_DIR / "features.json"
     if not path.exists():
         return {"completed": 0, "total": 0}
     try:
@@ -128,8 +130,17 @@ def check_progress_stall() -> tuple[bool, str]:
 
 # --- Completion criteria checks ---
 
+def check_tests_passing() -> tuple[bool, str]:
+    """Check if last test run passed (set by agents via set_state)."""
+    result = read_state("last_test_result", "unknown")
+    if result == "fail":
+        return False, "last test run FAILED — fix before exiting"
+    # "pass" or "unknown" (no test run recorded) both allow exit
+    return True, f"test result: {result}"
+
+
 def check_features_complete() -> tuple[bool, str]:
-    path = Path("features.json")
+    path = PROJECT_DIR / "features.json"
     if not path.exists():
         return True, "no features.json"
     try:
@@ -165,17 +176,14 @@ def check_deployment_prep_done() -> tuple[bool, str]:
 
 
 def check_qa_passed() -> tuple[bool, str]:
-    path = Path("qa-report.json")
+    path = PROJECT_DIR / "qa-report.json"
     if not path.exists():
         return False, "qa-report.json does not exist yet"
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (json.JSONDecodeError, OSError):
         return False, "qa-report.json unreadable"
-    verdict = data.get("verdict", "").lower()
-    overall = data.get("overall_result", "").lower()
-    if verdict in ("pass", "passed") or overall in ("pass", "passed"):
-        return True, f"QA verdict: {verdict or overall}"
+    # Only check critical_issues — the canonical QA gate field
     latest = data.get("latest", {})
     if isinstance(latest, dict):
         summary = latest.get("summary", {})
@@ -234,10 +242,12 @@ def main():
     # --- Check completion criteria based on scope ---
     features_ok, features_detail = check_features_complete()
 
+    tests_ok, tests_detail = check_tests_passing()
+
     if scope == "build_only":
-        # Build-only scope: just check features
-        if features_ok:
-            log_hook("build-gate", "lead", "ALLOW", f"scope=build_only | {features_detail}")
+        # Build-only scope: check features + tests
+        if features_ok and tests_ok:
+            log_hook("build-gate", "lead", "ALLOW", f"scope=build_only | {features_detail} | {tests_detail}")
             json.dump({"decision": "allow"}, sys.stdout)
             return
     else:
@@ -245,8 +255,8 @@ def main():
         qa_ok, qa_detail = check_qa_passed()
         prep_ok, prep_detail = check_deployment_prep_done()
 
-        if features_ok and qa_ok and prep_ok:
-            log_hook("build-gate", "lead", "ALLOW", f"scope=full | {features_detail} | {qa_detail} | {prep_detail}")
+        if features_ok and tests_ok and qa_ok and prep_ok:
+            log_hook("build-gate", "lead", "ALLOW", f"scope=full | {features_detail} | {tests_detail} | {qa_detail} | {prep_detail}")
             json.dump({"decision": "allow"}, sys.stdout)
             return
 
@@ -272,6 +282,8 @@ def main():
     reasons = []
     if not features_ok:
         reasons.append(f"Features: {features_detail}")
+    if not tests_ok:
+        reasons.append(f"Tests: {tests_detail}")
     if scope != "build_only":
         if not qa_ok:
             reasons.append(f"QA: {qa_detail}")
@@ -280,7 +292,9 @@ def main():
     reason_text = ". ".join(reasons)
 
     # Tailor directive to what's needed
-    if not features_ok:
+    if not tests_ok:
+        next_step = "Tests are FAILING. Run pytest -v and npm test, fix all failures, then call set_state(key='last_test_result', value='pass')."
+    elif not features_ok:
         next_step = "Continue building features. Call get_next_feature() to find remaining work."
     elif scope != "build_only" and not qa_ok:
         next_step = (

@@ -206,11 +206,27 @@ Custom slash commands are in `.claude/commands/`:
 
 ---
 
-## Known Issues & Workarounds
+## Known Deployment Pitfalls
 
+These are real bugs from previous production builds. Each one caused a deployment failure.
+
+### Database
+- **Define ALL tables in the database-schema feature.** Later features must NOT create new tables. Read the full `features.json` to identify every table before starting database-schema. If a feature needs a table that doesn't exist, the Coolify deploy will fail with `UndefinedTable`.
+- **ORM models must match the schema exactly.** If a model has `hashed_password` but the table has `password`, the app crashes on startup. Test every model with real CRUD operations, not just `create_all()`.
+- **CASCADE relationships:** If a category has budgets, `DELETE /categories/{id}` will fail unless the relationship has `cascade="all, delete-orphan"`. Test delete operations for every resource that has foreign keys.
+
+### Frontend
+- **All API calls use relative URLs (`/api/...`).** The `next.config.mjs` rewrites proxy handles routing to the backend. Do NOT hardcode `localhost:8000` or any absolute URL in frontend code.
+- **Tailwind content paths:** Use `./src/**/*.{js,ts,jsx,tsx}` in `tailwind.config.ts`, NOT `./app/**/*`. The App Router puts files in `src/app/`, not `app/`.
+- **Every CRUD feature needs frontend pages:** list page (`/[resource]`), create page (`/[resource]/new`), detail/edit page (`/[resource]/[id]`). Missing pages are flagged as critical by QA.
+- **`npm run build` must pass.** Run it before marking frontend features complete. Build errors break Coolify deployment.
+
+### Package & Dependencies
+- **All code MUST be in `src/fixture/`.** Do NOT create additional packages in `src/`. The Dockerfile and start.sh are hardcoded to `fixture`. A second package will not be installed in the Docker image.
+- **All imports must be declared in `pyproject.toml`.** If you `import requests`, add `requests` to `[project.dependencies]`. Undeclared deps pass in the codespace (installed globally) but fail in the Docker clean install.
+
+### Testing
+- `pytest` is at `/usr/local/py-utils/bin/pytest` in codespaces — use that path if `pytest` is not on PATH
 - When running `next dev`, ensure NODE_ENV is NOT set to "production" (breaks Tailwind PostCSS). Use `env -u NODE_ENV npx next dev -p 3000`
 - When creating `frontend/tsconfig.json`, exclude `__tests__` from compilation
-- For the frontend API client (`frontend/src/lib/api.ts`), set `baseURL` to `process.env.NEXT_PUBLIC_API_URL || ''`
-- `pytest` is at `/usr/local/py-utils/bin/pytest` in codespaces — use that path directly if `pytest` is not on PATH
-- For auth and frontend features: verify signup/login via real HTTP requests — unit tests alone are not enough
-- For frontend pages: ensure `npm test` passes, then `npm run build` to verify production build
+- Verify signup/login via real HTTP requests — unit tests alone miss auth integration bugs

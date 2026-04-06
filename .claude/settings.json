@@ -53,6 +53,16 @@
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/path-guard.py\"",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/localhost-guard.py\"",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/package-guard.py\"",
+            "timeout": 5
           }
         ]
       },
@@ -63,6 +73,17 @@
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/agent-gate.py\"",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "if": "Bash(git commit *)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/commit-guard.py\"",
+            "timeout": 5
           }
         ]
       }
@@ -100,6 +121,16 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/nextconfig-guard.py\"",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "TaskCreated": [
@@ -131,6 +162,17 @@
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/stop-failure.py\"",
             "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PermissionDenied": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/permission-retry.py\"",
+            "timeout": 5
           }
         ]
       }

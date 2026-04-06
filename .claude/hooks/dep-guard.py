@@ -6,16 +6,22 @@ checks whether the installed package is declared in the project manifest
 (pyproject.toml for Python, package.json for Node.js). Blocks if not declared.
 
 Language-aware: add new package managers by adding a case to PACKAGE_MANAGERS.
+
+OBSOLESCENCE: Remove when Anthropic ships native dependency-aware package
+management. See Hook Dependency Watchlist in memory/sync-status.md.
 """
 import json
+import os
 import re
 import sys
 from datetime import datetime
 from pathlib import Path
 
+PROJECT_DIR = Path(os.environ.get("CLAUDE_PROJECT_DIR", "."))
+
 
 def log_hook(hook_name: str, agent_id: str, action: str, detail: str = ""):
-    log_path = Path(".claude/hooks/hook-log.txt")
+    log_path = PROJECT_DIR / ".claude" / "hooks" / "hook-log.txt"
     log_path.parent.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().isoformat(timespec="milliseconds")
     line = f"{timestamp} | {hook_name} | agent={agent_id} | {action}"
@@ -167,7 +173,7 @@ def check_command(command: str) -> tuple[str | None, list[str], dict | None]:
             return None, [], None
 
         # Check which packages are declared
-        manifest_path = Path(pm["manifest"])
+        manifest_path = PROJECT_DIR / pm["manifest"]
         declared = pm["get_declared"](manifest_path)
 
         undeclared = []

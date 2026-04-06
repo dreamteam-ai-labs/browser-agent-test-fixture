@@ -7,7 +7,10 @@ FROM node:20-slim AS frontend-build
 
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
-RUN npm ci --production=false
+# Force dev deps for this command only — Coolify injects NODE_ENV=production
+# which skips typescript, tailwindcss, etc. Using inline env so it doesn't
+# leak into npm run build (Next.js 16 fails with NODE_ENV=development).
+RUN NODE_ENV=development npm install
 COPY frontend/ ./
 # NEXT_PUBLIC_* vars are baked into the JS bundle at build time.
 # Coolify sets this as a build-time env var via is_build_time=true.
@@ -39,10 +42,10 @@ RUN python -c "from fixture.main import app; print('Import validation passed')"
 COPY alembic.in[i] ./
 COPY alembi[c]/ ./alembic/
 
-# Copy built frontend
-COPY --from=frontend-build /app/frontend/ ./frontend/
-# Install production Node.js deps only
-RUN cd frontend && npm ci --production
+# Copy standalone frontend (no npm ci needed — deps are bundled)
+COPY --from=frontend-build /app/frontend/.next/standalone/ ./frontend/
+COPY --from=frontend-build /app/frontend/.next/static/ ./frontend/.next/static/
+COPY --from=frontend-build /app/frontend/publi[c]/ ./frontend/public/
 
 # Copy startup script
 COPY start.sh ./

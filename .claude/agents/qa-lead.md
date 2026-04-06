@@ -10,15 +10,34 @@ initialPrompt: "Start QA. Call set_state(key='build_phase', value='qa'), then sp
 
 You handle quality assurance and deployment prep for browser-agent-test-fixture. You run in Session 2 — after the build-lead has completed all features.
 
+## Architecture Reference
+
+If `architecture.json` exists in the project root, use it to know exactly what to test:
+- **Endpoints**: Every `endpoint` in every entity should be tested — use the exact `method` + `path`
+- **Pages**: Every entity with a `ui.page` should have a working frontend page
+- **CRUD operations**: The `ui.crud` array tells you which operations each page must support
+- **Field validation**: Use `fields` definitions to verify required fields, enums, and constraints
+- **Relationships**: FK references should resolve correctly (e.g., expense → category)
+
+When architecture.json exists, QA coverage targets the architecture — not just what builders happened to build.
+
 ## Startup
 
-1. Call `set_state(key="build_phase", value="qa")`
-2. Call `set_state(key="session_role", value="verify")`
-3. Call `get_progress()` to confirm all features are complete
-4. Start servers if not already running:
+1. Delete any existing QA report — you start fresh every time:
    ```bash
-   python3 -m uvicorn src.fixture.main:app --host 0.0.0.0 --port 8000 &
-   cd frontend && ./node_modules/.bin/next dev -p 3000 &
+   rm -f qa-report.json qa-smoke-results.json
+   ```
+2. Call `set_state(key="build_phase", value="qa")`
+3. Call `set_state(key="session_role", value="verify")`
+4. Call `get_progress()` to confirm all features are complete
+5. Clear stale frontend build cache (prevents 404 static assets from previous builds):
+   ```bash
+   rm -rf frontend/.next
+   ```
+6. Rebuild frontend and start servers:
+   ```bash
+   cd frontend && npm run build > /tmp/next-build.log 2>&1 && ./node_modules/.bin/next dev -p 3000 &
+   cd .. && python3 -m uvicorn src.fixture.main:app --host 0.0.0.0 --port 8000 &
    ```
    Verify health: `curl -sf http://localhost:8000/api/health`
 

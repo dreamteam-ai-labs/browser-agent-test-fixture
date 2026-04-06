@@ -5,6 +5,9 @@ Scans all .py files in src/ for imports and compares against declared
 dependencies in pyproject.toml. Reports any imports that are not in the
 standard library AND not declared as dependencies.
 
+OBSOLESCENCE: Remove when Anthropic ships native import-to-manifest
+validation. See Hook Dependency Watchlist in memory/sync-status.md.
+
 Usage:
     python3 .claude/hooks/audit-deps.py          # Scan src/
     python3 .claude/hooks/audit-deps.py --fix     # Print what to add (no auto-edit)
@@ -16,9 +19,12 @@ Exit codes:
 """
 import ast
 import json
+import os
 import re
 import sys
 from pathlib import Path
+
+PROJECT_DIR = Path(os.environ.get("CLAUDE_PROJECT_DIR", "."))
 
 # ── Python standard library modules (3.11+) ──────────────────────────
 # This list covers the vast majority. Some platform-specific modules omitted.
@@ -208,13 +214,13 @@ def main():
     fix_mode = "--fix" in sys.argv
 
     # Find src/ directory
-    src_dir = Path("src")
+    src_dir = PROJECT_DIR / "src"
     if not src_dir.exists():
         if not json_output:
             print("No src/ directory found.")
         sys.exit(0)
 
-    pyproject_path = Path("pyproject.toml")
+    pyproject_path = PROJECT_DIR / "pyproject.toml"
     declared = get_declared_deps(pyproject_path)
     project_package = detect_project_package(pyproject_path)
     imports = scan_imports(src_dir)

@@ -20,13 +20,25 @@ You are the frontend feature builder for browser-agent-test-fixture.
 
 Build all FRONTEND features — anything that lives in `frontend/`.
 
+## Architecture Reference
+
+If `architecture.json` exists in the project root, use it as your **PRIMARY design reference**:
+- **Pages**: Use the `ui.page` paths for page locations and `ui.display_name` for headings/nav
+- **CRUD operations**: Use the `ui.crud` array to know which operations each page needs
+- **API endpoints**: Use the `endpoints` section for the exact route paths and HTTP methods to call
+- **Field types**: Use the `fields` definitions for form validation, input types, and display formatting
+- **Relationships**: Use the `relationships` section to understand entity dependencies (e.g., expense form needs a category dropdown)
+
+If a feature is NOT covered in architecture.json, fall back to the feature description.
+Do NOT contradict architecture.json — if there's a conflict, architecture.json wins.
+
 ## Workflow
 
 Before starting, call `validate_features()` to check for issues in features.json.
 
 Loop until no more frontend features are pending:
 
-1. **Find next feature**: Call `get_next_feature()` — it returns the next pending feature with satisfied dependencies. If a backend dependency isn't done yet, that feature won't appear. If it says "no pending features", check `get_progress()` — if features exist under "Waiting on Dependencies", the backend-builder is still working. Wait and retry.
+1. **Find next feature**: Call `get_next_feature(min_phase=2)` — it returns the next pending feature with satisfied dependencies. If it says "no pending features", you're done — exit immediately. Do NOT sleep, wait, or poll. The foundations phase already completed before you started.
 
 2. **Claim it**: Call `start_feature(id="feature-id")` using the ID from step 1.
 
@@ -63,14 +75,23 @@ Watch for these — they recur across builds:
 
 ## Tailwind CSS Validation
 
-After `npm run build`, verify CSS output is not suspiciously small (<1KB total). If Tailwind is purging all classes, the `content` paths in `tailwind.config` likely don't match your actual file locations. Fix paths and rebuild.
+When creating `tailwind.config.ts` (or `.js`), the `content` array MUST include `./src/**/*.{js,ts,jsx,tsx}`. The Next.js 14 App Router puts pages in `src/app/` and components in `src/components/` — using `./app/**/*` without `./src/` will purge all classes.
+
+Correct:
+```js
+content: ["./src/**/*.{js,ts,jsx,tsx}"]
+```
+
+After `npm run build`, verify CSS output is not suspiciously small (<1KB total). If Tailwind is purging all classes, the content paths don't match your file locations. Fix paths and rebuild.
 
 ## Rules
 
-- Do NOT set `output: "export"` in `next.config` — the production deployment uses `next start` (SSR mode). Static export breaks the deployment pipeline.
+- Do NOT set `output: "export"` in `next.config` — static export breaks the deployment pipeline.
+- Do NOT remove `output: "standalone"` from `next.config` — standalone mode is required for Docker deployment. It bundles the server + deps so the container doesn't need `npm ci`.
 - Work ONLY in `frontend/` — do NOT touch `src/` (backend)
 - `get_next_feature()` respects dependencies — it only returns features whose deps are met. No need to manually check dependency status.
 - Use the MCP tools (`start_feature`, `touch_feature`, `complete_feature`) for all status updates — they use file locking so concurrent access from other agents is safe
+- After installing any new npm packages, run `cd frontend && npm install` to regenerate `package-lock.json`, then commit the updated lockfile before pushing. The Dockerfile relies on the lockfile being in sync with package.json — a mismatch breaks the Docker build.
 - Do NOT mark a feature complete unless both `npm test` and `npm run build` pass
 - If a tool call is denied (permission or auto-mode classifier), try an alternative approach — do NOT retry the same command
 - Commit messages MUST use the real feature name (e.g. "feat: implement dashboard-page"),

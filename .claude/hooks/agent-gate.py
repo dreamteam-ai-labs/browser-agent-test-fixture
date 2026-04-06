@@ -10,15 +10,17 @@ tool permissions in agent frontmatter. See Hook Dependency Watchlist
 in memory/sync-status.md.
 """
 import json
+import os
 import sys
 from datetime import datetime
 from pathlib import Path
 
-STATE_FILE = Path("project-state.json")
+PROJECT_DIR = Path(os.environ.get("CLAUDE_PROJECT_DIR", "."))
+STATE_FILE = PROJECT_DIR / "project-state.json"
 
 
 def log_hook(hook_name: str, agent_id: str, action: str, detail: str = ""):
-    log_path = Path(".claude/hooks/hook-log.txt")
+    log_path = PROJECT_DIR / ".claude" / "hooks" / "hook-log.txt"
     log_path.parent.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().isoformat(timespec="milliseconds")
     line = f"{timestamp} | {hook_name} | agent={agent_id} | {action}"

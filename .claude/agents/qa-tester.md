@@ -87,14 +87,16 @@ For non-CRUD features (export, report, etc.), test with valid input and verify a
 
 Record every step: feature name, endpoint, method, request body, expected status, actual status, PASS/FAIL.
 
-### Step 5: Browser Smoke Test (mandatory — but only on final iteration)
+### Step 5: Browser Testing (mandatory — but only on final iteration)
 
-**Only run the browser smoke test when Steps 1-4 and Step 6 have ZERO critical issues.** The browser test costs real money (Computer Use API calls with screenshots). Running it on every iteration wastes budget when you're retesting backend fixes that curl already verified.
+**Only run browser tests when Steps 1-4 and Step 6 have ZERO critical issues.** Browser tests cost real money. Running them on every iteration wastes budget when you're retesting backend fixes that curl already verified.
 
 - If this is the first iteration: run Steps 1-4, Step 6 first. If zero critical issues, run Step 5. If critical issues exist, skip Step 5, report the issues, and wait for fixes.
 - If this is a retest iteration: only run Step 5 after confirming all previous critical issues are resolved via Steps 1-4 and Step 6.
 
 **You MUST run this step at least once before reporting zero critical issues.**
+
+#### 5a. Smoke Test
 
 Verify prerequisites: `CODESPACE_NAME` is set, `scripts/qa-smoke-test.py` exists. If either is missing → **CRITICAL**.
 
@@ -110,7 +112,37 @@ Review `screenshotUrls` — if any page renders as raw unstyled HTML (no colours
 
 **Classification:** Exit code 0 AND `browser_smoke_test.overall` is `"pass"` → PASS. Anything else → **CRITICAL**.
 
-**You must NOT report "0 critical issues" if the browser smoke test returned anything other than pass.**
+#### 5b. Browser CRUD Testing
+
+For each feature in features.json tagged `"ui"`, verify the FULL CRUD cycle works through the browser UI. This catches bugs that curl tests miss (e.g., client-side auth, form validation, frontend routing).
+
+**Auth first:** Get a logged-in browser session. Try the app's login/register UI — discover the auth flow from the actual page (don't assume a specific pattern). If auth uses Firebase/GCP client-side, fill the Firebase UI. If it uses a backend endpoint, use that. The goal: reach an authenticated state where CRUD operations are possible.
+
+**For each UI-tagged feature:**
+1. Navigate to the entity's list page
+2. Find and click the create/add/new button
+3. Fill the form — read field labels and type appropriate test data (text for text fields, numbers for number fields, dates for date fields, emails for email fields)
+4. Submit the form
+5. Verify the new item appears in the list
+6. Click the item to edit, change a field, save
+7. Delete the item, verify removal
+
+Use the browser agent service (`scripts/qa-smoke-test.py` or direct HTTP to the browser service) to drive these interactions.
+
+**Write results to qa-report.json under `browser_crud_results`.** Each entry has flexible test keys — CRUD entities have create/read/update/delete, view-only pages (dashboard, analytics) have renders/data_loads:
+```json
+{
+  "browser_crud_results": [
+    {"entity": "expenses", "page": "/expenses", "tests": {"create": "pass", "read": "pass", "update": "pass", "delete": "pass"}},
+    {"entity": "dashboard", "page": "/dashboard", "tests": {"renders": "pass", "data_loads": "pass"}}
+  ]
+}
+```
+Every discovered UI page must have an entry with at least one test. All test values must be "pass" or "fail".
+
+**Any browser test failure is CRITICAL.** If creating an entity through the UI fails but the curl API test passed, the frontend is broken.
+
+**You must NOT report "0 critical issues" if browser testing returned any failures.**
 
 ### Step 6: Frontend Page Checks
 
@@ -118,16 +150,15 @@ Discover pages from `frontend/src/app/` directory structure, curl each one.
 For features with CRUD operations: `/[resource]`, `/[resource]/new`, and `/[resource]/[id]` MUST exist. Missing CRUD page → **CRITICAL**.
 For non-CRUD features: a 404 is NON-CRITICAL but should be reported.
 
-Also check: any feature tagged `"ui"` in features.json must have a component test in `frontend/src/__tests__/` or colocated `*.test.tsx`. Missing UI test → **CRITICAL**.
-
 ## Critical vs Non-Critical
 
 **CRITICAL (must fix):**
-- Auth flow broken
+- Auth flow broken (API or browser)
 - Backend health check fails
-- Any CRUD operation fails for any feature
+- Any CRUD operation fails for any feature (API or browser)
 - Feature endpoint returns 500
 - Browser smoke test returns anything other than `pass`
+- Browser CRUD test fails for any UI-tagged feature
 - UI-tagged feature has no component test
 - Browser console shows `pageerror` or failed resource loads
 
@@ -148,7 +179,20 @@ After Step 6 (frontend): update report with page checks and final summary.
 
 The report is **cumulative across iterations** — each QA cycle appends to an `iterations` array. The `latest` field always points to the most recent iteration.
 
-Each iteration should include: backend/frontend health status, auth flow results, functional test results per feature (with CRUD steps and PASS/FAIL), browser smoke test results (copy from `qa-smoke-results.json`), frontend page checks, and a summary with `endpoints_passed`, `endpoints_total`, and `critical_issues` list.
+**REQUIRED fields** (the quality gate reads these — use these exact names):
+```json
+{
+  "latest": {
+    "summary": {
+      "critical_issues": [],
+      "total_tests": 22,
+      "passed": 22
+    }
+  }
+}
+```
+
+`critical_issues` must be an array. Empty array = QA passed. This is the ONLY field the quality gate checks. Everything else is for reporting — add whatever detail is useful.
 
 Commit and push the report after each update.
 
@@ -168,6 +212,7 @@ Message the lead with:
 ## Rules
 
 - Do NOT fix code yourself — only test and report
+- Test infrastructure timeouts or crashes (browser agent, test runner, external services) are INFRASTRUCTURE issues — do NOT read or investigate test script source code to debug them. Report the timeout as NON-CRITICAL and continue testing other features.
 - Do NOT modify source files (qa-report.json is the only file you create)
 - ALWAYS run the FULL test suite on every iteration
 - Test with real data, read feature descriptions, discover actual routes from code

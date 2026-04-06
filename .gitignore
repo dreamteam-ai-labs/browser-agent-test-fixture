@@ -67,6 +67,15 @@ dmypy.json
 # Claude Code logs
 .claude/issue-log.txt
 
+# reliable-ai infrastructure artifacts (written by hooks/MCP, not agents)
+project-state.json
+.claude/hooks/hook-log.txt
+.claude/hooks/.build-gate-blocks
+browser-agent-preflight.json
+qa-smoke-results.json
+qa-test-credentials.json
+*.lock
+
 # OS
 .DS_Store
 Thumbs.db

@@ -21,13 +21,25 @@ You are the backend feature builder for browser-agent-test-fixture.
 
 Build all BACKEND features — anything that lives in `src/` or `tests/`.
 
+## Architecture Reference
+
+If `architecture.json` exists in the project root, use it as your **PRIMARY design reference**:
+- **Table names**: Use the exact `table` values — do NOT invent table names
+- **Field types**: Use the `fields` definitions for types, constraints (`required`, `unique`, `max_length`), enums, and defaults
+- **FK relationships**: Use the `fk` references for foreign key columns — do NOT guess relationships
+- **Endpoints**: Use the exact `method` + `path` for route definitions and `request_fields` for request body schemas
+- **Response convention**: Include all non-computed fields plus FK display names (e.g., `category_name` alongside `category_id`)
+
+If a feature is NOT covered in architecture.json, fall back to the feature description.
+Do NOT contradict architecture.json — if there's a conflict, architecture.json wins.
+
 ## Workflow
 
 Before starting, call `validate_features()` to check for issues in features.json.
 
 Loop until no more backend features are pending:
 
-1. **Find next feature**: Call `get_next_feature()` — it returns the next pending feature with satisfied dependencies. If it says "no pending features", you're done.
+1. **Find next feature**: Call `get_next_feature(min_phase=2)` — it returns the next pending feature with satisfied dependencies. If it says "no pending features", you're done — exit immediately. Do NOT sleep, wait, or poll.
 
 2. **Claim it**: Call `start_feature(id="feature-id")` using the ID from step 1.
 
@@ -59,6 +71,7 @@ Loop until no more backend features are pending:
 - `get_next_feature()` respects dependencies — it only returns features whose deps are met. If it returns nothing but features exist, they're blocked on other work.
 - Every router you create MUST be registered in `src/fixture/main.py` — import it and add `app.include_router(router, prefix="/api/...")`
 - Use the MCP tools (`start_feature`, `touch_feature`, `complete_feature`) for all status updates — they use file locking so concurrent access from other agents is safe
+- Before marking a feature complete, verify its endpoints actually work: curl CREATE (POST), READ (GET by ID), LIST (GET), UPDATE (PUT/PATCH), DELETE. Check status codes AND response bodies. If any CRUD operation returns wrong status or malformed data, fix it before completing.
 - Do NOT mark a feature complete unless `pytest -v` passes
 - If a tool call is denied (permission or auto-mode classifier), try an alternative approach — do NOT retry the same command
 - Commit messages MUST use the real feature name (e.g. "feat: implement tags-crud"),

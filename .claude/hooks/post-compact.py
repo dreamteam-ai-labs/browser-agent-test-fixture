@@ -10,11 +10,14 @@ OBSOLESCENCE: Remove when Anthropic ships native compaction-aware context
 injection. See Hook Dependency Watchlist in memory/sync-status.md.
 """
 import json
+import os
 import sys
 from datetime import datetime
 from pathlib import Path
 
-STATE_FILE = Path("project-state.json")
+PROJECT_DIR = Path(os.environ.get("CLAUDE_PROJECT_DIR", "."))
+
+STATE_FILE = PROJECT_DIR / "project-state.json"
 
 # Phase-specific directives — focused, actionable, short
 PHASE_DIRECTIVES = {
@@ -49,7 +52,7 @@ PHASE_DIRECTIVES = {
 
 
 def log_hook(hook_name: str, agent_id: str, action: str, detail: str = ""):
-    log_path = Path(".claude/hooks/hook-log.txt")
+    log_path = PROJECT_DIR / ".claude" / "hooks" / "hook-log.txt"
     log_path.parent.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().isoformat(timespec="milliseconds")
     line = f"{timestamp} | {hook_name} | agent={agent_id} | {action}"
@@ -76,7 +79,7 @@ def get_progress_summary() -> str:
     lines = []
 
     # Environment features
-    env_path = Path("environment_features.json")
+    env_path = PROJECT_DIR / "environment_features.json"
     if env_path.exists():
         try:
             data = json.loads(env_path.read_text(encoding="utf-8"))
@@ -91,7 +94,7 @@ def get_progress_summary() -> str:
             pass
 
     # App features
-    app_path = Path("features.json")
+    app_path = PROJECT_DIR / "features.json"
     if not app_path.exists():
         return "No features.json found."
 
@@ -151,7 +154,7 @@ def main():
 
     log_detail = f"phase={build_phase or 'unset'}"
     try:
-        data = json.loads(Path("features.json").read_text(encoding="utf-8"))
+        data = json.loads((PROJECT_DIR / "features.json").read_text(encoding="utf-8"))
         features = data.get("features", [])
         done = sum(1 for f in features if f.get("status") == "completed")
         log_detail += f" | {done}/{len(features)} features"

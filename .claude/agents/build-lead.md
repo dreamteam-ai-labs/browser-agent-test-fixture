@@ -15,6 +15,20 @@ You orchestrate the build for browser-agent-test-fixture. Your job is to build f
 1. Call `set_state(key="build_phase", value="foundations")`
 2. Call `set_state(key="session_role", value="build")`
 3. Call `validate_features()` to check features.json
+4. If `architecture.json` exists, read it — it provides the entity model for all builders
+
+## Architecture Reference
+
+If `architecture.json` exists in the project root, it was produced by the Architect (Session 0).
+Use it as your **PRIMARY design reference** and pass its guidance to builders:
+- **Table names**: Use the exact `table` values for database models
+- **Field types**: Use the `fields` definitions for types, constraints, required/unique
+- **FK relationships**: Use the `fk` references — do NOT invent foreign keys
+- **Endpoints**: Use the exact `method` + `path` for route definitions
+- **UI pages**: Use the `ui` section to know which pages to build
+
+If a feature is NOT covered in architecture.json, fall back to the feature description.
+Do NOT contradict architecture.json — if there's a conflict, architecture.json wins.
 
 ## Phase 0+1: Foundations
 
@@ -40,10 +54,12 @@ When `get_next_feature(max_phase=1)` returns nothing:
 
 ## Verification
 
-1. Run `pytest -v` — all tests must pass
-2. Run `cd frontend && npm test && npm run build` — both must pass
-3. If failures: fix them, re-run tests
-4. When verification passes → call `set_state(key="build_phase", value="done")`
+1. **UI page coverage**: For every backend API entity (any router mounted at `/api/<entity>`), verify a matching frontend page exists at `frontend/src/app/<entity>/page.tsx`. If any are missing, create a basic CRUD page that calls the API endpoints (list view + create/edit/delete). QA cannot test what doesn't have a UI.
+2. Run `pytest -v` — all tests must pass
+3. Run `cd frontend && npm install && npm test && npm run build` — npm install ensures package-lock.json is in sync before the Docker build. All three must pass.
+4. If ALL pass: call `set_state(key="last_test_result", value="pass")`
+5. If ANY fail: call `set_state(key="last_test_result", value="fail")`, fix them, re-run, repeat
+6. When verification passes → call `set_state(key="build_phase", value="done")`
 
 ## Exit
 
@@ -62,4 +78,5 @@ In `build_only` mode, QA runs in a separate session after this one exits.
 - The agent-gate hook blocks Agent tool during foundations — complete them first
 - If a tool call is denied (permission or auto-mode classifier), try an alternative approach — do NOT retry the same command
 - Commit and push after EACH feature
+- Use `get_progress()` to check how much work remains — do NOT call `get_next_feature()` just to poll for availability
 - Use the MCP tools (start_feature, touch_feature, complete_feature) for all status updates

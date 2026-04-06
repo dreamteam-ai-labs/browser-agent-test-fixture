@@ -4,19 +4,25 @@
 Reads hook event JSON from stdin. Uses agent_id to determine which
 directories the agent is allowed to write to. Returns JSON decision.
 
+OBSOLESCENCE: Remove when Anthropic ships native allowedPaths in
+agent frontmatter. See Hook Dependency Watchlist in memory/sync-status.md.
+
 Agent rules:
   backend-builder:  allow src/, tests/ — deny frontend/
   frontend-builder: allow frontend/ — deny src/, tests/
   qa-tester:        deny all writes (defense-in-depth)
 """
 import json
+import os
 import sys
 from datetime import datetime
 from pathlib import Path
 
+PROJECT_DIR = Path(os.environ.get("CLAUDE_PROJECT_DIR", "."))
+
 
 def log_hook(hook_name: str, agent_id: str, action: str, detail: str = ""):
-    log_path = Path(".claude/hooks/hook-log.txt")
+    log_path = PROJECT_DIR / ".claude" / "hooks" / "hook-log.txt"
     log_path.parent.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().isoformat(timespec="milliseconds")
     line = f"{timestamp} | {hook_name} | agent={agent_id} | {action}"

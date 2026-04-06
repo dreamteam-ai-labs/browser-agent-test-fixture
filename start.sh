@@ -14,10 +14,31 @@ fi
 SERVICE="${SERVICE:-both}"
 
 if [ "$SERVICE" = "backend" ] || [ "$SERVICE" = "both" ]; then
+  # Fresh deploy: clean schema before starting (set by factory loop for new products)
+  if [ "$FRESH_DEPLOY" = "true" ] && [ -n "$DATABASE_URL" ]; then
+    echo "Fresh deploy: resetting database schema..."
+    python3 -c "
+from fixture.database import Base, get_engine
+engine = get_engine()
+Base.metadata.drop_all(bind=engine)
+Base.metadata.create_all(bind=engine)
+print('Schema reset complete')
+"
+  fi
+
   # Run Alembic migrations
   if [ -n "$DATABASE_URL" ]; then
     echo "Running database migrations..."
     alembic upgrade head 2>/dev/null || echo "Migrations skipped"
+  fi
+
+  # Ensure all tables exist (idempotent — skips existing, creates missing)
+  if [ -n "$DATABASE_URL" ]; then
+    python3 -c "
+from fixture.database import Base, get_engine
+from fixture import models  # noqa: F401 — register models on Base.metadata
+Base.metadata.create_all(bind=get_engine())
+" 2>/dev/null || echo "Table creation skipped (models not yet implemented)"
   fi
 
   echo "Starting backend on port 8000..."
@@ -33,12 +54,15 @@ fi
 
 if [ "$SERVICE" = "frontend" ] || [ "$SERVICE" = "both" ]; then
   echo "Starting frontend on port 3000..."
+  # HOSTNAME=0.0.0.0 required — standalone server uses process.env.HOSTNAME for binding.
+  # Without it, Docker sets HOSTNAME to container ID and Traefik gets 502.
+  export HOSTNAME=0.0.0.0
   if [ "$SERVICE" = "frontend" ]; then
     # Frontend only — run in foreground
-    cd frontend && exec npx next start -p 3000
+    cd frontend && PORT=3000 exec node server.js
   else
     # Both — run in background
-    cd frontend && NODE_ENV=production npx next start -p 3000 &
+    cd frontend && PORT=3000 NODE_ENV=production node server.js &
     FRONTEND_PID=$!
     cd ..
   fi

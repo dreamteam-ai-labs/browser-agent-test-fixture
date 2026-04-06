@@ -5,15 +5,21 @@ Fires when an agent spawns a task via TaskCreate. Logs the task name,
 creating agent, and description to hook-log.txt. Never blocks.
 
 New in Claude Code 2.1.84.
+
+OBSOLESCENCE: Remove when Anthropic ships native task logging to file.
+See Hook Dependency Watchlist in memory/sync-status.md.
 """
 import json
+import os
 import sys
 from datetime import datetime
 from pathlib import Path
 
+PROJECT_DIR = Path(os.environ.get("CLAUDE_PROJECT_DIR", "."))
+
 
 def log_hook(hook_name: str, agent_id: str, action: str, detail: str = ""):
-    log_path = Path(".claude/hooks/hook-log.txt")
+    log_path = PROJECT_DIR / ".claude" / "hooks" / "hook-log.txt"
     log_path.parent.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().isoformat(timespec="milliseconds")
     line = f"{timestamp} | {hook_name} | agent={agent_id} | {action}"

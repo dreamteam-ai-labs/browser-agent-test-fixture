@@ -3,15 +3,21 @@
 
 Reads TeammateIdle hook event JSON from stdin. Reads features.json to
 find the next pending feature and returns it as a message for the idle agent.
+
+OBSOLESCENCE: Remove when Anthropic ships native TeammateIdle with MCP
+integration or native task queue auto-claim. See Hook Dependency Watchlist.
 """
 import json
+import os
 import sys
 from datetime import datetime
 from pathlib import Path
 
+PROJECT_DIR = Path(os.environ.get("CLAUDE_PROJECT_DIR", "."))
+
 
 def log_hook(hook_name: str, agent_id: str, action: str, detail: str = ""):
-    log_path = Path(".claude/hooks/hook-log.txt")
+    log_path = PROJECT_DIR / ".claude" / "hooks" / "hook-log.txt"
     log_path.parent.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().isoformat(timespec="milliseconds")
     line = f"{timestamp} | {hook_name} | agent={agent_id} | {action}"
@@ -24,9 +30,9 @@ def log_hook(hook_name: str, agent_id: str, action: str, detail: str = ""):
         pass  # Best-effort logging — never break the hook
 
 
-def get_next_pending(features_path: str = "features.json") -> dict | None:
+def get_next_pending() -> dict | None:
     """Find the next pending feature from features.json."""
-    path = Path(features_path)
+    path = PROJECT_DIR / "features.json"
     if not path.exists():
         return None
 
@@ -54,7 +60,7 @@ def main():
     # Also check if any features are still in_progress
     has_in_progress = False
     try:
-        data = json.loads(Path("features.json").read_text(encoding="utf-8"))
+        data = json.loads((PROJECT_DIR / "features.json").read_text(encoding="utf-8"))
         has_in_progress = any(
             f.get("status") == "in_progress" for f in data.get("features", [])
         )
