@@ -1,0 +1,125 @@
+{
+  "version": "1.0.0",
+  "services": {
+    "fixture": {
+      "source": "build_new",
+      "constraints": {
+        "auth": "GCP Identity Platform",
+        "database": "sqlite",
+        "orm": "sqlalchemy",
+        "backend": "fastapi",
+        "frontend": "nextjs"
+      },
+      "entities": {
+        "users": {
+          "table": "users",
+          "fields": {
+            "id": { "type": "uuid", "pk": true },
+            "email": { "type": "string", "required": true, "unique": true, "max_length": 255 },
+            "hashed_password": { "type": "string", "required": true },
+            "name": { "type": "string", "required": true, "max_length": 255 }
+          },
+          "endpoints": {
+            "register": { "method": "POST", "path": "/api/auth/register" },
+            "login": { "method": "POST", "path": "/api/auth/login" },
+            "me": { "method": "GET", "path": "/api/users/me" }
+          },
+          "ui": {
+            "page": "/login",
+            "display_name": "Authentication",
+            "crud": ["create"]
+          }
+        },
+        "projects": {
+          "table": "projects",
+          "fields": {
+            "id": { "type": "uuid", "pk": true },
+            "name": { "type": "string", "required": true, "max_length": 255 },
+            "description": { "type": "text" },
+            "owner_id": { "type": "uuid", "required": true, "fk": "users.id" }
+          },
+          "endpoints": {
+            "create": { "method": "POST", "path": "/api/projects" },
+            "list": { "method": "GET", "path": "/api/projects" },
+            "read": { "method": "GET", "path": "/api/projects/{id}" },
+            "delete": { "method": "DELETE", "path": "/api/projects/{id}" }
+          },
+          "ui": {
+            "page": "/projects",
+            "display_name": "Projects",
+            "crud": ["list", "create", "read", "delete"]
+          }
+        },
+        "tasks": {
+          "table": "tasks",
+          "fields": {
+            "id": { "type": "uuid", "pk": true },
+            "title": { "type": "string", "required": true, "max_length": 255 },
+            "description": { "type": "text" },
+            "project_id": { "type": "uuid", "required": true, "fk": "projects.id" },
+            "assignee_id": { "type": "uuid", "fk": "users.id" },
+            "status": {
+              "type": "string",
+              "enum": ["pending", "in_progress", "done"],
+              "default": "pending"
+            }
+          },
+          "endpoints": {
+            "create": { "method": "POST", "path": "/api/tasks" },
+            "list": { "method": "GET", "path": "/api/tasks" },
+            "read": { "method": "GET", "path": "/api/tasks/{id}" },
+            "delete": { "method": "DELETE", "path": "/api/tasks/{id}" }
+          },
+          "ui": {
+            "page": "/tasks",
+            "display_name": "Tasks",
+            "crud": ["list", "create", "read", "delete"]
+          }
+        }
+      },
+      "relationships": [
+        {
+          "from": "projects",
+          "to": "users",
+          "field": "owner_id",
+          "cardinality": "many_to_one"
+        },
+        {
+          "from": "tasks",
+          "to": "projects",
+          "field": "project_id",
+          "cardinality": "many_to_one"
+        },
+        {
+          "from": "tasks",
+          "to": "users",
+          "field": "assignee_id",
+          "cardinality": "many_to_one"
+        }
+      ],
+      "pages": {
+        "dashboard": {
+          "path": "/dashboard",
+          "display_name": "Dashboard",
+          "type": "view_only",
+          "displays": [
+            "project count",
+            "task count",
+            "quick links to projects and tasks"
+          ]
+        },
+        "navigation": {
+          "path": "/",
+          "display_name": "Navigation and Layout",
+          "type": "view_only",
+          "displays": [
+            "sidebar with route highlighting",
+            "logout button",
+            "auth guard protecting authenticated routes",
+            "layout wrapper for authenticated pages"
+          ]
+        }
+      }
+    }
+  }
+}

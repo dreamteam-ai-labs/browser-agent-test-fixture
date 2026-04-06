@@ -6,3 +6,5 @@
 2026-03-30T20:59:58.324 | build-gate | agent=build-lead | ALLOW | not lead session
 2026-03-30T21:02:24.559 | build-gate | agent=build-lead | ALLOW | not lead session
 2026-03-30T21:55:00.969 | build-gate | agent=build-lead | ALLOW | not lead session
+2026-04-06T19:59:00.854 | build-gate | agent=architect | ALLOW | not lead session
+2026-04-06T20:01:55.688 | commit-guard | agent=unknown | ALLOW | msg: feat: complete Phase 0+1 foundations — browser agent verified, database schema, 
