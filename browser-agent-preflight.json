@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-03-30T21:50:05Z",
+  "checked_at": "2026-04-06T20:00:13Z",
   "browser_agent_url": "https://browser.dreamteamlabs.co.uk",
   "stages": {
     "health": {
@@ -9,19 +9,20 @@
     },
     "diagnose": {
       "pass": true,
-      "final_url": "https://fixture-agent-test-5vg5g45465j26r5-8000.app.github.dev/api/health",
-      "screenshot_url": "https://litter.catbox.moe/j93mhr.png",
-      "elapsed_ms": 4145,
-      "test_url": "https://fixture-agent-test-5vg5g45465j26r5-8000.app.github.dev/api/health"
+      "final_url": "https://fixture-harness-r74w4rwr956fp4r6-8000.app.github.dev/api/health",
+      "screenshot_url": "https://litter.catbox.moe/lpx4kl.png",
+      "elapsed_ms": 4031,
+      "test_url": "https://fixture-harness-r74w4rwr956fp4r6-8000.app.github.dev/api/health"
     },
     "url_reachable": {
-      "pass": true,
-      "status": 200,
-      "url": "https://fixture-agent-test-5vg5g45465j26r5-8000.app.github.dev/api/health",
-      "attempts": 1
+      "pass": false,
+      "status": 502,
+      "url": "https://fixture-harness-r74w4rwr956fp4r6-8000.app.github.dev/api/health",
+      "error": "HTTP Error 502: Bad Gateway",
+      "warning": true
     }
   },
-  "codespace_name": "fixture-agent-test-5vg5g45465j26r5",
+  "codespace_name": "fixture-harness-r74w4rwr956fp4r6",
   "overall": "pass",
-  "screenshot_url": "https://litter.catbox.moe/j93mhr.png"
+  "screenshot_url": "https://litter.catbox.moe/lpx4kl.png"
 }
