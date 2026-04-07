@@ -1,360 +1,173 @@
 {
-  "latest": {
-    "timestamp": "2026-04-07T14:40:00Z",
-    "iteration": 1,
-    "summary": {
-      "total_tests": 32,
-      "passed": 31,
-      "failed": 0,
-      "skipped": 1,
-      "critical_issues": []
-    },
-    "details": [
-      {
-        "step": 1,
-        "name": "Backend Health Check",
-        "endpoint": "GET /api/health",
-        "status": "pass",
-        "note": "Returns 200 with healthy status"
-      },
-      {
-        "step": 1,
-        "name": "Frontend Health Check",
-        "endpoint": "GET http://localhost:3000",
-        "status": "pass",
-        "note": "Returns 200"
-      },
-      {
-        "step": 2,
-        "name": "Auth: Register new user",
-        "endpoint": "POST /api/auth/register",
-        "status": "pass",
-        "note": "Returns 200 with user object and JWT token"
-      },
-      {
-        "step": 2,
-        "name": "Auth: Get current user (/api/auth/me)",
-        "endpoint": "GET /api/auth/me",
-        "status": "pass",
-        "note": "Returns 200 with user id, email, display_name"
-      },
-      {
-        "step": 2,
-        "name": "Auth: Login",
-        "endpoint": "POST /api/auth/login",
-        "status": "pass",
-        "note": "Returns 200 with user object and JWT token"
-      },
-      {
-        "step": 4,
-        "name": "Projects: CREATE",
-        "endpoint": "POST /api/projects",
-        "method": "POST",
-        "request_body": {"name": "QA Test Project", "description": "A test project for QA", "color": "#ff5733"},
-        "expected_status": 201,
-        "actual_status": 201,
-        "status": "pass",
-        "note": "Returns project with id=1"
-      },
-      {
-        "step": 4,
-        "name": "Projects: LIST",
-        "endpoint": "GET /api/projects",
-        "expected_status": 200,
-        "actual_status": 200,
-        "status": "pass",
-        "note": "Returns array containing the created project"
-      },
-      {
-        "step": 4,
-        "name": "Projects: GET by ID",
-        "endpoint": "GET /api/projects/1",
-        "expected_status": 200,
-        "actual_status": 200,
-        "status": "pass",
-        "note": "Returns correct project data"
-      },
-      {
-        "step": 4,
-        "name": "Projects: UPDATE",
-        "endpoint": "PUT /api/projects/1",
-        "method": "PUT",
-        "request_body": {"name": "QA Test Project Updated", "description": "Updated description", "color": "#00ff00"},
-        "expected_status": 200,
-        "actual_status": 200,
-        "status": "pass",
-        "note": "Returns updated project"
-      },
-      {
-        "step": 4,
-        "name": "Projects: VERIFY UPDATE",
-        "endpoint": "GET /api/projects/1",
-        "status": "pass",
-        "note": "Returns updated name and description"
-      },
-      {
-        "step": 4,
-        "name": "Tasks: CREATE",
-        "endpoint": "POST /api/tasks",
-        "method": "POST",
-        "request_body": {"title": "QA Test Task", "project_id": 1, "status": "todo"},
-        "expected_status": 201,
-        "actual_status": 201,
-        "status": "pass",
-        "note": "Returns task with id=1, linked to project"
-      },
-      {
-        "step": 4,
-        "name": "Tasks: LIST",
-        "endpoint": "GET /api/tasks",
-        "expected_status": 200,
-        "actual_status": 200,
-        "status": "pass",
-        "note": "Returns array containing the created task"
-      },
-      {
-        "step": 4,
-        "name": "Tasks: GET by ID",
-        "endpoint": "GET /api/tasks/1",
-        "expected_status": 200,
-        "actual_status": 200,
-        "status": "pass",
-        "note": "Returns correct task data"
-      },
-      {
-        "step": 4,
-        "name": "Tasks: UPDATE",
-        "endpoint": "PUT /api/tasks/1",
-        "method": "PUT",
-        "request_body": {"title": "QA Test Task Updated", "project_id": 1, "status": "in_progress"},
-        "expected_status": 200,
-        "actual_status": 200,
-        "status": "pass",
-        "note": "Returns updated task with status=in_progress"
-      },
-      {
-        "step": 4,
-        "name": "Tasks: VERIFY UPDATE",
-        "endpoint": "GET /api/tasks/1",
-        "status": "pass",
-        "note": "Returns updated title and status"
-      },
-      {
-        "step": 4,
-        "name": "Tasks: DELETE",
-        "endpoint": "DELETE /api/tasks/1",
-        "expected_status": 204,
-        "actual_status": 204,
-        "status": "pass",
-        "note": "Returns 204 No Content"
-      },
-      {
-        "step": 4,
-        "name": "Tasks: VERIFY DELETE",
-        "endpoint": "GET /api/tasks/1",
-        "expected_status": 404,
-        "actual_status": 404,
-        "status": "pass",
-        "note": "Returns 404 after deletion"
-      },
-      {
-        "step": 4,
-        "name": "Projects: DELETE",
-        "endpoint": "DELETE /api/projects/1",
-        "expected_status": 204,
-        "actual_status": 204,
-        "status": "pass",
-        "note": "Returns 204 No Content"
-      },
-      {
-        "step": 4,
-        "name": "Projects: VERIFY DELETE",
-        "endpoint": "GET /api/projects/1",
-        "expected_status": 404,
-        "actual_status": 404,
-        "status": "pass",
-        "note": "Returns 404 after deletion"
-      },
-      {
-        "step": 5,
-        "name": "Browser Smoke Test: Overall",
-        "status": "pass",
-        "note": "qa-smoke-test.py exit code 0, overall=pass. 3/3 entities tested."
-      },
-      {
-        "step": 5,
-        "name": "Browser: Login/Auth flow",
-        "status": "pass",
-        "note": "Login successful, dashboard redirect works, register new account works, logout works"
-      },
-      {
-        "step": 5,
-        "name": "Browser: Projects CREATE",
-        "status": "pass",
-        "note": "Form accessible, all fields functional (Name, Description, Color), creation succeeded"
-      },
-      {
-        "step": 5,
-        "name": "Browser: Projects READ/LIST",
-        "status": "pass",
-        "note": "Projects list displays correctly with proper data formatting"
-      },
-      {
-        "step": 5,
-        "name": "Browser: Projects UPDATE",
-        "status": "pass",
-        "note": "Edit form pre-populated, changes saved and persist"
-      },
-      {
-        "step": 5,
-        "name": "Browser: Projects DELETE",
-        "status": "pass",
-        "note": "Delete operation successful, item removed from list"
-      },
-      {
-        "step": 5,
-        "name": "Browser: Tasks CREATE",
-        "status": "pass",
-        "note": "Successfully created task with title, project, and status fields"
-      },
-      {
-        "step": 5,
-        "name": "Browser: Tasks READ/LIST",
-        "status": "pass",
-        "note": "Task appears in list with proper data"
-      },
-      {
-        "step": 5,
-        "name": "Browser: Tasks UPDATE",
-        "status": "pass",
-        "note": "Title updated successfully, changes persisted"
-      },
-      {
-        "step": 5,
-        "name": "Browser: Tasks DELETE",
-        "status": "skip",
-        "note": "Delete was initiated but session ended before final confirmation captured. Non-critical."
-      },
-      {
-        "step": 6,
-        "name": "Frontend: / (root)",
-        "status": "pass",
-        "note": "Returns 200"
-      },
-      {
-        "step": 6,
-        "name": "Frontend: /login",
-        "status": "pass",
-        "note": "Returns 200 with sign-in form HTML"
-      },
-      {
-        "step": 6,
-        "name": "Frontend: /register",
-        "status": "pass",
-        "note": "Returns 200"
-      },
-      {
-        "step": 6,
-        "name": "Frontend: /dashboard",
-        "status": "pass",
-        "note": "Returns 200"
-      },
-      {
-        "step": 6,
-        "name": "Frontend: /projects",
-        "status": "pass",
-        "note": "Returns 200"
-      },
-      {
-        "step": 6,
-        "name": "Frontend: /projects/new",
-        "status": "pass",
-        "note": "Returns 200"
-      },
-      {
-        "step": 6,
-        "name": "Frontend: /projects/[id]",
-        "status": "pass",
-        "note": "Returns 200 for /projects/1"
-      },
-      {
-        "step": 6,
-        "name": "Frontend: /tasks",
-        "status": "pass",
-        "note": "Returns 200"
-      },
-      {
-        "step": 6,
-        "name": "Frontend: /tasks/new",
-        "status": "pass",
-        "note": "Returns 200"
-      },
-      {
-        "step": 6,
-        "name": "Frontend: /tasks/[id]",
-        "status": "pass",
-        "note": "Returns 200 for /tasks/1"
-      }
-    ],
-    "observations": [
-      "NOTABLE: At server startup the DB tables did not exist (Neon PostgreSQL). The init_db() in main.py calls Base.metadata.create_all() but failed silently on first startup. The /api/admin/reset endpoint was used to force table creation. All subsequent requests succeeded.",
-      "favicon.ico returns 404 - non-critical, missing static asset",
-      "Some Next.js RSC fetch requests show ERR_ABORTED in browser console - these are normal Next.js navigation artifacts (RSC requests aborted when user navigates away before response)",
-      "Authentication entity in smoke test was 'partial' due to no user profile/delete functionality in UI. This is by design - the app only supports login/register/logout.",
-      "Tasks seeding in smoke test step 1.5 returned 422 - smoke test seeds tasks without a project_id, but tasks work correctly when a project is provided (verified in CRUD tests)"
-    ],
-    "browser_crud_results": [
-      {
-        "entity": "login",
-        "page": "/login",
-        "tests": {
-          "renders": "pass",
-          "login_flow": "pass",
-          "register_flow": "pass",
-          "logout": "pass"
-        }
-      },
-      {
-        "entity": "projects",
-        "page": "/projects",
-        "tests": {
-          "create": "pass",
-          "read": "pass",
-          "update": "pass",
-          "delete": "pass"
-        }
-      },
-      {
-        "entity": "tasks",
-        "page": "/tasks",
-        "tests": {
-          "create": "pass",
-          "read": "pass",
-          "update": "pass",
-          "delete": "skip"
-        }
-      },
-      {
-        "entity": "dashboard",
-        "page": "/dashboard",
-        "tests": {
-          "renders": "pass",
-          "data_loads": "pass"
-        }
-      }
-    ]
-  },
   "iterations": [
     {
-      "timestamp": "2026-04-07T14:40:00Z",
+      "timestamp": "2026-04-07T15:42:30Z",
       "iteration": 1,
       "summary": {
-        "total_tests": 32,
-        "passed": 31,
-        "failed": 0,
-        "skipped": 1,
-        "critical_issues": []
+        "total_tests": 22,
+        "passed": 4,
+        "failed": 18,
+        "critical_issues": [
+          "REGISTER broken (500): ORM model uses column 'name' but public.users table has 'display_name' NOT NULL with no default — INSERT fails with NotNullViolation",
+          "CREATE PROJECT broken (500): ORM model uses 'owner_id' FK but public.projects table has 'user_id' — INSERT fails with UndefinedColumn",
+          "CREATE TASK broken (500): ORM model includes 'description' and 'assignee_id' columns but public.tasks table has neither — INSERT fails with UndefinedColumn",
+          "Browser smoke test FAIL: smoke test registration fails because /api/auth/register returns 500, browser_smoke_test.overall = 'error'"
+        ]
+      },
+      "steps": {
+        "step1_servers": {
+          "backend": "pass",
+          "frontend": "pass",
+          "detail": "Backend healthy at localhost:8000, frontend serving at localhost:3000"
+        },
+        "step2_auth": {
+          "register": "fail",
+          "login_seed_user": "pass",
+          "get_me": "pass",
+          "detail": "Register returns 500 — NotNullViolation on display_name column. Login with seed user (test@fixture.example.com) works. GET /api/auth/me returns user data."
+        },
+        "step3_endpoints": {
+          "status": "pass",
+          "endpoint_map": {
+            "auth": [
+              {"method": "POST", "path": "/api/auth/register"},
+              {"method": "POST", "path": "/api/auth/login"},
+              {"method": "GET", "path": "/api/auth/me"}
+            ],
+            "projects": [
+              {"method": "GET", "path": "/api/projects"},
+              {"method": "POST", "path": "/api/projects"},
+              {"method": "GET", "path": "/api/projects/{id}"},
+              {"method": "PUT", "path": "/api/projects/{id}"},
+              {"method": "DELETE", "path": "/api/projects/{id}"}
+            ],
+            "tasks": [
+              {"method": "GET", "path": "/api/tasks"},
+              {"method": "POST", "path": "/api/tasks"},
+              {"method": "GET", "path": "/api/tasks/{id}"},
+              {"method": "PUT", "path": "/api/tasks/{id}"},
+              {"method": "DELETE", "path": "/api/tasks/{id}"}
+            ],
+            "health": [
+              {"method": "GET", "path": "/api/health"}
+            ]
+          }
+        },
+        "step4_functional": {
+          "auth_register": {"status": "fail", "http_code": 500, "error": "NotNullViolation: display_name column NOT NULL, ORM sends name only"},
+          "auth_login": {"status": "pass", "http_code": 200, "detail": "Seed user login works"},
+          "auth_me": {"status": "pass", "http_code": 200, "detail": "Returns user id, email, name"},
+          "projects_create": {"status": "fail", "http_code": 500, "error": "UndefinedColumn: ORM uses owner_id but DB has user_id"},
+          "projects_list": {"status": "unknown", "detail": "Could not test — requires authenticated user that can create projects"},
+          "projects_get": {"status": "unknown"},
+          "projects_update": {"status": "unknown"},
+          "projects_delete": {"status": "unknown"},
+          "tasks_create": {"status": "fail", "http_code": 500, "error": "UndefinedColumn: ORM includes description column not in DB tasks table"},
+          "tasks_list": {"status": "unknown"},
+          "tasks_get": {"status": "unknown"},
+          "tasks_update": {"status": "unknown"},
+          "tasks_delete": {"status": "unknown"}
+        },
+        "step5_browser": {
+          "smoke_test_exit_code": 1,
+          "overall": "fail",
+          "browser_smoke_test_overall": "error",
+          "detail": "Smoke test failed: registration returns 500, no valid credentials for browser test. Auth step failed."
+        },
+        "step6_frontend_pages": {
+          "pages": [
+            {"path": "/", "status": 200, "result": "pass"},
+            {"path": "/projects", "status": 200, "result": "pass"},
+            {"path": "/projects/new", "status": 200, "result": "pass"},
+            {"path": "/projects/1", "status": 200, "result": "pass"},
+            {"path": "/tasks", "status": 200, "result": "pass"},
+            {"path": "/tasks/new", "status": 200, "result": "pass"},
+            {"path": "/tasks/1", "status": 200, "result": "pass"}
+          ],
+          "result": "pass",
+          "detail": "All 7 required frontend pages return HTTP 200"
+        }
+      },
+      "tests": [
+        {"name": "Backend health check", "status": "pass", "detail": "GET /api/health returns 200 with status:healthy"},
+        {"name": "Frontend health check", "status": "pass", "detail": "GET / returns 200"},
+        {"name": "User registration", "status": "fail", "detail": "POST /api/auth/register returns 500 — NotNullViolation: null value in column 'display_name' of relation 'users'. ORM model maps column as 'name' but DB table has 'display_name' NOT NULL with no default value."},
+        {"name": "User login (seed user)", "status": "pass", "detail": "POST /api/auth/login returns 200 with token"},
+        {"name": "Get current user", "status": "pass", "detail": "GET /api/auth/me returns 200 with {id, email, name}"},
+        {"name": "Create project", "status": "fail", "detail": "POST /api/projects returns 500 — UndefinedColumn: column 'owner_id' of relation 'projects' does not exist. ORM model uses owner_id FK but DB table has user_id."},
+        {"name": "List projects", "status": "fail", "detail": "Blocked by create failure — cannot verify list without created items"},
+        {"name": "Get project by ID", "status": "fail", "detail": "Blocked by create failure"},
+        {"name": "Update project", "status": "fail", "detail": "Blocked by create failure"},
+        {"name": "Delete project", "status": "fail", "detail": "Blocked by create failure"},
+        {"name": "Create task", "status": "fail", "detail": "POST /api/tasks returns 500 — UndefinedColumn: column 'description' of relation 'tasks' does not exist. ORM model includes description, assignee_id columns not present in DB tasks table."},
+        {"name": "List tasks", "status": "fail", "detail": "Blocked by create failure"},
+        {"name": "Get task by ID", "status": "fail", "detail": "Blocked by create failure"},
+        {"name": "Update task", "status": "fail", "detail": "Blocked by create failure"},
+        {"name": "Delete task", "status": "fail", "detail": "Blocked by create failure"},
+        {"name": "Frontend page: /", "status": "pass", "detail": "HTTP 200"},
+        {"name": "Frontend page: /projects", "status": "pass", "detail": "HTTP 200"},
+        {"name": "Frontend page: /projects/new", "status": "pass", "detail": "HTTP 200"},
+        {"name": "Frontend page: /projects/1", "status": "pass", "detail": "HTTP 200"},
+        {"name": "Frontend page: /tasks", "status": "pass", "detail": "HTTP 200"},
+        {"name": "Frontend page: /tasks/new", "status": "pass", "detail": "HTTP 200"},
+        {"name": "Frontend page: /tasks/1", "status": "pass", "detail": "HTTP 200"},
+        {"name": "Browser smoke test", "status": "fail", "detail": "Exit code 1 — browser_smoke_test.overall=error. Auth failed because /api/auth/register returns 500."}
+      ],
+      "schema_mismatches": {
+        "users_table": {
+          "orm_column": "name",
+          "db_column": "display_name",
+          "issue": "DB has 'display_name' NOT NULL no default, ORM model has 'name'. INSERT fails with NotNullViolation."
+        },
+        "projects_table": {
+          "orm_column": "owner_id",
+          "db_column": "user_id",
+          "issue": "DB has 'user_id' as FK, ORM model references 'owner_id'. INSERT fails with UndefinedColumn."
+        },
+        "tasks_table": {
+          "orm_columns_missing_in_db": ["description", "assignee_id"],
+          "issue": "DB tasks table has no 'description' or 'assignee_id' columns. ORM includes both. INSERT fails with UndefinedColumn on 'description'."
+        }
       }
     }
-  ]
+  ],
+  "latest": {
+    "timestamp": "2026-04-07T15:42:30Z",
+    "summary": {
+      "total_tests": 22,
+      "passed": 4,
+      "failed": 18,
+      "critical_issues": [
+        "REGISTER broken (500): ORM model uses column 'name' but public.users table has 'display_name' NOT NULL with no default — INSERT fails with NotNullViolation",
+        "CREATE PROJECT broken (500): ORM model uses 'owner_id' FK but public.projects table has 'user_id' — INSERT fails with UndefinedColumn",
+        "CREATE TASK broken (500): ORM model includes 'description' and 'assignee_id' columns but public.tasks table has neither — INSERT fails with UndefinedColumn",
+        "Browser smoke test FAIL: smoke test registration fails because /api/auth/register returns 500, browser_smoke_test.overall = 'error'"
+      ]
+    },
+    "tests": [
+      {"name": "Backend health check", "status": "pass", "detail": "GET /api/health returns 200 with status:healthy"},
+      {"name": "Frontend health check", "status": "pass", "detail": "GET / returns 200"},
+      {"name": "User registration", "status": "fail", "detail": "POST /api/auth/register returns 500 — NotNullViolation: null value in column 'display_name' of relation 'users'. ORM model maps column as 'name' but DB table has 'display_name' NOT NULL with no default value."},
+      {"name": "User login (seed user)", "status": "pass", "detail": "POST /api/auth/login returns 200 with token"},
+      {"name": "Get current user", "status": "pass", "detail": "GET /api/auth/me returns 200 with {id, email, name}"},
+      {"name": "Create project", "status": "fail", "detail": "POST /api/projects returns 500 — UndefinedColumn: column 'owner_id' of relation 'projects' does not exist. ORM model uses owner_id FK but DB table has user_id."},
+      {"name": "List projects", "status": "fail", "detail": "Blocked by create failure — cannot verify list without created items"},
+      {"name": "Get project by ID", "status": "fail", "detail": "Blocked by create failure"},
+      {"name": "Update project", "status": "fail", "detail": "Blocked by create failure"},
+      {"name": "Delete project", "status": "fail", "detail": "Blocked by create failure"},
+      {"name": "Create task", "status": "fail", "detail": "POST /api/tasks returns 500 — UndefinedColumn: column 'description' of relation 'tasks' does not exist. ORM model includes description, assignee_id columns not present in DB tasks table."},
+      {"name": "List tasks", "status": "fail", "detail": "Blocked by create failure"},
+      {"name": "Get task by ID", "status": "fail", "detail": "Blocked by create failure"},
+      {"name": "Update task", "status": "fail", "detail": "Blocked by create failure"},
+      {"name": "Delete task", "status": "fail", "detail": "Blocked by create failure"},
+      {"name": "Frontend page: /", "status": "pass", "detail": "HTTP 200"},
+      {"name": "Frontend page: /projects", "status": "pass", "detail": "HTTP 200"},
+      {"name": "Frontend page: /projects/new", "status": "pass", "detail": "HTTP 200"},
+      {"name": "Frontend page: /projects/1", "status": "pass", "detail": "HTTP 200"},
+      {"name": "Frontend page: /tasks", "status": "pass", "detail": "HTTP 200"},
+      {"name": "Frontend page: /tasks/new", "status": "pass", "detail": "HTTP 200"},
+      {"name": "Frontend page: /tasks/1", "status": "pass", "detail": "HTTP 200"},
+      {"name": "Browser smoke test", "status": "fail", "detail": "Exit code 1 — browser_smoke_test.overall=error. Auth failed because /api/auth/register returns 500."}
+    ]
+  }
 }
