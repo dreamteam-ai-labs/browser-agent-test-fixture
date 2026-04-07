@@ -67,6 +67,18 @@
               "default": "pending",
               "enum": ["pending", "in_progress", "done"]
             },
+            "url": {
+              "type": "string",
+              "required": false,
+              "max_length": 2048,
+              "description": "Optional URL for browser-agent preview capture"
+            },
+            "preview_url": {
+              "type": "string",
+              "required": false,
+              "max_length": 2048,
+              "description": "Screenshot URL stored after browser-agent /diagnose call"
+            },
             "created_at": { "type": "datetime", "default": "now" }
           },
           "endpoints": {
@@ -74,12 +86,24 @@
             "list": { "method": "GET", "path": "/api/tasks" },
             "read": { "method": "GET", "path": "/api/tasks/{id}" },
             "update": { "method": "PUT", "path": "/api/tasks/{id}" },
-            "delete": { "method": "DELETE", "path": "/api/tasks/{id}" }
+            "delete": { "method": "DELETE", "path": "/api/tasks/{id}" },
+            "preview": {
+              "method": "POST",
+              "path": "/api/tasks/{id}/preview",
+              "description": "POSTs {url: task.url} to browser-agent /diagnose (BROWSER_AGENT_URL env var), stores screenshotUrl as task.preview_url, returns {preview_url}"
+            }
           },
           "ui": {
             "page": "/tasks",
             "display_name": "Tasks",
-            "crud": ["list", "create", "read", "update", "delete"]
+            "crud": ["list", "create", "read", "update", "delete"],
+            "extra_pages": [
+              {
+                "path": "/tasks/{id}",
+                "display_name": "Task Detail",
+                "features": ["preview_screenshot_thumbnail", "capture_preview_button"]
+              }
+            ]
           }
         }
       },
@@ -142,10 +166,37 @@
     "browser-agent": {
       "source": "existing",
       "url": "https://browser.dreamteamlabs.co.uk",
-      "description": "Headless Chrome agent for UI testing — takes URL + instructions, returns screenshots + test results",
-      "health": "GET /",
+      "description": "Headless Chrome agent — navigates URLs, takes screenshots, runs smoke tests. Puppeteer-based, deployed on VPS.",
+      "health": "GET /health",
       "api": {
-        "smoke-test": { "method": "POST", "path": "/smoke-test" }
+        "diagnose": {
+          "method": "POST",
+          "path": "/diagnose",
+          "description": "Navigate to URL, take screenshot, return screenshot URL. No Claude call ($0).",
+          "request": { "url": "string (required)" },
+          "response": { "success": "boolean", "finalUrl": "string", "screenshotUrl": "string", "events": "array", "elapsed": "number" }
+        },
+        "explore": {
+          "method": "POST",
+          "path": "/explore",
+          "description": "Full Claude-powered site exploration with feature discovery (~$12).",
+          "request": { "url": "string (required)", "maxIterations": "number (default 20)", "timeout": "number" },
+          "response": { "success": "boolean", "url": "string", "iterations": "number", "features": "string", "parsed_features": "array" }
+        },
+        "quick-analyze": {
+          "method": "POST",
+          "path": "/quick-analyze",
+          "description": "Lighter exploration — 10 iterations, 60s timeout (~$5).",
+          "request": { "url": "string (required)" },
+          "response": { "success": "boolean", "url": "string", "iterations": "number", "parsed_features": "array" }
+        },
+        "smoke-test": {
+          "method": "POST",
+          "path": "/smoke-test",
+          "description": "QA smoke test with login, CRUD testing, screenshots. Supports mock mode (~$12, mock=$0).",
+          "request": { "url": "string (required)", "credentials": "object {email, password}", "features": "array", "maxIterations": "number", "mock": "boolean" },
+          "response": "NDJSON stream — progress events then final result line"
+        }
       }
     }
   }
