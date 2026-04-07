@@ -52,6 +52,16 @@ def test_delete_task(client, auth_headers):
     assert resp.status_code == 404
 
 
+def test_update_task(client, auth_headers):
+    create = client.post("/api/tasks", json={"title": "Old Title", "status": "todo"}, headers=auth_headers)
+    tid = create.json()["id"]
+    resp = client.put(f"/api/tasks/{tid}", json={"title": "New Title", "status": "done"}, headers=auth_headers)
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["title"] == "New Title"
+    assert data["status"] == "done"
+
+
 def test_tasks_require_auth(client):
     resp = client.get("/api/tasks")
     assert resp.status_code == 401
