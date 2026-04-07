@@ -403,9 +403,11 @@ def load_from_architecture(architecture_json_path: str = "architecture.json") ->
     # Navigate services nesting (v1.0 schema)
     services = data.get("services", {})
     if services:
-        # Phase 1: use first (typically only) service
-        # Phase 2: iterate all services and merge entities
-        first_service = next(iter(services.values()))
+        # Filter to build_new services (skip existing deployed services)
+        build_new = {k: v for k, v in services.items() if v.get("source") != "existing"}
+        if not build_new:
+            return {}
+        first_service = next(iter(build_new.values()))
         entities = first_service.get("entities", {})
     else:
         # Fallback: flat "entities" key (pre-v1.0 format)

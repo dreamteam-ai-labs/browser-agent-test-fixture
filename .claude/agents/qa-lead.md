@@ -20,6 +20,7 @@ If `architecture.json` exists in the project root, use it to know exactly what t
 - **Relationships**: FK references should resolve correctly (e.g., expense → category)
 
 When architecture.json exists, QA coverage targets the architecture — not just what builders happened to build.
+Existing services (`source: "existing"`) are external infrastructure — verify they respond (health check) but do NOT test their internals.
 
 ## Startup
 

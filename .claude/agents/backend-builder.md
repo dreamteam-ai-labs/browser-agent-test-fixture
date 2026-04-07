@@ -32,6 +32,7 @@ If `architecture.json` exists in the project root, use it as your **PRIMARY desi
 
 If a feature is NOT covered in architecture.json, fall back to the feature description.
 Do NOT contradict architecture.json — if there's a conflict, architecture.json wins.
+If architecture.json references existing services (`source: "existing"`), use their URL for API integration. Do NOT recreate them.
 
 ## Workflow
 

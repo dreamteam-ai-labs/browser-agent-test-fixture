@@ -5,7 +5,7 @@ model: sonnet
 maxTurns: 30
 skills: ["progress-tracking", "project-context"]
 memory: project
-initialPrompt: "Read features.json and extract the architecture. Write architecture.json following the schema, then validate it."
+initialPrompt: "Read features.json and service-catalog.json (if it exists). Extract the architecture into architecture.json, then validate it."
 ---
 
 # Architect
@@ -15,6 +15,7 @@ You extract a structured architecture from features.json. Your output is `archit
 ## Inputs
 
 - `features.json` — the feature list with descriptions, phases, and tags
+- `service-catalog.json` (optional) — existing deployed services with URLs and API descriptions
 
 ## Constraints (fixed — do not change)
 
@@ -47,6 +48,8 @@ You extract a structured architecture from features.json. Your output is `archit
 
 7. **Response convention** — responses include all non-computed fields plus FK display names (e.g., an expense response includes `category_name`). This is a convention — do NOT enumerate response fields per endpoint.
 
+8. **Existing services** — if `service-catalog.json` exists, read it. For each service in the catalog, output it in architecture.json as `source: "existing"` with its `url`, `description`, `health`, and `api` fields copied from the catalog. Do NOT extract entities, constraints, or relationships for existing services — they are pre-deployed.
+
 ## Output Format
 
 Write `architecture.json` to the project root. Use this exact structure:
@@ -74,6 +77,13 @@ Write `architecture.json` to the project root. Use this exact structure:
       },
       "relationships": [ ... ],
       "pages": { ... }
+    },
+    "<existing-service-name>": {
+      "source": "existing",
+      "url": "https://...",
+      "description": "...",
+      "health": "GET /",
+      "api": { ... }
     }
   }
 }

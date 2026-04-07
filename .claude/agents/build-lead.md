@@ -29,6 +29,7 @@ Use it as your **PRIMARY design reference** and pass its guidance to builders:
 
 If a feature is NOT covered in architecture.json, fall back to the feature description.
 Do NOT contradict architecture.json — if there's a conflict, architecture.json wins.
+Services with `source: "existing"` are pre-deployed — do NOT build them. They are available at their URL for wiring.
 
 ## Phase 0+1: Foundations
 

@@ -52,6 +52,12 @@ def validate_architecture(
         if not isinstance(svc, dict):
             return False, f"INVALID: service '{svc_name}' must be an object"
 
+        # Existing services: validate URL only, skip entity checks
+        if svc.get("source") == "existing":
+            if "url" not in svc:
+                return False, f"INVALID: existing service '{svc_name}' missing 'url'"
+            continue
+
         entities = svc.get("entities", {})
         if not isinstance(entities, dict) or not entities:
             return False, f"INVALID: service '{svc_name}' has no entities"
