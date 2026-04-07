@@ -8,7 +8,7 @@ import api from "@/lib/api";
 interface UserInfo {
   id: number;
   email: string;
-  display_name: string;
+  name: string;
 }
 
 export default function DashboardPage() {
@@ -27,7 +27,7 @@ export default function DashboardPage() {
       <div className="max-w-4xl">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Dashboard</h1>
         {user && (
-          <p className="text-gray-600 mb-8">Welcome back, {user.display_name}!</p>
+          <p className="text-gray-600 mb-8">Welcome back, {user.name}!</p>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

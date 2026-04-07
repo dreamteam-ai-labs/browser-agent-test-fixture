@@ -9,7 +9,7 @@ import { useState } from "react";
 import api from "@/lib/api";
 
 const registerSchema = z.object({
-  display_name: z.string().min(1, "Display name is required"),
+  name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
@@ -33,7 +33,7 @@ export default function RegisterPage() {
     try {
       const res = await api.post("/api/auth/register", {
         ...data,
-        name: data.display_name,
+        name: data.name,
       });
       localStorage.setItem("token", res.data.token);
       router.push("/dashboard");
@@ -55,19 +55,19 @@ export default function RegisterPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label htmlFor="display_name" className="block text-sm font-medium text-gray-700 mb-1">
-              Display name
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+              Name
             </label>
             <input
-              {...register("display_name")}
-              id="display_name"
+              {...register("name")}
+              id="name"
               type="text"
               autoComplete="name"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
               placeholder="Your name"
             />
-            {errors.display_name && (
-              <p className="mt-1 text-sm text-red-600">{errors.display_name.message}</p>
+            {errors.name && (
+              <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
             )}
           </div>
 

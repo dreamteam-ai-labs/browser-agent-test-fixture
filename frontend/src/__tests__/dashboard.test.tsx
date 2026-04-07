@@ -49,7 +49,7 @@ import DashboardPage from '../app/dashboard/page'
 describe('DashboardPage', () => {
   beforeEach(() => {
     mockGet.mockImplementation((url: string) => {
-      if (url === '/api/auth/me') return Promise.resolve({ data: { id: 1, email: 'test@example.com', display_name: 'Test User' } })
+      if (url === '/api/auth/me') return Promise.resolve({ data: { id: 1, email: 'test@example.com', name: 'Test User' } })
       if (url === '/api/projects') return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] })
       if (url === '/api/tasks') return Promise.resolve({ data: [{ id: 1 }] })
       return Promise.resolve({ data: [] })
