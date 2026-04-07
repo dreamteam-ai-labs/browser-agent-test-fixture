@@ -48,3 +48,8 @@
 2026-04-07T20:46:49.831 | commit-guard | agent=a718ad5be29cd3356 | ALLOW | msg: feat: implement dashboard page with project and task counts
 2026-04-07T20:47:04.542 | commit-guard | agent=a3e966608a0b59e84 | ALLOW | msg: $(cat <<
 2026-04-07T20:47:16.285 | commit-guard | agent=a718ad5be29cd3356 | ALLOW | msg: feat: implement navigation layout with sidebar, AuthGuard, and route highlightin
+2026-04-07T20:47:17.453 | build-gate | agent=build-lead | ALLOW | not lead session
+2026-04-07T20:48:09.001 | dep-guard | agent=unknown | BLOCK | pm=npm undeclared=[&&, npm, test, 2>&1, |, tail, &&, npm, run, build, 2>&1, |, tail] manifest=frontend/package.json
+2026-04-07T20:48:39.242 | build-gate | agent=build-lead | ALLOW | not lead session
+2026-04-07T20:53:35.084 | commit-guard | agent=a17b09de3425b739a | ALLOW | msg: $(cat <<
+2026-04-07T20:55:21.285 | commit-guard | agent=unknown | ALLOW | msg: fix: rename projects.user_id to owner_id to match SQLAlchemy ORM model
