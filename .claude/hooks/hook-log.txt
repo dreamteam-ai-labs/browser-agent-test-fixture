@@ -44,3 +44,5 @@
 2026-04-07T20:44:51.783 | commit-guard | agent=unknown | ALLOW | msg: feat: frontend setup — Next.js 14, Tailwind, App Router, all pages present
 2026-04-07T20:44:56.526 | commit-guard | agent=unknown | ALLOW | msg: feat: frontend setup — Next.js 14, Tailwind, App Router, all pages present
 2026-04-07T20:45:24.506 | commit-guard | agent=unknown | ALLOW | msg: feat: health-endpoint and user-auth — all tests pass
+2026-04-07T20:46:03.692 | build-gate | agent=build-lead | ALLOW | not lead session
+2026-04-07T20:46:49.831 | commit-guard | agent=a718ad5be29cd3356 | ALLOW | msg: feat: implement dashboard page with project and task counts
