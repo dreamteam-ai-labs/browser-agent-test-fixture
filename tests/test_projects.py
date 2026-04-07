@@ -43,6 +43,16 @@ def test_delete_project(client, auth_headers):
     assert resp.status_code == 404
 
 
+def test_update_project(client, auth_headers):
+    create = client.post("/api/projects", json={"name": "Old Name", "description": "Old"}, headers=auth_headers)
+    pid = create.json()["id"]
+    resp = client.put(f"/api/projects/{pid}", json={"name": "New Name", "description": "Updated"}, headers=auth_headers)
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["name"] == "New Name"
+    assert data["description"] == "Updated"
+
+
 def test_projects_require_auth(client):
     resp = client.get("/api/projects")
     assert resp.status_code == 401
