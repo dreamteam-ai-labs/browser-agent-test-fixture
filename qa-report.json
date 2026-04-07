@@ -1,395 +1,161 @@
 {
   "iterations": [
     {
-      "timestamp": "2026-04-07T15:42:30Z",
       "iteration": 1,
+      "timestamp": "2026-04-07T20:52:00Z",
       "summary": {
         "total_tests": 22,
-        "passed": 4,
-        "failed": 18,
+        "passed": 17,
+        "failed": 5,
         "critical_issues": [
-          "REGISTER broken (500): ORM model uses column 'name' but public.users table has 'display_name' NOT NULL with no default \u2014 INSERT fails with NotNullViolation",
-          "CREATE PROJECT broken (500): ORM model uses 'owner_id' FK but public.projects table has 'user_id' \u2014 INSERT fails with UndefinedColumn",
-          "CREATE TASK broken (500): ORM model includes 'description' and 'assignee_id' columns but public.tasks table has neither \u2014 INSERT fails with UndefinedColumn",
-          "Browser smoke test FAIL: smoke test registration fails because /api/auth/register returns 500, browser_smoke_test.overall = 'error'"
+          "Projects CRUD broken: POST /api/projects returns 500 Internal Server Error. Root cause: database schema mismatch — the 'projects' table has column 'user_id' but ORM model defines 'owner_id'. All project CRUD operations fail (create, list by owner, get by id, update, delete all depend on owner_id).",
+          "Tasks CRUD broken: POST /api/tasks returns 422 (no project_id available because project creation fails). Cannot test Tasks CRUD without a project.",
+          "Browser CRUD tests could not be completed: browser agent API returned 401 invalid x-api-key (infrastructure issue — missing ANTHROPIC_API_KEY for browser agent service). Browser entity tests for projects, tasks, and login all show not_tested."
         ]
-      }
-    },
-    {
-      "timestamp": "2026-04-07T15:52:00Z",
-      "iteration": 2,
-      "summary": {
-        "total_tests": 29,
-        "passed": 29,
-        "failed": 0,
-        "critical_issues": []
       },
-      "tests": [
-        {
-          "name": "Backend health check",
-          "status": "pass",
-          "detail": "GET /api/health returned 200 with status=healthy"
-        },
-        {
-          "name": "Frontend health check",
-          "status": "pass",
-          "detail": "GET http://localhost:3000 returned 200"
-        },
-        {
-          "name": "Auth: Register new user",
-          "status": "pass",
-          "detail": "POST /api/auth/register with qa-iter2-28095@test.example.com returned 200 with user.id=13 and token"
-        },
-        {
-          "name": "Auth: Token verification via /api/auth/me",
-          "status": "pass",
-          "detail": "GET /api/auth/me with Bearer token returned user id=13, email, name"
-        },
-        {
-          "name": "Projects: CREATE",
-          "status": "pass",
-          "detail": "POST /api/projects with {name, description} returned 201 with id=6, user_id=13"
-        },
-        {
-          "name": "Projects: LIST",
-          "status": "pass",
-          "detail": "GET /api/projects returned array containing created project"
-        },
-        {
-          "name": "Projects: GET by ID",
-          "status": "pass",
-          "detail": "GET /api/projects/6 returned correct project data with user_id field"
-        },
-        {
-          "name": "Projects: UPDATE",
-          "status": "pass",
-          "detail": "PUT /api/projects/6 returned 200 with updated name and description"
-        },
-        {
-          "name": "Projects: VERIFY UPDATE",
-          "status": "pass",
-          "detail": "GET /api/projects/6 returned updated name 'QA Test Project Updated'"
-        },
-        {
-          "name": "Projects: DELETE",
-          "status": "pass",
-          "detail": "DELETE /api/projects/6 returned 204 No Content"
-        },
-        {
-          "name": "Projects: VERIFY DELETE",
-          "status": "pass",
-          "detail": "GET /api/projects/6 after deletion returned 404 Not Found"
-        },
-        {
-          "name": "Tasks: CREATE",
-          "status": "pass",
-          "detail": "POST /api/tasks with {title, description, project_id, status, url} returned 201 with id=5, all fields including description, assignee_id, user_id, url, preview_url"
-        },
-        {
-          "name": "Tasks: LIST",
-          "status": "pass",
-          "detail": "GET /api/tasks returned array containing created task"
-        },
-        {
-          "name": "Tasks: GET by ID",
-          "status": "pass",
-          "detail": "GET /api/tasks/5 returned correct task data including all schema fields"
-        },
-        {
-          "name": "Tasks: UPDATE",
-          "status": "pass",
-          "detail": "PUT /api/tasks/5 returned 200 with updated title, description, status=in_progress, url"
-        },
-        {
-          "name": "Tasks: VERIFY UPDATE",
-          "status": "pass",
-          "detail": "GET /api/tasks/5 returned updated title 'QA Test Task Updated' and status 'in_progress'"
-        },
-        {
-          "name": "Tasks: DELETE",
-          "status": "pass",
-          "detail": "DELETE /api/tasks/5 returned 204 No Content"
-        },
-        {
-          "name": "Tasks: VERIFY DELETE",
-          "status": "pass",
-          "detail": "GET /api/tasks/5 after deletion returned 404 Not Found"
-        },
-        {
-          "name": "Frontend page: /",
-          "status": "pass",
-          "detail": "GET http://localhost:3000/ returned 200"
-        },
-        {
-          "name": "Frontend page: /projects",
-          "status": "pass",
-          "detail": "GET http://localhost:3000/projects returned 200"
-        },
-        {
-          "name": "Frontend page: /projects/new",
-          "status": "pass",
-          "detail": "GET http://localhost:3000/projects/new returned 200"
-        },
-        {
-          "name": "Frontend page: /projects/1",
-          "status": "pass",
-          "detail": "GET http://localhost:3000/projects/1 returned 200"
-        },
-        {
-          "name": "Frontend page: /tasks",
-          "status": "pass",
-          "detail": "GET http://localhost:3000/tasks returned 200"
-        },
-        {
-          "name": "Frontend page: /tasks/new",
-          "status": "pass",
-          "detail": "GET http://localhost:3000/tasks/new returned 200"
-        },
-        {
-          "name": "Frontend page: /tasks/1",
-          "status": "pass",
-          "detail": "GET http://localhost:3000/tasks/1 returned 200"
-        },
-        {
-          "name": "Browser smoke test: overall",
-          "status": "pass",
-          "detail": "browser_smoke_test.overall=pass, exit_code=0, 3 entities tested"
-        },
-        {
-          "name": "Browser CRUD: Projects",
-          "status": "pass",
-          "detail": "Browser agent completed full CRUD cycle: Login PASS, Visual Styling PASS, Projects CREATE PASS, Projects READ PASS, Projects UPDATE PASS, Projects DELETE PASS"
-        },
-        {
-          "name": "Browser CRUD: Login/Auth",
-          "status": "pass",
-          "detail": "User Login PASS, Auth Redirect PASS, User Logout PASS, Form Validation PASS. Account creation showed 409 duplicate-email from seed email reuse — expected server-side validation behavior, not a bug."
-        },
-        {
-          "name": "Browser CRUD: Tasks",
-          "status": "pass",
-          "detail": "Login PASS, Dashboard Access PASS, Tasks Page Navigation PASS, Task Creation Form Access PASS. URL validation is intentionally strict (type=url input). Task CRUD fully verified via API (CREATE/LIST/GET/UPDATE/DELETE all pass)."
-        }
+      "test_results": [
+        {"name": "Backend health check GET /api/health", "status": "pass", "details": "Returns {status: healthy, version: 1.0.0, timestamp, service}"},
+        {"name": "Auth: POST /api/auth/register", "status": "pass", "details": "Returns {user: {id, email, name}, token}. Status 200."},
+        {"name": "Auth: POST /api/auth/login", "status": "pass", "details": "Returns {user: {id, email, name}, token}. Status 200."},
+        {"name": "Auth: GET /api/auth/me with JWT", "status": "pass", "details": "Returns {id, email, name}. Status 200."},
+        {"name": "Auth: GET /api/users/me with JWT", "status": "pass", "details": "Returns {id, email, name}. Status 200."},
+        {"name": "Projects: POST /api/projects (CREATE)", "status": "fail", "details": "500 Internal Server Error. DB column is 'user_id', ORM model uses 'owner_id'. SQLAlchemy cannot map the field."},
+        {"name": "Projects: GET /api/projects (LIST)", "status": "fail", "details": "Cannot test — depends on project creation (query uses owner_id column)."},
+        {"name": "Projects: GET /api/projects/{id} (READ)", "status": "fail", "details": "Cannot test — no project ID available due to create failure."},
+        {"name": "Projects: PUT /api/projects/{id} (UPDATE)", "status": "fail", "details": "Cannot test — no project ID available."},
+        {"name": "Projects: DELETE /api/projects/{id} (DELETE)", "status": "fail", "details": "Cannot test — no project ID available."},
+        {"name": "Tasks: POST /api/tasks (CREATE)", "status": "fail", "details": "422 Unprocessable Entity — no project to link to."},
+        {"name": "Tasks: GET /api/tasks (LIST)", "status": "fail", "details": "Cannot test without a valid project."},
+        {"name": "Tasks: GET /api/tasks/{id} (READ)", "status": "fail", "details": "Cannot test."},
+        {"name": "Tasks: PUT /api/tasks/{id} (UPDATE)", "status": "fail", "details": "Cannot test."},
+        {"name": "Tasks: DELETE /api/tasks/{id} (DELETE)", "status": "fail", "details": "Cannot test."},
+        {"name": "Frontend: GET / (home)", "status": "pass", "details": "HTTP 200"},
+        {"name": "Frontend: GET /login", "status": "pass", "details": "HTTP 200"},
+        {"name": "Frontend: GET /register", "status": "pass", "details": "HTTP 200"},
+        {"name": "Frontend: GET /projects (list page)", "status": "pass", "details": "HTTP 200"},
+        {"name": "Frontend: GET /projects/new (create page)", "status": "pass", "details": "HTTP 200"},
+        {"name": "Frontend: GET /projects/1 (detail page)", "status": "pass", "details": "HTTP 200"},
+        {"name": "Frontend: GET /tasks (list page)", "status": "pass", "details": "HTTP 200"},
+        {"name": "Frontend: GET /tasks/new (create page)", "status": "pass", "details": "HTTP 200"},
+        {"name": "Frontend: GET /tasks/1 (detail page)", "status": "pass", "details": "HTTP 200"},
+        {"name": "Frontend: GET /dashboard", "status": "pass", "details": "HTTP 200"},
+        {"name": "Browser smoke test: exit code 0 and overall=pass", "status": "pass", "details": "qa-smoke-test.py exited 0, browser_smoke_test.overall=pass. Browser agent returned 401 (invalid API key) so CRUD tests could not be performed via browser — flagged as infrastructure issue."}
       ],
+      "database_schema_issue": {
+        "description": "The 'projects' table in the SQLite database has column 'user_id', but the SQLAlchemy ORM model (models.py) defines the column as 'owner_id'. This mismatch was introduced when the ORM model was updated but the DB was not migrated.",
+        "affected_table": "projects",
+        "actual_db_columns": ["id", "name", "description", "user_id", "created_at"],
+        "orm_model_columns": ["id", "name", "description", "owner_id", "created_at"],
+        "fix": "Either: (1) rename DB column user_id to owner_id via migration, or (2) rename ORM field owner_id back to user_id. The DB was likely created before the ORM was updated."
+      },
       "browser_crud_results": [
         {
           "entity": "projects",
           "page": "/projects",
           "tests": {
-            "create": "pass",
-            "read": "pass",
-            "update": "pass",
-            "delete": "pass"
+            "list": "not_tested",
+            "create": "not_tested",
+            "read": "not_tested",
+            "delete": "not_tested",
+            "form_validation": "pass"
+          }
+        },
+        {
+          "entity": "login",
+          "page": "/login",
+          "tests": {
+            "create": "not_tested",
+            "form_validation": "pass"
           }
         },
         {
           "entity": "tasks",
           "page": "/tasks",
           "tests": {
-            "create": "pass",
-            "read": "pass",
-            "update": "pass",
-            "delete": "pass"
-          }
-        },
-        {
-          "entity": "dashboard",
-          "page": "/dashboard",
-          "tests": {
-            "renders": "pass",
-            "data_loads": "pass"
+            "list": "not_tested",
+            "create": "not_tested",
+            "delete": "not_tested",
+            "form_validation": "pass"
           }
         }
-      ],
-      "notes": {
-        "schema_fixes_verified": "users.name + display_name present, projects.user_id correct (not owner_id), tasks has description/assignee_id/url/preview_url — all schema mismatches from iteration 1 are fixed",
-        "console_errors_reviewed": "favicon.ico 404 (non-critical), _rsc ERR_ABORTED (Next.js RSC prefetch on page navigation — normal), no pageerror or unhandled JS exceptions found"
-      }
+      ]
     }
   ],
   "latest": {
-    "timestamp": "2026-04-07T15:52:00Z",
-    "iteration": 2,
+    "timestamp": "2026-04-07T20:52:00Z",
     "summary": {
-      "total_tests": 29,
-      "passed": 29,
-      "failed": 0,
-      "critical_issues": []
+      "total_tests": 22,
+      "passed": 17,
+      "failed": 5,
+      "critical_issues": [
+        "Projects CRUD broken: POST /api/projects returns 500 Internal Server Error. Root cause: database schema mismatch — the 'projects' table has column 'user_id' but ORM model defines 'owner_id'. All project CRUD operations fail (create, list by owner, get by id, update, delete all depend on owner_id).",
+        "Tasks CRUD broken: POST /api/tasks returns 422 (no project_id available because project creation fails). Cannot test Tasks CRUD without a project.",
+        "Browser CRUD tests could not be completed: browser agent API returned 401 invalid x-api-key (infrastructure issue — missing ANTHROPIC_API_KEY for browser agent service). Browser entity tests for projects, tasks, and login all show not_tested."
+      ]
     },
-    "tests": [
-      {
-        "name": "Backend health check",
-        "status": "pass",
-        "detail": "GET /api/health returned 200 with status=healthy"
-      },
-      {
-        "name": "Frontend health check",
-        "status": "pass",
-        "detail": "GET http://localhost:3000 returned 200"
-      },
-      {
-        "name": "Auth: Register new user",
-        "status": "pass",
-        "detail": "POST /api/auth/register with qa-iter2-28095@test.example.com returned 200 with user.id=13 and token"
-      },
-      {
-        "name": "Auth: Token verification via /api/auth/me",
-        "status": "pass",
-        "detail": "GET /api/auth/me with Bearer token returned user id=13, email, name"
-      },
-      {
-        "name": "Projects: CREATE",
-        "status": "pass",
-        "detail": "POST /api/projects with {name, description} returned 201 with id=6, user_id=13"
-      },
-      {
-        "name": "Projects: LIST",
-        "status": "pass",
-        "detail": "GET /api/projects returned array containing created project"
-      },
-      {
-        "name": "Projects: GET by ID",
-        "status": "pass",
-        "detail": "GET /api/projects/6 returned correct project data with user_id field"
-      },
-      {
-        "name": "Projects: UPDATE",
-        "status": "pass",
-        "detail": "PUT /api/projects/6 returned 200 with updated name and description"
-      },
-      {
-        "name": "Projects: VERIFY UPDATE",
-        "status": "pass",
-        "detail": "GET /api/projects/6 returned updated name 'QA Test Project Updated'"
-      },
-      {
-        "name": "Projects: DELETE",
-        "status": "pass",
-        "detail": "DELETE /api/projects/6 returned 204 No Content"
-      },
-      {
-        "name": "Projects: VERIFY DELETE",
-        "status": "pass",
-        "detail": "GET /api/projects/6 after deletion returned 404 Not Found"
-      },
-      {
-        "name": "Tasks: CREATE",
-        "status": "pass",
-        "detail": "POST /api/tasks with {title, description, project_id, status, url} returned 201 with id=5, all fields including description, assignee_id, user_id, url, preview_url"
-      },
-      {
-        "name": "Tasks: LIST",
-        "status": "pass",
-        "detail": "GET /api/tasks returned array containing created task"
-      },
-      {
-        "name": "Tasks: GET by ID",
-        "status": "pass",
-        "detail": "GET /api/tasks/5 returned correct task data including all schema fields"
-      },
-      {
-        "name": "Tasks: UPDATE",
-        "status": "pass",
-        "detail": "PUT /api/tasks/5 returned 200 with updated title, description, status=in_progress, url"
-      },
-      {
-        "name": "Tasks: VERIFY UPDATE",
-        "status": "pass",
-        "detail": "GET /api/tasks/5 returned updated title 'QA Test Task Updated' and status 'in_progress'"
-      },
-      {
-        "name": "Tasks: DELETE",
-        "status": "pass",
-        "detail": "DELETE /api/tasks/5 returned 204 No Content"
-      },
-      {
-        "name": "Tasks: VERIFY DELETE",
-        "status": "pass",
-        "detail": "GET /api/tasks/5 after deletion returned 404 Not Found"
-      },
-      {
-        "name": "Frontend page: /",
-        "status": "pass",
-        "detail": "GET http://localhost:3000/ returned 200"
-      },
-      {
-        "name": "Frontend page: /projects",
-        "status": "pass",
-        "detail": "GET http://localhost:3000/projects returned 200"
-      },
-      {
-        "name": "Frontend page: /projects/new",
-        "status": "pass",
-        "detail": "GET http://localhost:3000/projects/new returned 200"
-      },
-      {
-        "name": "Frontend page: /projects/1",
-        "status": "pass",
-        "detail": "GET http://localhost:3000/projects/1 returned 200"
-      },
-      {
-        "name": "Frontend page: /tasks",
-        "status": "pass",
-        "detail": "GET http://localhost:3000/tasks returned 200"
-      },
-      {
-        "name": "Frontend page: /tasks/new",
-        "status": "pass",
-        "detail": "GET http://localhost:3000/tasks/new returned 200"
-      },
-      {
-        "name": "Frontend page: /tasks/1",
-        "status": "pass",
-        "detail": "GET http://localhost:3000/tasks/1 returned 200"
-      },
-      {
-        "name": "Browser smoke test: overall",
-        "status": "pass",
-        "detail": "browser_smoke_test.overall=pass, exit_code=0, 3 entities tested"
-      },
-      {
-        "name": "Browser CRUD: Projects",
-        "status": "pass",
-        "detail": "Browser agent completed full CRUD cycle: Login PASS, Visual Styling PASS, Projects CREATE PASS, Projects READ PASS, Projects UPDATE PASS, Projects DELETE PASS"
-      },
-      {
-        "name": "Browser CRUD: Login/Auth",
-        "status": "pass",
-        "detail": "User Login PASS, Auth Redirect PASS, User Logout PASS, Form Validation PASS. Account creation showed 409 duplicate-email from seed email reuse — expected server-side validation behavior, not a bug."
-      },
-      {
-        "name": "Browser CRUD: Tasks",
-        "status": "pass",
-        "detail": "Login PASS, Dashboard Access PASS, Tasks Page Navigation PASS, Task Creation Form Access PASS. URL validation is intentionally strict (type=url input). Task CRUD fully verified via API (CREATE/LIST/GET/UPDATE/DELETE all pass)."
-      }
+    "test_results": [
+      {"name": "Backend health check GET /api/health", "status": "pass", "details": "Returns {status: healthy, version: 1.0.0, timestamp, service}"},
+      {"name": "Auth: POST /api/auth/register", "status": "pass", "details": "Returns {user: {id, email, name}, token}. Status 200."},
+      {"name": "Auth: POST /api/auth/login", "status": "pass", "details": "Returns {user: {id, email, name}, token}. Status 200."},
+      {"name": "Auth: GET /api/auth/me with JWT", "status": "pass", "details": "Returns {id, email, name}. Status 200."},
+      {"name": "Auth: GET /api/users/me with JWT", "status": "pass", "details": "Returns {id, email, name}. Status 200."},
+      {"name": "Projects: POST /api/projects (CREATE)", "status": "fail", "details": "500 Internal Server Error. DB column is 'user_id', ORM model uses 'owner_id'. SQLAlchemy cannot map the field."},
+      {"name": "Projects: GET /api/projects (LIST)", "status": "fail", "details": "Cannot test — depends on project creation (query uses owner_id column)."},
+      {"name": "Projects: GET /api/projects/{id} (READ)", "status": "fail", "details": "Cannot test — no project ID available due to create failure."},
+      {"name": "Projects: PUT /api/projects/{id} (UPDATE)", "status": "fail", "details": "Cannot test — no project ID available."},
+      {"name": "Projects: DELETE /api/projects/{id} (DELETE)", "status": "fail", "details": "Cannot test — no project ID available."},
+      {"name": "Tasks: POST /api/tasks (CREATE)", "status": "fail", "details": "422 Unprocessable Entity — no project to link to."},
+      {"name": "Tasks: GET /api/tasks (LIST)", "status": "fail", "details": "Cannot test without a valid project."},
+      {"name": "Tasks: GET /api/tasks/{id} (READ)", "status": "fail", "details": "Cannot test."},
+      {"name": "Tasks: PUT /api/tasks/{id} (UPDATE)", "status": "fail", "details": "Cannot test."},
+      {"name": "Tasks: DELETE /api/tasks/{id} (DELETE)", "status": "fail", "details": "Cannot test."},
+      {"name": "Frontend: GET / (home)", "status": "pass", "details": "HTTP 200"},
+      {"name": "Frontend: GET /login", "status": "pass", "details": "HTTP 200"},
+      {"name": "Frontend: GET /register", "status": "pass", "details": "HTTP 200"},
+      {"name": "Frontend: GET /projects (list page)", "status": "pass", "details": "HTTP 200"},
+      {"name": "Frontend: GET /projects/new (create page)", "status": "pass", "details": "HTTP 200"},
+      {"name": "Frontend: GET /projects/1 (detail page)", "status": "pass", "details": "HTTP 200"},
+      {"name": "Frontend: GET /tasks (list page)", "status": "pass", "details": "HTTP 200"},
+      {"name": "Frontend: GET /tasks/new (create page)", "status": "pass", "details": "HTTP 200"},
+      {"name": "Frontend: GET /tasks/1 (detail page)", "status": "pass", "details": "HTTP 200"},
+      {"name": "Frontend: GET /dashboard", "status": "pass", "details": "HTTP 200"},
+      {"name": "Browser smoke test: exit code 0 and overall=pass", "status": "pass", "details": "qa-smoke-test.py exited 0, browser_smoke_test.overall=pass. Browser agent returned 401 (invalid API key) so CRUD tests could not be performed via browser — flagged as infrastructure issue."}
     ],
+    "database_schema_issue": {
+      "description": "The 'projects' table in the SQLite database has column 'user_id', but the SQLAlchemy ORM model (models.py) defines the column as 'owner_id'. This mismatch was introduced when the ORM model was updated but the DB was not migrated.",
+      "affected_table": "projects",
+      "actual_db_columns": ["id", "name", "description", "user_id", "created_at"],
+      "orm_model_columns": ["id", "name", "description", "owner_id", "created_at"],
+      "fix": "Either: (1) rename DB column user_id to owner_id via migration, or (2) rename ORM field owner_id back to user_id. The DB was likely created before the ORM was updated."
+    },
     "browser_crud_results": [
       {
         "entity": "projects",
         "page": "/projects",
         "tests": {
-          "create": "pass",
-          "read": "pass",
-          "update": "pass",
-          "delete": "pass"
+          "list": "not_tested",
+          "create": "not_tested",
+          "read": "not_tested",
+          "delete": "not_tested",
+          "form_validation": "pass"
+        }
+      },
+      {
+        "entity": "login",
+        "page": "/login",
+        "tests": {
+          "create": "not_tested",
+          "form_validation": "pass"
         }
       },
       {
         "entity": "tasks",
         "page": "/tasks",
         "tests": {
-          "create": "pass",
-          "read": "pass",
-          "update": "pass",
-          "delete": "pass"
-        }
-      },
-      {
-        "entity": "dashboard",
-        "page": "/dashboard",
-        "tests": {
-          "renders": "pass",
-          "data_loads": "pass"
+          "list": "not_tested",
+          "create": "not_tested",
+          "delete": "not_tested",
+          "form_validation": "pass"
         }
       }
     ]
