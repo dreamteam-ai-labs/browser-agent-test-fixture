@@ -22,3 +22,4 @@
 2026-04-07T14:23:04.632 | commit-guard | agent=unknown | ALLOW | msg: feat: database schema - SQLAlchemy ORM models for users, projects, tasks
 2026-04-07T14:23:59.966 | commit-guard | agent=unknown | ALLOW | msg: feat: frontend setup - Next.js 14 with Tailwind, all pages, API client
 2026-04-07T14:24:23.738 | commit-guard | agent=unknown | ALLOW | msg: feat: health endpoint - GET /api/health returns healthy status
+2026-04-07T14:24:39.715 | commit-guard | agent=unknown | ALLOW | msg: feat: user authentication - register, login, JWT, /api/users/me
