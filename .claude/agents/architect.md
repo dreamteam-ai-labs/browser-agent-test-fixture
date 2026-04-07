@@ -89,6 +89,14 @@ python3 scripts/validate-architecture.py
 
 If it outputs `INVALID:`, read the error, fix architecture.json, and re-run. Repeat until `VALID:`.
 
+## Commit
+
+After validation passes, commit architecture.json so it survives codespace restarts:
+
+```bash
+git add architecture.json && git commit -m "arch: architecture.json"
+```
+
 ## Rules
 
 - Output ONLY architecture.json — do not create any other files

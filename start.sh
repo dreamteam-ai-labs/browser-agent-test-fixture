@@ -18,12 +18,12 @@ if [ "$SERVICE" = "backend" ] || [ "$SERVICE" = "both" ]; then
   if [ "$FRESH_DEPLOY" = "true" ] && [ -n "$DATABASE_URL" ]; then
     echo "Fresh deploy: resetting database schema..."
     python3 -c "
-from fixture.database import Base, get_engine
+from fixture.database import create_tables, Base, get_engine
 engine = get_engine()
 Base.metadata.drop_all(bind=engine)
-Base.metadata.create_all(bind=engine)
+create_tables()
 print('Schema reset complete')
-"
+" || echo "ERROR: Schema reset failed"
   fi
 
   # Run Alembic migrations
@@ -34,11 +34,8 @@ print('Schema reset complete')
 
   # Ensure all tables exist (idempotent — skips existing, creates missing)
   if [ -n "$DATABASE_URL" ]; then
-    python3 -c "
-from fixture.database import Base, get_engine
-from fixture import models  # noqa: F401 — register models on Base.metadata
-Base.metadata.create_all(bind=get_engine())
-" 2>/dev/null || echo "Table creation skipped (models not yet implemented)"
+    python3 -c "from fixture.database import create_tables; create_tables()" \
+      || echo "ERROR: Table creation failed"
   fi
 
   echo "Starting backend on port 8000..."

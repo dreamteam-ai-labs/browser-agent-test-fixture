@@ -666,10 +666,11 @@ def run_browser_crud_tests(frontend_url, email, password, entity_model):
         entity_level = {}
         for name in ordered:
             deps = entity_model.get(name, {}).get("depends_on", [])
-            if not deps:
+            known_dep_levels = [entity_level[d] for d in deps if d in entity_level]
+            if not known_dep_levels:
                 entity_level[name] = 0
             else:
-                entity_level[name] = max(entity_level.get(d, 0) for d in deps if d in entity_level) + 1
+                entity_level[name] = max(known_dep_levels) + 1
             level = entity_level[name]
             levels.setdefault(level, []).append(name)
 
