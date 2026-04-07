@@ -37,3 +37,6 @@
 2026-04-07T15:34:17.269 | commit-guard | agent=a36548104bda13a8d | ALLOW | msg: feat: implement task-management with full CRUD and correct status enum
 2026-04-07T15:34:31.896 | commit-guard | agent=a36548104bda13a8d | ALLOW | msg: chore: update feature tracking state — all features complete
 2026-04-07T15:35:27.837 | dep-guard | agent=unknown | BLOCK | pm=npm undeclared=[2>&1, |, tail, &&, npm, test, 2>&1, |, tail, &&, npm, run, build, 2>&1, |, tail] manifest=frontend/package.json
+2026-04-07T20:41:44.298 | commit-guard | agent=unknown | ALLOW | msg: arch: architecture.json
+2026-04-07T20:41:50.317 | build-gate | agent=architect | ALLOW | not lead session
+2026-04-07T20:43:04.856 | commit-guard | agent=unknown | ALLOW | msg: feat: verify browser agent end-to-end — all 3 stages pass

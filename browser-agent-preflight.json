@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-04-07T15:22:34Z",
+  "checked_at": "2026-04-07T20:42:49Z",
   "browser_agent_url": "https://browser.dreamteamlabs.co.uk",
   "stages": {
     "health": {
@@ -9,19 +9,19 @@
     },
     "diagnose": {
       "pass": true,
-      "final_url": "https://fixture-harness-q7g7gwgjww64cpj5-8000.app.github.dev/api/health",
-      "screenshot_url": "https://litter.catbox.moe/p8s55p.png",
-      "elapsed_ms": 4148,
-      "test_url": "https://fixture-harness-q7g7gwgjww64cpj5-8000.app.github.dev/api/health"
+      "final_url": "https://fixture-harness-r4v4vjvqjqvj2x5v7-8000.app.github.dev/api/health",
+      "screenshot_url": null,
+      "elapsed_ms": 3674,
+      "test_url": "https://fixture-harness-r4v4vjvqjqvj2x5v7-8000.app.github.dev/api/health"
     },
     "url_reachable": {
       "pass": true,
       "status": 200,
-      "url": "https://fixture-harness-q7g7gwgjww64cpj5-8000.app.github.dev/api/health",
+      "url": "https://fixture-harness-r4v4vjvqjqvj2x5v7-8000.app.github.dev/api/health",
       "attempts": 1
     }
   },
-  "codespace_name": "fixture-harness-q7g7gwgjww64cpj5",
+  "codespace_name": "fixture-harness-r4v4vjvqjqvj2x5v7",
   "overall": "pass",
-  "screenshot_url": "https://litter.catbox.moe/p8s55p.png"
+  "screenshot_url": null
 }
