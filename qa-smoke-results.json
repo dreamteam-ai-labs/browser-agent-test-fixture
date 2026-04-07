@@ -1,154 +1,700 @@
 {
-  "timestamp": "2026-03-30T21:07:11Z",
+  "timestamp": "2026-04-07T14:34:44Z",
   "auth": {
     "success": true,
-    "email": "qa-tester-1774904832@test.example.com",
+    "email": "qa-tester-782f5bb8@test.example.com",
     "password": "TestPass123!",
+    "auth_method": "backend_register",
     "steps": {
-      "register": {
-        "status": 200,
-        "response": {
-          "user": {
-            "id": 6,
-            "email": "qa-tester-1774904832@test.example.com",
-            "display_name": "QA Tester"
-          },
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZW1haWwiOiJxYS10ZXN0ZXItMTc3NDkwNDgzMkB0ZXN0LmV4YW1wbGUuY29tIiwiZXhwIjoxNzc0OTkxMjMyfQ.O0lJQF4C80EdT7SHtcHDUs3PjumKCBZrgdeiTPW-CHM"
-        }
-      },
-      "login": {
+      "backend_register": {
         "status": 200
       },
-      "verify_token": {
+      "sync_user": {
         "status": 200,
         "path": "/api/auth/me"
       }
     },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0IiwiZW1haWwiOiJxYS10ZXN0ZXItNzgyZjViYjhAdGVzdC5leGFtcGxlLmNvbSIsImV4cCI6MTc3NTY1ODg4NX0.JHOtJkZTWZObSA8yWlPDnVZODZ81Db4Bj-HoIhW8uKg",
     "token_verified": true
   },
   "browser_smoke_test": {
     "overall": "pass",
-    "tests": [
-      {
-        "feature": "User Authentication/Login",
-        "status": "pass",
-        "notes": "Successfully logged in with test credentials. Email and password fields work correctly, proper form validation, redirect to dashboard after successful login."
+    "entities_tested": 3,
+    "entities_total": 3,
+    "per_entity_results": {
+      "projects": {
+        "overall": "pass",
+        "tests": [
+          {
+            "feature": "Login Authentication",
+            "status": "pass",
+            "notes": "Successfully logged in with provided credentials, proper redirect to dashboard, CSS styling working correctly"
+          },
+          {
+            "feature": "Projects CREATE",
+            "status": "pass",
+            "notes": "New project form accessible, all fields functional (Name, Description, Color), successful creation and redirect to list view"
+          },
+          {
+            "feature": "Projects READ",
+            "status": "pass",
+            "notes": "Projects list displays correctly, shows existing and newly created items with proper data formatting and styling"
+          },
+          {
+            "feature": "Projects UPDATE",
+            "status": "pass",
+            "notes": "Edit functionality working, form pre-populated with existing data, changes saved successfully and persist in list view"
+          },
+          {
+            "feature": "Projects DELETE",
+            "status": "pass",
+            "notes": "Delete operation successful, item immediately removed from list, proper count reduction from 2 to 1 items"
+          },
+          {
+            "feature": "Navigation",
+            "status": "pass",
+            "notes": "Sidebar navigation functional, proper page routing between Dashboard, Projects sections"
+          },
+          {
+            "feature": "UI/CSS Styling",
+            "status": "pass",
+            "notes": "All pages properly styled, responsive design, form elements have proper focus states and visual feedback"
+          }
+        ],
+        "critical_issues": [],
+        "login_successful": true,
+        "pages_tested": 4,
+        "total_issues": 0,
+        "screenshotUrls": [
+          {
+            "step": 0,
+            "action": "initial_load",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/tfbofm.png"
+          },
+          {
+            "step": 1,
+            "action": "screenshot",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/ufn5ad.png"
+          },
+          {
+            "step": 2,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/q57ngr.png"
+          },
+          {
+            "step": 3,
+            "action": "key",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/9e4eii.png"
+          },
+          {
+            "step": 4,
+            "action": "type",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/dudu68.png"
+          },
+          {
+            "step": 5,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/w2bu9v.png"
+          },
+          {
+            "step": 6,
+            "action": "type",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/1cu7d1.png"
+          },
+          {
+            "step": 7,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/dashboard",
+            "imageUrl": null
+          },
+          {
+            "step": 8,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/projects",
+            "imageUrl": "https://litter.catbox.moe/jii9g6.png"
+          },
+          {
+            "step": 9,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/projects/new",
+            "imageUrl": null
+          },
+          {
+            "step": 10,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/projects/new",
+            "imageUrl": "https://litter.catbox.moe/nbxbyk.png"
+          },
+          {
+            "step": 11,
+            "action": "key",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/projects/new",
+            "imageUrl": null
+          },
+          {
+            "step": 12,
+            "action": "type",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/projects/new",
+            "imageUrl": null
+          },
+          {
+            "step": 13,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/projects/new",
+            "imageUrl": "https://litter.catbox.moe/a9huqa.png"
+          },
+          {
+            "step": 14,
+            "action": "key",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/projects/new",
+            "imageUrl": null
+          },
+          {
+            "step": 15,
+            "action": "type",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/projects/new",
+            "imageUrl": null
+          },
+          {
+            "step": 16,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/projects",
+            "imageUrl": "https://litter.catbox.moe/ue23wm.png"
+          },
+          {
+            "step": 17,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/projects/3",
+            "imageUrl": "https://litter.catbox.moe/kcgpnd.png"
+          },
+          {
+            "step": 18,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/projects/3",
+            "imageUrl": "https://litter.catbox.moe/x57tft.png"
+          },
+          {
+            "step": 19,
+            "action": "key",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/projects/3",
+            "imageUrl": null
+          },
+          {
+            "step": 20,
+            "action": "type",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/projects/3",
+            "imageUrl": "https://litter.catbox.moe/d9zolg.png"
+          },
+          {
+            "step": 21,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/projects",
+            "imageUrl": null
+          },
+          {
+            "step": 22,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/projects",
+            "imageUrl": "https://litter.catbox.moe/lhwkuo.png"
+          }
+        ],
+        "consoleMessages": [
+          {
+            "type": "error",
+            "text": "Failed to load resource: the server responded with a status of 404 ()",
+            "url": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/favicon.ico"
+          },
+          {
+            "type": "requestfailed",
+            "text": "net::ERR_ABORTED: https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/dashboard?_rsc=3y0gy",
+            "url": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/dashboard?_rsc=3y0gy"
+          },
+          {
+            "type": "requestfailed",
+            "text": "net::ERR_ABORTED: https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/projects/3?_rsc=iv6au",
+            "url": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/projects/3?_rsc=iv6au"
+          }
+        ]
       },
-      {
-        "feature": "Dashboard",
-        "status": "pass",
-        "notes": "Dashboard loads properly with welcome message, shows project/task counts (1 project, 0 tasks), navigation links functional, proper styling and layout."
+      "login": {
+        "overall": "partial",
+        "tests": [
+          {
+            "feature": "Login Page Access",
+            "status": "pass",
+            "notes": "Successfully accessed login page with proper styling and form elements"
+          },
+          {
+            "feature": "Initial Login (QA Tester)",
+            "status": "pass",
+            "notes": "Successfully logged in with provided credentials qa-tester-782f5bb8@test.example.com, redirected to dashboard with welcome message"
+          },
+          {
+            "feature": "Dashboard Access",
+            "status": "pass",
+            "notes": "Dashboard loaded properly with navigation sidebar, styled elements, and user welcome message"
+          },
+          {
+            "feature": "Authentication CREATE",
+            "status": "pass",
+            "notes": "Successfully created new account with test data (Display name: Test Item, Email: test@example.com), auto-login after creation worked"
+          },
+          {
+            "feature": "Logout Functionality",
+            "status": "pass",
+            "notes": "Successfully logged out and redirected back to login page"
+          },
+          {
+            "feature": "Authentication READ",
+            "status": "skip",
+            "notes": "Started testing login with newly created account but session ended before completion"
+          },
+          {
+            "feature": "Authentication UPDATE",
+            "status": "skip",
+            "notes": "No user profile/settings management interface discovered during testing"
+          },
+          {
+            "feature": "Authentication DELETE",
+            "status": "skip",
+            "notes": "No account deletion functionality found in the tested interface"
+          },
+          {
+            "feature": "Visual Quality",
+            "status": "pass",
+            "notes": "All pages properly styled with CSS, good layout, colors, spacing, and responsive design"
+          }
+        ],
+        "critical_issues": [
+          "Authentication CRUD testing incomplete - only CREATE operation fully tested",
+          "User management interface not found - may require admin privileges or different navigation path"
+        ],
+        "login_successful": true,
+        "pages_tested": 3,
+        "total_issues": 2,
+        "screenshotUrls": [
+          {
+            "step": 0,
+            "action": "initial_load",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/iqc664.png"
+          },
+          {
+            "step": 1,
+            "action": "screenshot",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": null
+          },
+          {
+            "step": 2,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/qfxbr9.png"
+          },
+          {
+            "step": 3,
+            "action": "key",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/0d7iai.png"
+          },
+          {
+            "step": 4,
+            "action": "type",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": null
+          },
+          {
+            "step": 5,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/dbs6nq.png"
+          },
+          {
+            "step": 6,
+            "action": "type",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": null
+          },
+          {
+            "step": 7,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/dashboard",
+            "imageUrl": null
+          },
+          {
+            "step": 8,
+            "action": "screenshot",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/dashboard",
+            "imageUrl": "https://litter.catbox.moe/j4cjan.png"
+          },
+          {
+            "step": 9,
+            "action": "key",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/dashboard",
+            "imageUrl": null
+          },
+          {
+            "step": 10,
+            "action": "type",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/dashboard",
+            "imageUrl": "https://litter.catbox.moe/ovvcol.png"
+          },
+          {
+            "step": 11,
+            "action": "key",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/dashboard",
+            "imageUrl": null
+          },
+          {
+            "step": 12,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/hpc1j3.png"
+          },
+          {
+            "step": 13,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/register",
+            "imageUrl": "https://litter.catbox.moe/hkhcng.png"
+          },
+          {
+            "step": 14,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/register",
+            "imageUrl": "https://litter.catbox.moe/dm5p7e.png"
+          },
+          {
+            "step": 15,
+            "action": "key",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/register",
+            "imageUrl": "https://litter.catbox.moe/ggh5g0.png"
+          },
+          {
+            "step": 16,
+            "action": "type",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/register",
+            "imageUrl": "https://litter.catbox.moe/5dd44f.png"
+          },
+          {
+            "step": 17,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/register",
+            "imageUrl": "https://litter.catbox.moe/bohuiy.png"
+          },
+          {
+            "step": 18,
+            "action": "key",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/register",
+            "imageUrl": "https://litter.catbox.moe/fe6eya.png"
+          },
+          {
+            "step": 19,
+            "action": "type",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/register",
+            "imageUrl": null
+          },
+          {
+            "step": 20,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/register",
+            "imageUrl": "https://litter.catbox.moe/9a7wtb.png"
+          },
+          {
+            "step": 21,
+            "action": "type",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/register",
+            "imageUrl": "https://litter.catbox.moe/dzs2ul.png"
+          },
+          {
+            "step": 22,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/dashboard",
+            "imageUrl": null
+          },
+          {
+            "step": 23,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/5ech50.png"
+          },
+          {
+            "step": 24,
+            "action": "triple_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/cxr2mw.png"
+          },
+          {
+            "step": 25,
+            "action": "type",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/7ojdhd.png"
+          }
+        ],
+        "consoleMessages": [
+          {
+            "type": "error",
+            "text": "Failed to load resource: the server responded with a status of 404 ()",
+            "url": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/favicon.ico"
+          },
+          {
+            "type": "requestfailed",
+            "text": "net::ERR_ABORTED: https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/dashboard?_rsc=3y0gy",
+            "url": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/dashboard?_rsc=3y0gy"
+          },
+          {
+            "type": "requestfailed",
+            "text": "net::ERR_ABORTED: https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/register?_rsc=ix1ve",
+            "url": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/register?_rsc=ix1ve"
+          },
+          {
+            "type": "requestfailed",
+            "text": "net::ERR_ABORTED: https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/dashboard?_rsc=1gtj6",
+            "url": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/dashboard?_rsc=1gtj6"
+          },
+          {
+            "type": "requestfailed",
+            "text": "net::ERR_ABORTED: https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login?_rsc=8ipd9",
+            "url": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login?_rsc=8ipd9"
+          }
+        ]
       },
-      {
-        "feature": "Navigation and Layout",
-        "status": "pass",
-        "notes": "Left sidebar navigation works correctly, proper page routing, clean UI design with consistent styling, logout button present."
-      },
-      {
-        "feature": "Project Management - List View",
-        "status": "pass",
-        "notes": "Projects page loads successfully, displays existing project data in table format, shows CRUD action buttons (New Project, Edit, Delete)."
-      },
-      {
-        "feature": "Project Management - Create Form",
-        "status": "pass",
-        "notes": "New Project form loads with proper fields (Name, Description, Color), form styling consistent, color picker functionality present, Create button available."
-      },
-      {
-        "feature": "Task Management",
-        "status": "skip",
-        "notes": "Task functionality visible in navigation but not fully tested in this session."
+      "tasks": {
+        "overall": "pass",
+        "tests": [
+          {
+            "feature": "User Authentication",
+            "status": "pass",
+            "notes": "Login successful with provided credentials, proper redirect to dashboard"
+          },
+          {
+            "feature": "Dashboard Access",
+            "status": "pass",
+            "notes": "Dashboard loads correctly with welcome message, navigation menu, and proper styling"
+          },
+          {
+            "feature": "Tasks Navigation",
+            "status": "pass",
+            "notes": "Successfully navigated to Tasks page from sidebar menu"
+          },
+          {
+            "feature": "Tasks CREATE",
+            "status": "pass",
+            "notes": "Successfully created new task with title 'Test Title', project 'QA Seed name', and status 'To Do'"
+          },
+          {
+            "feature": "Tasks READ",
+            "status": "pass",
+            "notes": "Task appears correctly in list view with proper data and action buttons"
+          },
+          {
+            "feature": "Tasks UPDATE",
+            "status": "pass",
+            "notes": "Successfully edited task title from 'Test Title' to 'Test Title Updated', changes persisted"
+          },
+          {
+            "feature": "Tasks DELETE",
+            "status": "skip",
+            "notes": "Test was initiated by clicking Delete link but final result not captured in session"
+          }
+        ],
+        "critical_issues": [],
+        "login_successful": true,
+        "pages_tested": 4,
+        "total_issues": 0,
+        "screenshotUrls": [
+          {
+            "step": 0,
+            "action": "initial_load",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/8zna9z.png"
+          },
+          {
+            "step": 1,
+            "action": "screenshot",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/cayu1b.png"
+          },
+          {
+            "step": 2,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/zsbqen.png"
+          },
+          {
+            "step": 3,
+            "action": "key",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/s30g7a.png"
+          },
+          {
+            "step": 4,
+            "action": "type",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/aoww5v.png"
+          },
+          {
+            "step": 5,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": "https://litter.catbox.moe/2bspfp.png"
+          },
+          {
+            "step": 6,
+            "action": "type",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/login",
+            "imageUrl": null
+          },
+          {
+            "step": 7,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/dashboard",
+            "imageUrl": "https://litter.catbox.moe/scrdbv.png"
+          },
+          {
+            "step": 8,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks",
+            "imageUrl": "https://litter.catbox.moe/xi2ymz.png"
+          },
+          {
+            "step": 9,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks/new",
+            "imageUrl": null
+          },
+          {
+            "step": 10,
+            "action": "triple_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks/new",
+            "imageUrl": "https://litter.catbox.moe/cf9fam.png"
+          },
+          {
+            "step": 11,
+            "action": "type",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks/new",
+            "imageUrl": "https://litter.catbox.moe/idn7zj.png"
+          },
+          {
+            "step": 12,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks/new",
+            "imageUrl": "https://litter.catbox.moe/cn3oa2.png"
+          },
+          {
+            "step": 13,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks/new",
+            "imageUrl": "https://litter.catbox.moe/ajp7qp.png"
+          },
+          {
+            "step": 14,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks/new",
+            "imageUrl": "https://litter.catbox.moe/pz1pz2.png"
+          },
+          {
+            "step": 15,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks/new",
+            "imageUrl": "https://litter.catbox.moe/3uw24a.png"
+          },
+          {
+            "step": 16,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks/new",
+            "imageUrl": "https://litter.catbox.moe/xw5ye5.png"
+          },
+          {
+            "step": 17,
+            "action": "key",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks/new",
+            "imageUrl": null
+          },
+          {
+            "step": 18,
+            "action": "key",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks/new",
+            "imageUrl": null
+          },
+          {
+            "step": 19,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks",
+            "imageUrl": "https://litter.catbox.moe/0a7kef.png"
+          },
+          {
+            "step": 20,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks/2",
+            "imageUrl": "https://litter.catbox.moe/xxn9cf.png"
+          },
+          {
+            "step": 21,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks/2",
+            "imageUrl": null
+          },
+          {
+            "step": 22,
+            "action": "key",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks/2",
+            "imageUrl": "https://litter.catbox.moe/cwmpvx.png"
+          },
+          {
+            "step": 23,
+            "action": "type",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks/2",
+            "imageUrl": "https://litter.catbox.moe/m7hjrh.png"
+          },
+          {
+            "step": 24,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks",
+            "imageUrl": "https://litter.catbox.moe/cd8xb7.png"
+          },
+          {
+            "step": 25,
+            "action": "left_click",
+            "pageUrl": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks",
+            "imageUrl": "https://litter.catbox.moe/jy9v87.png"
+          }
+        ],
+        "consoleMessages": [
+          {
+            "type": "error",
+            "text": "Failed to load resource: the server responded with a status of 404 ()",
+            "url": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/favicon.ico"
+          },
+          {
+            "type": "requestfailed",
+            "text": "net::ERR_ABORTED: https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/dashboard?_rsc=3y0gy",
+            "url": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/dashboard?_rsc=3y0gy"
+          },
+          {
+            "type": "requestfailed",
+            "text": "net::ERR_ABORTED: https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks?_rsc=udws7",
+            "url": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks?_rsc=udws7"
+          },
+          {
+            "type": "requestfailed",
+            "text": "net::ERR_ABORTED: https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks/new?_rsc=1ferm",
+            "url": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks/new?_rsc=1ferm"
+          },
+          {
+            "type": "requestfailed",
+            "text": "net::ERR_ABORTED: https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks/2?_rsc=1fdz3",
+            "url": "https://fixture-harness-g4w4wgwjg95p2pw66-3000.app.github.dev/tasks/2?_rsc=1fdz3"
+          }
+        ]
       }
-    ],
-    "critical_issues": [],
-    "login_successful": true,
-    "pages_tested": 4,
-    "total_issues": 0,
-    "service_reachable": true,
-    "screenshotUrls": [
-      {
-        "step": 0,
-        "action": "initial_load",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/f7kxm5.png"
-      },
-      {
-        "step": 1,
-        "action": "screenshot",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/gp1ego.png"
-      },
-      {
-        "step": 2,
-        "action": "left_click",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/jltamp.png"
-      },
-      {
-        "step": 3,
-        "action": "key",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/my0fih.png"
-      },
-      {
-        "step": 4,
-        "action": "type",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/k0i9po.png"
-      },
-      {
-        "step": 5,
-        "action": "left_click",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": "https://litter.catbox.moe/hoio5p.png"
-      },
-      {
-        "step": 6,
-        "action": "type",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/login",
-        "imageUrl": null
-      },
-      {
-        "step": 7,
-        "action": "left_click",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/dashboard",
-        "imageUrl": null
-      },
-      {
-        "step": 8,
-        "action": "left_click",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects",
-        "imageUrl": "https://litter.catbox.moe/4kcgix.png"
-      },
-      {
-        "step": 9,
-        "action": "left_click",
-        "pageUrl": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/new",
-        "imageUrl": "https://litter.catbox.moe/f3gv7e.png"
-      }
-    ],
-    "consoleMessages": [
-      {
-        "type": "error",
-        "text": "Failed to load resource: the server responded with a status of 404 ()",
-        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/favicon.ico"
-      },
-      {
-        "type": "requestfailed",
-        "text": "net::ERR_ABORTED: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/dashboard?_rsc=3y0gy",
-        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/dashboard?_rsc=3y0gy"
-      },
-      {
-        "type": "requestfailed",
-        "text": "net::ERR_ABORTED: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects?_rsc=1lc1r",
-        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects?_rsc=1lc1r"
-      },
-      {
-        "type": "requestfailed",
-        "text": "net::ERR_ABORTED: https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/new?_rsc=1d7rs",
-        "url": "https://fixture-agent-test-5vg5g45465j26r5-3000.app.github.dev/projects/new?_rsc=1d7rs"
-      }
-    ]
+    }
   },
   "exit_code": 0
 }
