@@ -2,29 +2,17 @@
   "mcpServers": {
     "reliable-ai": {
       "command": "python",
-      "args": [
-        "-m",
-        "reliable_ai.serve",
-        "--features",
-        "features.json",
-        "--env-features",
-        "environment_features.json"
-      ]
+      "args": ["-m", "reliable_ai.serve", "--features", "features.json", "--env-features", "environment_features.json"]
     },
     "filesystem": {
       "type": "stdio",
       "command": "npx",
-      "args": [
-        "@modelcontextprotocol/server-filesystem",
-        "."
-      ]
+      "args": ["@modelcontextprotocol/server-filesystem", "."]
     },
     "code-search": {
       "type": "stdio",
       "command": "npx",
-      "args": [
-        "mcp-ripgrep@latest"
-      ]
+      "args": ["mcp-ripgrep@latest"]
     }
   }
 }

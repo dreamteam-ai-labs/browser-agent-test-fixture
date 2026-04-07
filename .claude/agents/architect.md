@@ -48,7 +48,15 @@ You extract a structured architecture from features.json. Your output is `archit
 
 7. **Response convention** — responses include all non-computed fields plus FK display names (e.g., an expense response includes `category_name`). This is a convention — do NOT enumerate response fields per endpoint.
 
-8. **Existing services** — if `service-catalog.json` exists, read it. For each service in the catalog, output it in architecture.json as `source: "existing"` with its `url`, `description`, `health`, and `api` fields copied from the catalog. Do NOT extract entities, constraints, or relationships for existing services — they are pre-deployed.
+8. **Existing services** — if `service-catalog.json` exists, read it. For each service in the catalog, check if it fully covers any feature requirements. If yes, include it as `source: "existing"` with its `url`, `description`, `health`, and `api` fields. Do NOT extract entities for existing services — they are pre-deployed.
+
+9. **Service split** — decide how to group uncovered features into `build_new` services:
+   - **Default: stay monolithic.** Put all features in a single `build_new` service unless features clearly describe independent deployable units with separate data stores.
+   - Split into multiple services ONLY when features describe distinct domains (e.g., "auth service" and "notification service" with no shared tables).
+   - Each `build_new` service gets a `features` array listing the feature IDs assigned to it.
+   - Every phase 2+ feature must be assigned to exactly one service.
+
+10. **Service dependencies** — if service B calls service A (either existing or build_new), add `"depends_on": ["service-a"]` to service B. The factory builds services bottom-up in dependency order.
 
 ## Output Format
 
@@ -60,6 +68,8 @@ Write `architecture.json` to the project root. Use this exact structure:
   "services": {
     "fixture": {
       "source": "build_new",
+      "features": ["feature-id-1", "feature-id-2"],
+      "depends_on": [],
       "constraints": {
         "auth": "...",
         "database": "...",

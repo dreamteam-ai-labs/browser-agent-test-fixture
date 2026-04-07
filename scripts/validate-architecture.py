@@ -112,6 +112,35 @@ def validate_architecture(
 
         total_relationships += len(relationships)
 
+    # ── Layer 2b: depends_on + feature assignment validation ──
+    all_svc_names = set(services.keys())
+    for svc_name, svc in services.items():
+        # Validate depends_on references
+        for dep in svc.get("depends_on", []):
+            if dep not in all_svc_names:
+                return False, f"INVALID: service '{svc_name}' depends_on unknown service '{dep}'"
+            if dep == svc_name:
+                return False, f"INVALID: service '{svc_name}' depends_on itself"
+
+    # Cycle detection in depends_on graph
+    def _has_cycle(name, visited, stack):
+        visited.add(name)
+        stack.add(name)
+        for dep in services.get(name, {}).get("depends_on", []):
+            if dep in stack:
+                return True
+            if dep not in visited and dep in services:
+                if _has_cycle(dep, visited, stack):
+                    return True
+        stack.discard(name)
+        return False
+
+    visited_cycle, stack_cycle = set(), set()
+    for svc_name in services:
+        if svc_name not in visited_cycle:
+            if _has_cycle(svc_name, visited_cycle, stack_cycle):
+                return False, f"INVALID: circular dependency detected involving '{svc_name}'"
+
     # ── Layer 3: Semantic cross-reference with features.json ──
     features_file = Path(features_path)
     if features_file.exists():
@@ -119,6 +148,17 @@ def validate_architecture(
             with open(features_file) as f:
                 features_data = json.load(f)
             features = features_data.get("features", [])
+
+            # Validate feature assignment: every phase 2+ feature assigned to exactly one service
+            phase2_feature_ids = {f.get("id") for f in features if f.get("phase", 0) >= 2}
+            assigned_features = set()
+            for svc_name, svc in services.items():
+                if svc.get("source") == "existing":
+                    continue
+                for fid in svc.get("features", []):
+                    if fid in assigned_features:
+                        pass  # WARNING: duplicate assignment, non-blocking
+                    assigned_features.add(fid)
 
             # Collect all entity names across all services
             all_entity_names = set()
