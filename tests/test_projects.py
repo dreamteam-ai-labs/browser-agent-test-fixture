@@ -17,7 +17,7 @@ def test_create_project(client, auth_headers):
     assert data["name"] == "My Project"
     assert data["description"] == "A test project"
     assert "id" in data
-    assert "user_id" in data
+    assert "owner_id" in data
 
 
 def test_get_project(client, auth_headers):

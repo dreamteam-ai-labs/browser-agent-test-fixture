@@ -13,7 +13,7 @@ from .routers import auth, projects, tasks
 
 SEED_EMAIL = "test@fixture.example.com"
 SEED_PASSWORD = "TestFixture123!"
-SEED_DISPLAY = "Test User"
+SEED_NAME = "Test User"
 
 
 def init_db():
@@ -24,7 +24,7 @@ def init_db():
             db.add(User(
                 email=SEED_EMAIL,
                 hashed_password=hash_password(SEED_PASSWORD),
-                display_name=SEED_DISPLAY,
+                name=SEED_NAME,
             ))
             db.commit()
     finally:
@@ -65,7 +65,7 @@ def health():
 # Also support /api/users/me (qa-smoke-test.py uses this path)
 @app.get("/api/users/me")
 def users_me(current_user: User = Depends(get_current_user)):
-    return {"id": current_user.id, "email": current_user.email, "display_name": current_user.display_name}
+    return {"id": current_user.id, "email": current_user.email, "name": current_user.name}
 
 
 @app.post("/api/admin/reset")
@@ -77,7 +77,7 @@ def admin_reset():
         db.add(User(
             email=SEED_EMAIL,
             hashed_password=hash_password(SEED_PASSWORD),
-            display_name=SEED_DISPLAY,
+            name=SEED_NAME,
         ))
         db.commit()
     finally:

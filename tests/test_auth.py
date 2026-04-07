@@ -12,7 +12,7 @@ def test_register_success(client):
     data = resp.json()
     assert "token" in data
     assert data["user"]["email"] == "new@example.com"
-    assert data["user"]["display_name"] == "New User"
+    assert data["user"]["name"] == "New User"
 
 
 def test_register_duplicate_email(client):

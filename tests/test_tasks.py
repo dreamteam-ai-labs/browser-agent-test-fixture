@@ -10,12 +10,12 @@ def test_list_tasks_empty(client, auth_headers):
 def test_create_task(client, auth_headers):
     resp = client.post("/api/tasks", json={
         "title": "My Task",
-        "status": "todo",
+        "status": "pending",
     }, headers=auth_headers)
     assert resp.status_code == 201
     data = resp.json()
     assert data["title"] == "My Task"
-    assert data["status"] == "todo"
+    assert data["status"] == "pending"
     assert "id" in data
 
 
@@ -53,7 +53,7 @@ def test_delete_task(client, auth_headers):
 
 
 def test_update_task(client, auth_headers):
-    create = client.post("/api/tasks", json={"title": "Old Title", "status": "todo"}, headers=auth_headers)
+    create = client.post("/api/tasks", json={"title": "Old Title", "status": "pending"}, headers=auth_headers)
     tid = create.json()["id"]
     resp = client.put(f"/api/tasks/{tid}", json={"title": "New Title", "status": "done"}, headers=auth_headers)
     assert resp.status_code == 200
