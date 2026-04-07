@@ -1,7 +1,7 @@
 {
   "project": "browser-agent-test-fixture",
   "version": "0.1.0",
-  "last_updated": "2026-04-07T20:44:49.224287",
+  "last_updated": "2026-04-07T20:45:21.526996",
   "features": [
     {
       "id": "database-schema",
@@ -74,7 +74,7 @@
       "id": "health-endpoint",
       "name": "Health Check and App Config",
       "description": "GET /api/health returns {status: \"healthy\"}. Backend entry point at src/fixture/main.py.",
-      "status": "pending",
+      "status": "completed",
       "phase": 1,
       "files": [
         "src/fixture/main.py"
@@ -82,25 +82,33 @@
       "dependencies": [
         "database-schema"
       ],
-      "tests_pass": false,
+      "tests_pass": true,
       "metadata": {
         "complexity": "simple",
         "category": "API",
-        "priority": "high"
+        "priority": "high",
+        "completion_warning": "Completed in 8s (threshold: 600s)"
       },
-      "started_at": null,
-      "completed_at": null,
-      "last_touched_at": null,
-      "iteration_count": 0,
-      "work_history": [],
-      "completion_notes": null,
+      "started_at": "2026-04-07T20:45:02.418969",
+      "completed_at": "2026-04-07T20:45:10.446560",
+      "last_touched_at": "2026-04-07T20:45:02.418973",
+      "iteration_count": 1,
+      "work_history": [
+        {
+          "iteration": 1,
+          "timestamp": "2026-04-07T20:45:10.446561",
+          "note": "COMPLETED",
+          "tests_pass": true
+        }
+      ],
+      "completion_notes": "GET /api/health already implemented in main.py — returns {status, version, timestamp, service}. Test passes.",
       "tags": []
     },
     {
       "id": "user-auth",
       "name": "User Authentication",
       "description": "POST /api/auth/register accepts {email, password, name}, creates user with bcrypt-hashed password, returns JWT. POST /api/auth/login validates credentials, returns {token}. GET /api/users/me returns current user profile. JWT middleware extracts user from Authorization: Bearer header.",
-      "status": "pending",
+      "status": "completed",
       "phase": 1,
       "files": [
         "src/fixture/auth.py",
@@ -109,18 +117,26 @@
       "dependencies": [
         "database-schema"
       ],
-      "tests_pass": false,
+      "tests_pass": true,
       "metadata": {
         "complexity": "complex",
         "category": "Auth",
-        "priority": "high"
+        "priority": "high",
+        "completion_warning": "Completed in 7s (threshold: 600s)"
       },
-      "started_at": null,
-      "completed_at": null,
-      "last_touched_at": null,
-      "iteration_count": 0,
-      "work_history": [],
-      "completion_notes": null,
+      "started_at": "2026-04-07T20:45:14.432434",
+      "completed_at": "2026-04-07T20:45:21.526991",
+      "last_touched_at": "2026-04-07T20:45:14.432437",
+      "iteration_count": 1,
+      "work_history": [
+        {
+          "iteration": 1,
+          "timestamp": "2026-04-07T20:45:21.526992",
+          "note": "COMPLETED",
+          "tests_pass": true
+        }
+      ],
+      "completion_notes": "Auth fully implemented: register, login, JWT middleware, /api/users/me. All 7 auth tests pass.",
       "tags": []
     },
     {
