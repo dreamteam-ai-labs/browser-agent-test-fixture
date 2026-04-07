@@ -1,7 +1,7 @@
 {
   "project": "browser-agent-test-fixture",
   "version": "0.1.0",
-  "last_updated": "2026-04-07T14:26:31.337969",
+  "last_updated": "2026-04-07T14:26:46.782111",
   "features": [
     {
       "id": "database-schema",
@@ -178,7 +178,7 @@
       "id": "navigation",
       "name": "Navigation and Layout",
       "description": "Sidebar navigation with route highlighting and logout button. AuthGuard component protects authenticated routes. Layout component wraps all authenticated pages.",
-      "status": "pending",
+      "status": "completed",
       "phase": 2,
       "files": [
         "frontend/src/components/Sidebar.tsx",
@@ -189,25 +189,33 @@
         "user-auth",
         "frontend-setup"
       ],
-      "tests_pass": false,
+      "tests_pass": true,
       "metadata": {
         "complexity": "simple",
         "category": "Frontend",
-        "priority": "low"
+        "priority": "low",
+        "completion_warning": "Completed in 7s (threshold: 600s)"
       },
-      "started_at": null,
-      "completed_at": null,
-      "last_touched_at": null,
-      "iteration_count": 0,
-      "work_history": [],
-      "completion_notes": null,
+      "started_at": "2026-04-07T14:26:39.304343",
+      "completed_at": "2026-04-07T14:26:46.782106",
+      "last_touched_at": "2026-04-07T14:26:39.304347",
+      "iteration_count": 1,
+      "work_history": [
+        {
+          "iteration": 1,
+          "timestamp": "2026-04-07T14:26:46.782107",
+          "note": "COMPLETED",
+          "tests_pass": true
+        }
+      ],
+      "completion_notes": "Sidebar navigation with route highlighting and logout, AuthGuard protecting authenticated routes, Layout wrapping authenticated pages. All 21 tests pass, build passes.",
       "tags": []
     },
     {
       "id": "project-management",
       "name": "Project Management",
       "description": "Full CRUD for projects. POST /api/projects creates project with owner_id from auth. GET /api/projects lists user's projects. GET /api/projects/{id} returns single project. DELETE /api/projects/{id} removes project. Frontend pages: /projects (list), /projects/new (create form).",
-      "status": "in_progress",
+      "status": "completed",
       "phase": 2,
       "files": [
         "src/fixture/routers/projects.py",
@@ -218,31 +226,38 @@
         "database-schema",
         "frontend-setup"
       ],
-      "tests_pass": false,
+      "tests_pass": true,
       "metadata": {
         "complexity": "medium",
         "category": "Feature",
-        "priority": "medium"
+        "priority": "medium",
+        "completion_warning": "Completed in 44s (threshold: 600s)"
       },
       "started_at": "2026-04-07T14:25:53.167898",
-      "completed_at": null,
+      "completed_at": "2026-04-07T14:26:36.824606",
       "last_touched_at": "2026-04-07T14:26:31.337962",
-      "iteration_count": 1,
+      "iteration_count": 2,
       "work_history": [
         {
           "iteration": 1,
           "timestamp": "2026-04-07T14:26:31.337966",
           "note": "Verified full CRUD endpoints (list, create, get, update, delete), added update test — 8 tests passing"
+        },
+        {
+          "iteration": 2,
+          "timestamp": "2026-04-07T14:26:36.824607",
+          "note": "COMPLETED",
+          "tests_pass": true
         }
       ],
-      "completion_notes": null,
+      "completion_notes": "Full CRUD for /api/projects: list, create, get, update, delete. Auth required, per-user isolation. 8 tests passing.",
       "tags": []
     },
     {
       "id": "task-management",
       "name": "Task Management",
       "description": "Full CRUD for tasks with project assignment. POST /api/tasks creates task with project_id. GET /api/tasks lists user's tasks. DELETE /api/tasks/{id} removes task. Frontend pages: /tasks (list), /tasks/new (create form with project selector).",
-      "status": "pending",
+      "status": "in_progress",
       "phase": 2,
       "files": [
         "src/fixture/routers/tasks.py",
@@ -260,9 +275,9 @@
         "category": "Feature",
         "priority": "medium"
       },
-      "started_at": null,
+      "started_at": "2026-04-07T14:26:46.289129",
       "completed_at": null,
-      "last_touched_at": null,
+      "last_touched_at": "2026-04-07T14:26:46.289132",
       "iteration_count": 0,
       "work_history": [],
       "completion_notes": null,
