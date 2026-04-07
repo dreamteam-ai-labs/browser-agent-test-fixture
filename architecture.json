@@ -3,6 +3,8 @@
   "services": {
     "fixture": {
       "source": "build_new",
+      "features": ["project-management", "task-management", "dashboard", "navigation"],
+      "depends_on": [],
       "constraints": {
         "auth": "GCP Identity Platform",
         "database": "SQLite",
@@ -22,8 +24,8 @@
           },
           "endpoints": {
             "register": { "method": "POST", "path": "/api/auth/register" },
-            "login": { "method": "POST", "path": "/api/auth/login" },
-            "me": { "method": "GET", "path": "/api/users/me" }
+            "login":    { "method": "POST", "path": "/api/auth/login" },
+            "me":       { "method": "GET",  "path": "/api/users/me" }
           },
           "ui": {
             "page": "/login",
@@ -41,16 +43,15 @@
             "created_at": { "type": "datetime", "default": "now" }
           },
           "endpoints": {
-            "create": { "method": "POST", "path": "/api/projects" },
-            "list": { "method": "GET", "path": "/api/projects" },
-            "read": { "method": "GET", "path": "/api/projects/{id}" },
-            "update": { "method": "PUT", "path": "/api/projects/{id}" },
+            "create": { "method": "POST",   "path": "/api/projects" },
+            "list":   { "method": "GET",    "path": "/api/projects" },
+            "read":   { "method": "GET",    "path": "/api/projects/{id}" },
             "delete": { "method": "DELETE", "path": "/api/projects/{id}" }
           },
           "ui": {
             "page": "/projects",
             "display_name": "Projects",
-            "crud": ["list", "create", "read", "update", "delete"]
+            "crud": ["list", "create", "read", "delete"]
           }
         },
         "tasks": {
@@ -67,65 +68,24 @@
               "default": "pending",
               "enum": ["pending", "in_progress", "done"]
             },
-            "url": {
-              "type": "string",
-              "required": false,
-              "max_length": 2048,
-              "description": "Optional URL for browser-agent preview capture"
-            },
-            "preview_url": {
-              "type": "string",
-              "required": false,
-              "max_length": 2048,
-              "description": "Screenshot URL stored after browser-agent /diagnose call"
-            },
             "created_at": { "type": "datetime", "default": "now" }
           },
           "endpoints": {
-            "create": { "method": "POST", "path": "/api/tasks" },
-            "list": { "method": "GET", "path": "/api/tasks" },
-            "read": { "method": "GET", "path": "/api/tasks/{id}" },
-            "update": { "method": "PUT", "path": "/api/tasks/{id}" },
-            "delete": { "method": "DELETE", "path": "/api/tasks/{id}" },
-            "preview": {
-              "method": "POST",
-              "path": "/api/tasks/{id}/preview",
-              "description": "POSTs {url: task.url} to browser-agent /diagnose (BROWSER_AGENT_URL env var), stores screenshotUrl as task.preview_url, returns {preview_url}"
-            }
+            "create": { "method": "POST",   "path": "/api/tasks" },
+            "list":   { "method": "GET",    "path": "/api/tasks" },
+            "delete": { "method": "DELETE", "path": "/api/tasks/{id}" }
           },
           "ui": {
             "page": "/tasks",
             "display_name": "Tasks",
-            "crud": ["list", "create", "read", "update", "delete"],
-            "extra_pages": [
-              {
-                "path": "/tasks/{id}",
-                "display_name": "Task Detail",
-                "features": ["preview_screenshot_thumbnail", "capture_preview_button"]
-              }
-            ]
+            "crud": ["list", "create", "delete"]
           }
         }
       },
       "relationships": [
-        {
-          "from": "projects",
-          "to": "users",
-          "field": "owner_id",
-          "cardinality": "many_to_one"
-        },
-        {
-          "from": "tasks",
-          "to": "projects",
-          "field": "project_id",
-          "cardinality": "many_to_one"
-        },
-        {
-          "from": "tasks",
-          "to": "users",
-          "field": "assignee_id",
-          "cardinality": "many_to_one"
-        }
+        { "from": "projects", "to": "users",    "field": "owner_id",    "cardinality": "many_to_one" },
+        { "from": "tasks",    "to": "projects", "field": "project_id",  "cardinality": "many_to_one" },
+        { "from": "tasks",    "to": "users",    "field": "assignee_id", "cardinality": "many_to_one" }
       ],
       "pages": {
         "dashboard": {
@@ -155,10 +115,10 @@
           "path": "/",
           "display_name": "Navigation and Layout",
           "displays": [
-            "sidebar with route highlighting",
-            "logout button",
-            "auth guard protecting authenticated routes",
-            "layout wrapper for all authenticated pages"
+            "sidebar with route highlighting (Dashboard, Projects, Tasks)",
+            "logout button clears auth token and redirects to /login",
+            "AuthGuard component redirects unauthenticated users to /login",
+            "Layout component wraps all authenticated pages"
           ]
         }
       }
