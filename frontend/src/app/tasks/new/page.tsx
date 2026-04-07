@@ -15,8 +15,10 @@ interface Project {
 
 const taskSchema = z.object({
   title: z.string().min(1, "Task title is required"),
+  description: z.string().optional(),
   project_id: z.string().optional(),
-  status: z.string().default("todo"),
+  status: z.string().default("pending"),
+  url: z.string().url("Must be a valid URL").optional().or(z.literal("")),
 });
 
 type TaskForm = z.infer<typeof taskSchema>;
@@ -37,7 +39,7 @@ export default function NewTaskPage() {
     formState: { errors, isSubmitting },
   } = useForm<TaskForm>({
     resolver: zodResolver(taskSchema),
-    defaultValues: { status: "todo", project_id: "" },
+    defaultValues: { status: "pending", project_id: "", description: "", url: "" },
   });
 
   const onSubmit = async (data: TaskForm) => {
@@ -45,12 +47,15 @@ export default function NewTaskPage() {
     try {
       await api.post("/api/tasks", {
         title: data.title,
+        description: data.description || "",
         project_id: data.project_id ? parseInt(data.project_id) : null,
         status: data.status,
+        url: data.url || null,
       });
       router.push("/tasks");
-    } catch (err: any) {
-      setError(err.response?.data?.detail || "Failed to create task");
+    } catch (err: unknown) {
+      const e = err as { response?: { data?: { detail?: string } } };
+      setError(e.response?.data?.detail || "Failed to create task");
     }
   };
 
@@ -80,6 +85,19 @@ export default function NewTaskPage() {
             {errors.title && (
               <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
             )}
+          </div>
+
+          <div>
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+              Description
+            </label>
+            <textarea
+              {...register("description")}
+              id="description"
+              rows={3}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              placeholder="Optional description"
+            />
           </div>
 
           <div>
@@ -119,12 +137,28 @@ export default function NewTaskPage() {
                   id="status"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                 >
-                  <option value="todo">To Do</option>
+                  <option value="pending">Pending</option>
                   <option value="in_progress">In Progress</option>
                   <option value="done">Done</option>
                 </select>
               )}
             />
+          </div>
+
+          <div>
+            <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-1">
+              URL (optional — for browser preview)
+            </label>
+            <input
+              {...register("url")}
+              id="url"
+              type="url"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              placeholder="https://example.com"
+            />
+            {errors.url && (
+              <p className="mt-1 text-sm text-red-600">{errors.url.message}</p>
+            )}
           </div>
 
           <button

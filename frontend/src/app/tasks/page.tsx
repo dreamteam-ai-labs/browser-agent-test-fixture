@@ -10,6 +10,9 @@ interface Task {
   title: string;
   status: string;
   project_id: number | null;
+  description: string;
+  url: string | null;
+  preview_url: string | null;
 }
 
 export default function TasksPage() {
