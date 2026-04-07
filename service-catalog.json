@@ -1,0 +1,12 @@
+{
+  "services": {
+    "browser-agent": {
+      "url": "https://browser.dreamteamlabs.co.uk",
+      "description": "Headless Chrome agent for UI testing — takes URL + instructions, returns screenshots + test results",
+      "health": "GET /",
+      "api": {
+        "smoke-test": { "method": "POST", "path": "/smoke-test" }
+      }
+    }
+  }
+}
