@@ -1,7 +1,7 @@
 {
   "project": "browser-agent-test-fixture",
   "version": "0.1.0",
-  "last_updated": "2026-04-07T14:24:36.650256",
+  "last_updated": "2026-04-07T14:26:31.337969",
   "features": [
     {
       "id": "database-schema",
@@ -143,7 +143,7 @@
       "id": "dashboard",
       "name": "Dashboard",
       "description": "Overview page at /dashboard showing project and task counts with quick links.",
-      "status": "pending",
+      "status": "completed",
       "phase": 2,
       "files": [
         "frontend/src/app/dashboard/page.tsx"
@@ -152,18 +152,26 @@
         "user-auth",
         "frontend-setup"
       ],
-      "tests_pass": false,
+      "tests_pass": true,
       "metadata": {
         "complexity": "simple",
         "category": "Frontend",
-        "priority": "low"
+        "priority": "low",
+        "completion_warning": "Completed in 30s (threshold: 600s)"
       },
-      "started_at": null,
-      "completed_at": null,
-      "last_touched_at": null,
-      "iteration_count": 0,
-      "work_history": [],
-      "completion_notes": null,
+      "started_at": "2026-04-07T14:25:53.986886",
+      "completed_at": "2026-04-07T14:26:24.180908",
+      "last_touched_at": "2026-04-07T14:25:53.986889",
+      "iteration_count": 1,
+      "work_history": [
+        {
+          "iteration": 1,
+          "timestamp": "2026-04-07T14:26:24.180909",
+          "note": "COMPLETED",
+          "tests_pass": true
+        }
+      ],
+      "completion_notes": "Dashboard page at /dashboard showing project/task counts and quick links. 21 tests pass, build passes.",
       "tags": []
     },
     {
@@ -199,7 +207,7 @@
       "id": "project-management",
       "name": "Project Management",
       "description": "Full CRUD for projects. POST /api/projects creates project with owner_id from auth. GET /api/projects lists user's projects. GET /api/projects/{id} returns single project. DELETE /api/projects/{id} removes project. Frontend pages: /projects (list), /projects/new (create form).",
-      "status": "pending",
+      "status": "in_progress",
       "phase": 2,
       "files": [
         "src/fixture/routers/projects.py",
@@ -216,11 +224,17 @@
         "category": "Feature",
         "priority": "medium"
       },
-      "started_at": null,
+      "started_at": "2026-04-07T14:25:53.167898",
       "completed_at": null,
-      "last_touched_at": null,
-      "iteration_count": 0,
-      "work_history": [],
+      "last_touched_at": "2026-04-07T14:26:31.337962",
+      "iteration_count": 1,
+      "work_history": [
+        {
+          "iteration": 1,
+          "timestamp": "2026-04-07T14:26:31.337966",
+          "note": "Verified full CRUD endpoints (list, create, get, update, delete), added update test — 8 tests passing"
+        }
+      ],
       "completion_notes": null,
       "tags": []
     },
