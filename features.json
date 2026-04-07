@@ -1,7 +1,7 @@
 {
   "project": "browser-agent-test-fixture",
   "version": "0.1.0",
-  "last_updated": "2026-04-07T20:46:49.000433",
+  "last_updated": "2026-04-07T20:46:56.327607",
   "features": [
     {
       "id": "database-schema",
@@ -183,7 +183,7 @@
       "id": "navigation",
       "name": "Navigation and Layout",
       "description": "Sidebar navigation with route highlighting and logout button. AuthGuard component protects authenticated routes. Layout component wraps all authenticated pages.",
-      "status": "pending",
+      "status": "in_progress",
       "phase": 2,
       "files": [
         "frontend/src/components/Sidebar.tsx",
@@ -200,9 +200,9 @@
         "category": "Frontend",
         "priority": "low"
       },
-      "started_at": null,
+      "started_at": "2026-04-07T20:46:56.327603",
       "completed_at": null,
-      "last_touched_at": null,
+      "last_touched_at": "2026-04-07T20:46:56.327606",
       "iteration_count": 0,
       "work_history": [],
       "completion_notes": null,
@@ -254,7 +254,7 @@
       "id": "task-management",
       "name": "Task Management",
       "description": "Full CRUD for tasks with project assignment. POST /api/tasks creates task with project_id. GET /api/tasks lists user's tasks. DELETE /api/tasks/{id} removes task. Frontend pages: /tasks (list), /tasks/new (create form with project selector).",
-      "status": "in_progress",
+      "status": "completed",
       "phase": 2,
       "files": [
         "src/fixture/routers/tasks.py",
@@ -266,24 +266,31 @@
         "project-management",
         "frontend-setup"
       ],
-      "tests_pass": false,
+      "tests_pass": true,
       "metadata": {
         "complexity": "medium",
         "category": "Feature",
-        "priority": "medium"
+        "priority": "medium",
+        "completion_warning": "Completed in 5s (threshold: 600s)"
       },
       "started_at": "2026-04-07T20:46:46.657417",
-      "completed_at": null,
+      "completed_at": "2026-04-07T20:46:51.748958",
       "last_touched_at": "2026-04-07T20:46:49.000425",
-      "iteration_count": 1,
+      "iteration_count": 2,
       "work_history": [
         {
           "iteration": 1,
           "timestamp": "2026-04-07T20:46:49.000429",
           "note": "Backend already implemented: POST/GET/GET-by-id/PUT/DELETE /api/tasks with project_id FK, user_id auth, isolation. 9 tests passing. Router registered in main.py."
+        },
+        {
+          "iteration": 2,
+          "timestamp": "2026-04-07T20:46:51.748959",
+          "note": "COMPLETED",
+          "tests_pass": true
         }
       ],
-      "completion_notes": null,
+      "completion_notes": "Backend fully implemented: POST/GET/GET-by-id/PUT/DELETE /api/tasks with project_id FK, user_id auth, isolation, status enum. Also includes preview endpoint. 9 tests + 6 url-preview tests passing. Router registered in main.py.",
       "tags": []
     }
   ]
