@@ -9,7 +9,7 @@ interface Project {
   id: number;
   name: string;
   description: string;
-  color: string;
+  owner_id: number;
 }
 
 export default function ProjectsPage() {
@@ -55,13 +55,7 @@ export default function ProjectsPage() {
                 {projects.map((project) => (
                   <tr key={project.id}>
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <span
-                          className="w-3 h-3 rounded-full"
-                          style={{ backgroundColor: project.color }}
-                        />
-                        <span className="font-medium text-gray-900">{project.name}</span>
-                      </div>
+                      <span className="font-medium text-gray-900">{project.name}</span>
                     </td>
                     <td className="px-6 py-4 text-gray-600">{project.description}</td>
                     <td className="px-6 py-4 text-right flex justify-end gap-4">

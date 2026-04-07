@@ -11,7 +11,6 @@ import api from "@/lib/api";
 const projectSchema = z.object({
   name: z.string().min(1, "Project name is required"),
   description: z.string().optional(),
-  color: z.string().default("#3b82f6"),
 });
 
 type ProjectForm = z.infer<typeof projectSchema>;
@@ -26,16 +25,19 @@ export default function NewProjectPage() {
     formState: { errors, isSubmitting },
   } = useForm<ProjectForm>({
     resolver: zodResolver(projectSchema),
-    defaultValues: { color: "#3b82f6" },
   });
 
   const onSubmit = async (data: ProjectForm) => {
     setError("");
     try {
-      await api.post("/api/projects", data);
+      await api.post("/api/projects", {
+        name: data.name,
+        description: data.description || "",
+      });
       router.push("/projects");
-    } catch (err: any) {
-      setError(err.response?.data?.detail || "Failed to create project");
+    } catch (err: unknown) {
+      const e = err as { response?: { data?: { detail?: string } } };
+      setError(e.response?.data?.detail || "Failed to create project");
     }
   };
 
@@ -77,18 +79,6 @@ export default function NewProjectPage() {
               rows={3}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
               placeholder="Optional description"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="color" className="block text-sm font-medium text-gray-700 mb-1">
-              Color
-            </label>
-            <input
-              {...register("color")}
-              id="color"
-              type="color"
-              className="h-10 w-20 border border-gray-300 rounded-lg cursor-pointer"
             />
           </div>
 

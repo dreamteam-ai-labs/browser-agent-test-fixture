@@ -9,7 +9,7 @@ interface Project {
   id: number;
   name: string;
   description: string;
-  color: string;
+  owner_id: number;
 }
 
 export default function ProjectDetailPage() {
@@ -18,7 +18,6 @@ export default function ProjectDetailPage() {
   const [project, setProject] = useState<Project | null>(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [color, setColor] = useState("#3b82f6");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
 
@@ -27,7 +26,6 @@ export default function ProjectDetailPage() {
       setProject(res.data);
       setName(res.data.name);
       setDescription(res.data.description || "");
-      setColor(res.data.color || "#3b82f6");
     });
   }, [params.id]);
 
@@ -36,10 +34,11 @@ export default function ProjectDetailPage() {
     setSaving(true);
     setError("");
     try {
-      await api.put(`/api/projects/${params.id}`, { name, description, color });
+      await api.put(`/api/projects/${params.id}`, { name, description });
       router.push("/projects");
-    } catch (err: any) {
-      setError(err.response?.data?.detail || "Failed to update project");
+    } catch (err: unknown) {
+      const e = err as { response?: { data?: { detail?: string } } };
+      setError(e.response?.data?.detail || "Failed to update project");
     } finally {
       setSaving(false);
     }
@@ -78,17 +77,6 @@ export default function ProjectDetailPage() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="color" className="block text-sm font-medium text-gray-700 mb-1">Color</label>
-            <input
-              id="color"
-              type="color"
-              value={color}
-              onChange={(e) => setColor(e.target.value)}
-              className="h-10 w-20 border border-gray-300 rounded-lg cursor-pointer"
             />
           </div>
 
