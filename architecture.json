@@ -5,7 +5,7 @@
       "source": "build_new",
       "constraints": {
         "auth": "GCP Identity Platform",
-        "database": "sqlite",
+        "database": "SQLite",
         "orm": "sqlalchemy",
         "backend": "fastapi",
         "frontend": "nextjs"
@@ -17,7 +17,8 @@
             "id": { "type": "uuid", "pk": true },
             "email": { "type": "string", "required": true, "unique": true, "max_length": 255 },
             "hashed_password": { "type": "string", "required": true },
-            "name": { "type": "string", "required": true, "max_length": 255 }
+            "name": { "type": "string", "required": true, "max_length": 255 },
+            "created_at": { "type": "datetime", "default": "now" }
           },
           "endpoints": {
             "register": { "method": "POST", "path": "/api/auth/register" },
@@ -36,18 +37,20 @@
             "id": { "type": "uuid", "pk": true },
             "name": { "type": "string", "required": true, "max_length": 255 },
             "description": { "type": "text" },
-            "owner_id": { "type": "uuid", "required": true, "fk": "users.id" }
+            "owner_id": { "type": "uuid", "required": true, "fk": "users.id" },
+            "created_at": { "type": "datetime", "default": "now" }
           },
           "endpoints": {
             "create": { "method": "POST", "path": "/api/projects" },
             "list": { "method": "GET", "path": "/api/projects" },
             "read": { "method": "GET", "path": "/api/projects/{id}" },
+            "update": { "method": "PUT", "path": "/api/projects/{id}" },
             "delete": { "method": "DELETE", "path": "/api/projects/{id}" }
           },
           "ui": {
             "page": "/projects",
             "display_name": "Projects",
-            "crud": ["list", "create", "read", "delete"]
+            "crud": ["list", "create", "read", "update", "delete"]
           }
         },
         "tasks": {
@@ -60,20 +63,23 @@
             "assignee_id": { "type": "uuid", "fk": "users.id" },
             "status": {
               "type": "string",
-              "enum": ["pending", "in_progress", "done"],
-              "default": "pending"
-            }
+              "required": true,
+              "default": "pending",
+              "enum": ["pending", "in_progress", "done"]
+            },
+            "created_at": { "type": "datetime", "default": "now" }
           },
           "endpoints": {
             "create": { "method": "POST", "path": "/api/tasks" },
             "list": { "method": "GET", "path": "/api/tasks" },
             "read": { "method": "GET", "path": "/api/tasks/{id}" },
+            "update": { "method": "PUT", "path": "/api/tasks/{id}" },
             "delete": { "method": "DELETE", "path": "/api/tasks/{id}" }
           },
           "ui": {
             "page": "/tasks",
             "display_name": "Tasks",
-            "crud": ["list", "create", "read", "delete"]
+            "crud": ["list", "create", "read", "update", "delete"]
           }
         }
       },
@@ -99,26 +105,47 @@
       ],
       "pages": {
         "dashboard": {
+          "type": "view_only",
           "path": "/dashboard",
           "display_name": "Dashboard",
-          "type": "view_only",
           "displays": [
-            "project count",
-            "task count",
-            "quick links to projects and tasks"
+            "total project count for current user",
+            "total task count for current user",
+            "quick links to /projects and /tasks"
           ]
         },
+        "login": {
+          "type": "view_only",
+          "path": "/login",
+          "display_name": "Login",
+          "displays": ["login form with email and password"]
+        },
+        "register": {
+          "type": "view_only",
+          "path": "/register",
+          "display_name": "Register",
+          "displays": ["registration form with email, password, and name"]
+        },
         "navigation": {
+          "type": "view_only",
           "path": "/",
           "display_name": "Navigation and Layout",
-          "type": "view_only",
           "displays": [
             "sidebar with route highlighting",
             "logout button",
             "auth guard protecting authenticated routes",
-            "layout wrapper for authenticated pages"
+            "layout wrapper for all authenticated pages"
           ]
         }
+      }
+    },
+    "browser-agent": {
+      "source": "existing",
+      "url": "https://browser.dreamteamlabs.co.uk",
+      "description": "Headless Chrome agent for UI testing — takes URL + instructions, returns screenshots + test results",
+      "health": "GET /",
+      "api": {
+        "smoke-test": { "method": "POST", "path": "/smoke-test" }
       }
     }
   }
