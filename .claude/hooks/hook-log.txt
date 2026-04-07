@@ -40,3 +40,6 @@
 2026-04-07T20:41:44.298 | commit-guard | agent=unknown | ALLOW | msg: arch: architecture.json
 2026-04-07T20:41:50.317 | build-gate | agent=architect | ALLOW | not lead session
 2026-04-07T20:43:04.856 | commit-guard | agent=unknown | ALLOW | msg: feat: verify browser agent end-to-end — all 3 stages pass
+2026-04-07T20:44:28.935 | commit-guard | agent=unknown | ALLOW | msg: feat: database schema — rename Project.user_id to owner_id per architecture
+2026-04-07T20:44:51.783 | commit-guard | agent=unknown | ALLOW | msg: feat: frontend setup — Next.js 14, Tailwind, App Router, all pages present
+2026-04-07T20:44:56.526 | commit-guard | agent=unknown | ALLOW | msg: feat: frontend setup — Next.js 14, Tailwind, App Router, all pages present
