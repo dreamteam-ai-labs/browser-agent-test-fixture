@@ -53,3 +53,5 @@
 2026-04-07T20:48:39.242 | build-gate | agent=build-lead | ALLOW | not lead session
 2026-04-07T20:53:35.084 | commit-guard | agent=a17b09de3425b739a | ALLOW | msg: $(cat <<
 2026-04-07T20:55:21.285 | commit-guard | agent=unknown | ALLOW | msg: fix: rename projects.user_id to owner_id to match SQLAlchemy ORM model
+2026-04-07T20:58:46.607 | commit-guard | agent=a9e8f087a37845015 | ALLOW | msg: qa: iteration 2 — all tests pass, zero critical issues
+2026-04-07T20:59:59.479 | commit-guard | agent=ac15236282768668a | ALLOW | msg: $(cat <<

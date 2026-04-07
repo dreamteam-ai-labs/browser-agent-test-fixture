@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-04-07T20:51:39Z",
+  "timestamp": "2026-04-07T20:56:37Z",
   "auth": {
     "success": true,
-    "email": "qa-tester-50650529@test.example.com",
+    "email": "qa-tester-213d2770@test.example.com",
     "password": "TestPass123!",
     "auth_method": "backend_register",
     "steps": {
@@ -14,7 +14,7 @@
         "path": "/api/auth/me"
       }
     },
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0IiwiZW1haWwiOiJxYS10ZXN0ZXItNTA2NTA1MjlAdGVzdC5leGFtcGxlLmNvbSIsImV4cCI6MTc3NTY4MTQ5OX0.qH0E1sm_K-aPCfAkHMjiZ_fWysB-17aRGL-EbX4ASB8",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3IiwiZW1haWwiOiJxYS10ZXN0ZXItMjEzZDI3NzBAdGVzdC5leGFtcGxlLmNvbSIsImV4cCI6MTc3NTY4MTc5OH0.02Rulha_E7DWCAHiQtxjwPt-n-zjhiUXvYxVC2vLkKM",
     "token_verified": true
   },
   "browser_smoke_test": {
@@ -35,7 +35,7 @@
             "url": "https://fixture-harness-r4v4vjvqjqvj2x5v7-3000.app.github.dev/favicon.ico"
           }
         ],
-        "error": "401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"invalid x-api-key\"},\"request_id\":\"req_011CZq5BCvpmPTgJnFQp3YbV\"}"
+        "error": "401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"invalid x-api-key\"},\"request_id\":\"req_011CZq5Z91YV3sfksQKL5vwB\"}"
       },
       "login": {
         "overall": "error",
@@ -50,7 +50,7 @@
             "url": "https://fixture-harness-r4v4vjvqjqvj2x5v7-3000.app.github.dev/favicon.ico"
           }
         ],
-        "error": "401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"invalid x-api-key\"},\"request_id\":\"req_011CZq5BCrrphUJknDxanfK8\"}"
+        "error": "401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"invalid x-api-key\"},\"request_id\":\"req_011CZq5Z8wq72KEACsS2rqk2\"}"
       },
       "tasks": {
         "overall": "error",
@@ -65,7 +65,7 @@
             "url": "https://fixture-harness-r4v4vjvqjqvj2x5v7-3000.app.github.dev/favicon.ico"
           }
         ],
-        "error": "401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"invalid x-api-key\"},\"request_id\":\"req_011CZq5DQuiDzv1Vhx7pZmPC\"}"
+        "error": "401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"invalid x-api-key\"},\"request_id\":\"req_011CZq5bL6MZkwyA7v6CANhr\"}"
       }
     }
   },
