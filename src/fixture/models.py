@@ -14,7 +14,7 @@ class User(Base):
     display_name = Column(String, nullable=True, default="")
     created_at = Column(DateTime, server_default=func.now())
 
-    projects = relationship("Project", back_populates="owner", cascade="all, delete-orphan", foreign_keys="Project.user_id")
+    projects = relationship("Project", back_populates="owner", cascade="all, delete-orphan", foreign_keys="Project.owner_id")
     assigned_tasks = relationship("Task", foreign_keys="Task.assignee_id", back_populates="assignee")
     owned_tasks = relationship("Task", foreign_keys="Task.user_id", back_populates="creator")
 
@@ -25,10 +25,10 @@ class Project(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
     description = Column(String, default="")
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime, server_default=func.now())
 
-    owner = relationship("User", back_populates="projects", foreign_keys=[user_id])
+    owner = relationship("User", back_populates="projects", foreign_keys=[owner_id])
     tasks = relationship("Task", back_populates="project", cascade="all, delete-orphan")
 
 
