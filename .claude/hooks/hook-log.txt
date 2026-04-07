@@ -23,3 +23,17 @@
 2026-04-07T14:23:59.966 | commit-guard | agent=unknown | ALLOW | msg: feat: frontend setup - Next.js 14 with Tailwind, all pages, API client
 2026-04-07T14:24:23.738 | commit-guard | agent=unknown | ALLOW | msg: feat: health endpoint - GET /api/health returns healthy status
 2026-04-07T14:24:39.715 | commit-guard | agent=unknown | ALLOW | msg: feat: user authentication - register, login, JWT, /api/users/me
+2026-04-07T15:20:58.589 | commit-guard | agent=unknown | ALLOW | msg: arch: architecture.json
+2026-04-07T15:21:07.313 | build-gate | agent=architect | ALLOW | not lead session
+2026-04-07T15:26:15.768 | commit-guard | agent=unknown | ALLOW | msg: feat: implement database-schema — SQLAlchemy models aligned to architecture.json
+2026-04-07T15:27:09.877 | package-guard | agent=unknown | BLOCK | rogue package=app, declared=fixture
+2026-04-07T15:27:58.957 | commit-guard | agent=unknown | ALLOW | msg: feat: implement frontend-setup — Next.js 14 app with Tailwind, API client, align
+2026-04-07T15:28:41.724 | commit-guard | agent=unknown | ALLOW | msg: feat: implement health-endpoint and user-auth — /api/health, register, login, JW
+2026-04-07T15:29:24.556 | build-gate | agent=build-lead | ALLOW | not lead session
+2026-04-07T15:31:06.923 | commit-guard | agent=af5ac06b9d6dce33c | ALLOW | msg: $(cat <<
+2026-04-07T15:31:27.387 | commit-guard | agent=af5ac06b9d6dce33c | ALLOW | msg: $(cat <<
+2026-04-07T15:31:40.993 | build-gate | agent=build-lead | ALLOW | not lead session
+2026-04-07T15:32:47.168 | commit-guard | agent=a36548104bda13a8d | ALLOW | msg: feat: implement project-management pages with CRUD
+2026-04-07T15:34:17.269 | commit-guard | agent=a36548104bda13a8d | ALLOW | msg: feat: implement task-management with full CRUD and correct status enum
+2026-04-07T15:34:31.896 | commit-guard | agent=a36548104bda13a8d | ALLOW | msg: chore: update feature tracking state — all features complete
+2026-04-07T15:35:27.837 | dep-guard | agent=unknown | BLOCK | pm=npm undeclared=[2>&1, |, tail, &&, npm, test, 2>&1, |, tail, &&, npm, run, build, 2>&1, |, tail] manifest=frontend/package.json
