@@ -46,3 +46,5 @@
 2026-04-07T20:45:24.506 | commit-guard | agent=unknown | ALLOW | msg: feat: health-endpoint and user-auth — all tests pass
 2026-04-07T20:46:03.692 | build-gate | agent=build-lead | ALLOW | not lead session
 2026-04-07T20:46:49.831 | commit-guard | agent=a718ad5be29cd3356 | ALLOW | msg: feat: implement dashboard page with project and task counts
+2026-04-07T20:47:04.542 | commit-guard | agent=a3e966608a0b59e84 | ALLOW | msg: $(cat <<
+2026-04-07T20:47:16.285 | commit-guard | agent=a718ad5be29cd3356 | ALLOW | msg: feat: implement navigation layout with sidebar, AuthGuard, and route highlightin
