@@ -2,10 +2,37 @@
   "services": {
     "browser-agent": {
       "url": "https://browser.dreamteamlabs.co.uk",
-      "description": "Headless Chrome agent for UI testing — takes URL + instructions, returns screenshots + test results",
-      "health": "GET /",
+      "description": "Headless Chrome agent — navigates URLs, takes screenshots, runs smoke tests. Puppeteer-based, deployed on VPS.",
+      "health": "GET /health",
       "api": {
-        "smoke-test": { "method": "POST", "path": "/smoke-test" }
+        "diagnose": {
+          "method": "POST",
+          "path": "/diagnose",
+          "description": "Navigate to URL, take screenshot, return screenshot URL. No Claude call ($0).",
+          "request": { "url": "string (required)" },
+          "response": { "success": "boolean", "finalUrl": "string", "screenshotUrl": "string", "events": "array", "elapsed": "number" }
+        },
+        "explore": {
+          "method": "POST",
+          "path": "/explore",
+          "description": "Full Claude-powered site exploration with feature discovery (~$12).",
+          "request": { "url": "string (required)", "maxIterations": "number (default 20)", "timeout": "number" },
+          "response": { "success": "boolean", "url": "string", "iterations": "number", "features": "string", "parsed_features": "array" }
+        },
+        "quick-analyze": {
+          "method": "POST",
+          "path": "/quick-analyze",
+          "description": "Lighter exploration — 10 iterations, 60s timeout (~$5).",
+          "request": { "url": "string (required)" },
+          "response": { "success": "boolean", "url": "string", "iterations": "number", "parsed_features": "array" }
+        },
+        "smoke-test": {
+          "method": "POST",
+          "path": "/smoke-test",
+          "description": "QA smoke test with login, CRUD testing, screenshots. Supports mock mode (~$12, mock=$0).",
+          "request": { "url": "string (required)", "credentials": "object {email, password}", "features": "array", "maxIterations": "number", "mock": "boolean" },
+          "response": "NDJSON stream — progress events then final result line"
+        }
       }
     }
   }
