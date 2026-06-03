@@ -4,6 +4,29 @@
 
 echo "🔄 Starting browser-agent-test-fixture Codespace..."
 
+# 0. Load codespace-injected secrets from the shared .env-secrets file.
+#    GitHub Codespaces writes operator-uploaded user/org secrets here as
+#    base64-encoded KEY=value lines. post-create.sh already loads this at
+#    create time (see post-create.sh:28-37). post-start.sh ALSO needs to
+#    load it because the SSH-spawned shells the factory loop uses (e.g.
+#    codespace-runner.js bash -c "...") do NOT inherit the env from a
+#    devcontainer login shell — they start with /etc/profile.d/codespaces.sh
+#    only, which doesn't propagate CODESPACE_* secrets. Without this load,
+#    the env-mapping loop in step 1 below sees nothing to map, and the
+#    downstream ~/.dreamteam_env ends up with empty values (e.g.
+#    CLAUDE_CODE_OAUTH_TOKEN=""), causing "Not logged in" failures at
+#    Claude invocation time. Closes canary-6 (2026-05-28) Claude-auth bug.
+SECRETS_FILE="/workspaces/.codespaces/shared/.env-secrets"
+if [ -f "$SECRETS_FILE" ]; then
+    echo "  Loading codespace secrets from $SECRETS_FILE..."
+    while read line; do
+        key=$(echo $line | sed "s/=.*//")
+        value=$(echo $line | sed "s/$key=//1")
+        decodedValue=$(echo $value | base64 -d)
+        export $key="$decodedValue"
+    done < "$SECRETS_FILE"
+fi
+
 # 1. Map all CODESPACE_ prefixed variables to unprefixed versions
 #    Write to ~/.dreamteam_env (a dedicated file without shell guards)
 #    so env vars are available in ALL shell types (interactive, SSH, CI)
@@ -31,6 +54,12 @@ if [ -n "$NAME" ]; then
 fi
 
 # 1.5. Set dynamic variables generated during project creation
+# Mirrors the .env.example.mustache gating: GCPIP_TENANT_ID + GCP credentials
+# are direct-integration-GCP-IdP-path concerns. Skip when auth_provider is
+# 'dreamteam_auth' (auth lives on the facade service) or 'none' (bare canary
+# / non-auth product). Pre-5.3 factory side with derived booleans unset →
+# both inverted checks pass → block renders as before. Closes the spurious
+# "⚠️ GCPIP_TENANT_ID not set" warning on auth_provider=none canaries.
 echo ""
 echo "🎯 Setting dynamic project variables..."
 export GCPIP_TENANT_ID=""

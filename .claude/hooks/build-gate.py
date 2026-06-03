@@ -19,8 +19,14 @@ from pathlib import Path
 
 PROJECT_DIR = Path(os.environ.get("CLAUDE_PROJECT_DIR", "."))
 
-# --- Fallback safety valve (validated across production runs) ---
-MAX_BLOCKS = 20
+# --- Fallback safety valve ---
+# Set below CC 2.1.135's native 8-block stop-hook cap so our specific
+# reason-string fires before CC's defensive cap. Operator can raise CC's
+# cap via CLAUDE_CODE_STOP_HOOK_BLOCK_CAP if 6 proves too tight in
+# practice, but the stall detector at STALL_THRESHOLD=5 (progress-based)
+# is the real workhorse — this fallback only matters when progress
+# detection is inconclusive.
+MAX_BLOCKS = 6
 BLOCK_COUNT_FILE = PROJECT_DIR / ".claude" / "hooks" / ".build-gate-blocks"
 
 # --- Progress-based stall detection ---
@@ -97,6 +103,23 @@ def get_progress_snapshot() -> dict:
         return {"completed": 0, "total": 0}
 
 
+def get_in_progress_count() -> int:
+    """Count features currently in_progress (a builder has claimed them).
+
+    A feature in_progress means a builder started it and is — or was — working
+    on it. That is categorically different from an idle stall (nothing claimed,
+    lead spinning), and we must not stall-allow over live work.
+    """
+    path = PROJECT_DIR / "features.json"
+    if not path.exists():
+        return 0
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return 0
+    return sum(1 for f in data.get("features", []) if f.get("status") == "in_progress")
+
+
 def check_progress_stall() -> tuple[bool, str]:
     """Check if progress has stalled. Returns (stalled, detail).
 
@@ -139,7 +162,30 @@ def check_tests_passing() -> tuple[bool, str]:
     return True, f"test result: {result}"
 
 
+def is_rework_mode() -> bool:
+    """Check if this is a rework build (rework.json exists)."""
+    return (PROJECT_DIR / "rework.json").exists()
+
+
+def is_amendment_mode() -> bool:
+    """Check if this is an amendment build (amendments.json exists, rework.json does not).
+
+    Rework takes precedence — if both files are present, treat as rework only.
+    """
+    return (
+        (PROJECT_DIR / "amendments.json").exists()
+        and not (PROJECT_DIR / "rework.json").exists()
+    )
+
+
 def check_features_complete() -> tuple[bool, str]:
+    # In rework mode, features are already completed — check rework instead
+    if is_rework_mode():
+        return check_rework_complete()
+    # In amendment mode, features are already completed — check amend commits instead
+    if is_amendment_mode():
+        return check_amendment_complete()
+
     path = PROJECT_DIR / "features.json"
     if not path.exists():
         return True, "no features.json"
@@ -157,6 +203,68 @@ def check_features_complete() -> tuple[bool, str]:
     if completed == total:
         return True, f"{completed}/{total} features complete"
     return False, f"{completed}/{total} complete, {in_progress} in-progress, {pending} pending"
+
+
+def check_rework_complete() -> tuple[bool, str]:
+    """In rework mode, check that fixes have been committed."""
+    import subprocess
+    try:
+        rework = json.loads((PROJECT_DIR / "rework.json").read_text(encoding="utf-8"))
+        item_count = len(rework.get("items", []))
+    except (OSError, json.JSONDecodeError):
+        return True, "rework.json unreadable — allowing exit"
+
+    if item_count == 0:
+        return True, "rework: 0 items"
+
+    # Check git log for fix commits since rework started
+    try:
+        result = subprocess.run(
+            ["git", "log", "--oneline", "-50", "--grep=fix:"],
+            capture_output=True, text=True, timeout=5,
+        )
+        fix_count = len(result.stdout.strip().splitlines()) if result.stdout.strip() else 0
+    except (subprocess.TimeoutExpired, OSError):
+        fix_count = 0
+
+    if fix_count > 0:
+        return True, f"rework: {item_count} items, {fix_count} fix commits found"
+
+    return False, f"rework: {item_count} items but no fix commits yet"
+
+
+def check_amendment_complete() -> tuple[bool, str]:
+    """In amendment mode, check that `amend:` commits have been made.
+
+    Symmetric with check_rework_complete. Empty-commit `amend: no-op ...` counts
+    — an amendment whose spec change doesn't affect impl is legitimate but still
+    needs an audit commit.
+    """
+    import subprocess
+    try:
+        amend_data = json.loads(
+            (PROJECT_DIR / "amendments.json").read_text(encoding="utf-8")
+        )
+        item_count = len(amend_data.get("amendments", []))
+    except (OSError, json.JSONDecodeError):
+        return True, "amendments.json unreadable — allowing exit"
+
+    if item_count == 0:
+        return True, "amendments: 0 items"
+
+    try:
+        result = subprocess.run(
+            ["git", "log", "--oneline", "-50", "--grep=amend:"],
+            capture_output=True, text=True, timeout=5,
+        )
+        amend_count = len(result.stdout.strip().splitlines()) if result.stdout.strip() else 0
+    except (subprocess.TimeoutExpired, OSError):
+        amend_count = 0
+
+    if amend_count > 0:
+        return True, f"amendments: {item_count} items, {amend_count} amend commits found"
+
+    return False, f"amendments: {item_count} items but no amend commits yet"
 
 
 def check_deployment_prep_done() -> tuple[bool, str]:
@@ -263,11 +371,37 @@ def main():
     # --- Not complete — check if we should force-allow via stall/safety valve ---
 
     # Primary: progress-based stall detection
-    stalled, stall_detail = check_progress_stall()
-    if stalled:
-        log_hook("build-gate", "lead", "ALLOW", f"stalled | {stall_detail}")
-        json.dump({"decision": "allow"}, sys.stdout)
-        return
+    # EXCEPT in rework mode: feature counts are static (all already completed),
+    # so stall-based auto-allow would always fire after N Stop retries. That's
+    # exactly the failure mode we want to block — a no-op rework run where the
+    # agent never spawned a builder. Skip stall-allow when rework is active and
+    # fix commits are missing. Same logic for amendment mode. Block counter
+    # below still provides escape.
+    in_progress_count = get_in_progress_count()
+    if is_rework_mode() and not features_ok:
+        stall_detail = "rework mode — stall-allow disabled"
+    elif is_amendment_mode() and not features_ok:
+        stall_detail = "amendment mode — stall-allow disabled"
+    elif in_progress_count > 0 and not features_ok:
+        # A feature is genuinely in_progress — a builder claimed it and is (or
+        # was) working. That is NOT an idle stall; force-releasing here orphans
+        # live work below 100% (the run-4 greeting-crud failure: build-lead
+        # fire-and-forgot its builders, then stall-allow let it exit at 1/2).
+        # Keep blocking so the lead is driven back to poll/re-spawn.
+        # Dead-builder escape hatches still apply: the FeatureList stale-reclaim
+        # flips a silently-abandoned in_progress feature back to pending after
+        # its timeout (lifting this guard), and the MAX_BLOCKS hard cap below
+        # still releases a truly wedged lead.
+        stall_detail = (
+            f"{in_progress_count} feature(s) in_progress — stall-allow disabled "
+            f"(live builder owns unfinished work)"
+        )
+    else:
+        stalled, stall_detail = check_progress_stall()
+        if stalled:
+            log_hook("build-gate", "lead", "ALLOW", f"stalled | {stall_detail}")
+            json.dump({"decision": "allow"}, sys.stdout)
+            return
 
     # Fallback: block counter (safety net if progress check fails or is insufficient)
     block_count = get_block_count()
@@ -294,6 +428,24 @@ def main():
     # Tailor directive to what's needed
     if not tests_ok:
         next_step = "Tests are FAILING. Run pytest -v and npm test, fix all failures, then call set_state(key='last_test_result', value='pass')."
+    elif not features_ok and is_rework_mode():
+        next_step = (
+            "You are in REWORK MODE. rework.json exists in the project root with open items, "
+            "and no `fix:` commits have been recorded yet. READ rework.json now. "
+            "Spawn backend-builder (and frontend-builder if not an infrastructure service) "
+            "to fix each item. Each fix MUST be committed with a `fix:` prefix — that's "
+            "what this hook looks for. Do NOT retry Stop without progress."
+        )
+    elif not features_ok and is_amendment_mode():
+        next_step = (
+            "You are in AMENDMENT MODE. amendments.json exists in the project root with "
+            "open spec changes, and no `amend:` commits have been recorded yet. READ "
+            "amendments.json now. Spawn backend-builder (and frontend-builder if not an "
+            "infrastructure service) to re-align impl to the new spec. Each amendment MUST "
+            "be committed with an `amend:` prefix — a no-op commit (--allow-empty, message "
+            "`amend: no-op for <feature-id> ...`) is valid if the spec change is cosmetic. "
+            "Do NOT retry Stop without progress."
+        )
     elif not features_ok:
         next_step = "Continue building features. Call get_next_feature() to find remaining work."
     elif scope != "build_only" and not qa_ok:

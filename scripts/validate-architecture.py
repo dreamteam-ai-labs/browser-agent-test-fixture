@@ -9,6 +9,7 @@ Output contract (agreed with DreamTeam factory loop):
 """
 
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -52,10 +53,35 @@ def validate_architecture(
         if not isinstance(svc, dict):
             return False, f"INVALID: service '{svc_name}' must be an object"
 
-        # Existing services: validate URL only, skip entity checks
+        # Existing services: validate URL + require api_spec (or explicit opt-out)
         if svc.get("source") == "existing":
             if "url" not in svc:
                 return False, f"INVALID: existing service '{svc_name}' missing 'url'"
+            # Layer 2e: every existing service must carry its contract.
+            # Escape hatches: api_spec_source="manual" with api_spec provided,
+            # or api_spec_source="opt_out" with written justification.
+            api_spec_source = svc.get("api_spec_source", "openapi")
+            if api_spec_source == "opt_out":
+                if not svc.get("api_spec_opt_out_reason"):
+                    return False, (
+                        f"INVALID: existing service '{svc_name}' has api_spec_source='opt_out' "
+                        f"but no 'api_spec_opt_out_reason'. Opt-out requires written justification."
+                    )
+            elif api_spec_source in ("openapi", "manual"):
+                spec = svc.get("api_spec")
+                if not isinstance(spec, dict) or not spec:
+                    return False, (
+                        f"INVALID: existing service '{svc_name}' missing 'api_spec'. "
+                        f"Integration builders need the contract to avoid guessing field names. "
+                        f"Fix: ensure the service exposes /openapi.json and the catalog captures it, "
+                        f"OR provide a manual schema via api_spec_source='manual' + api_spec=, "
+                        f"OR explicitly opt out with api_spec_source='opt_out' + api_spec_opt_out_reason='...'."
+                    )
+            else:
+                return False, (
+                    f"INVALID: existing service '{svc_name}' has unknown "
+                    f"api_spec_source '{api_spec_source}' (expected: openapi, manual, opt_out)"
+                )
             continue
 
         entities = svc.get("entities", {})
@@ -112,7 +138,7 @@ def validate_architecture(
 
         total_relationships += len(relationships)
 
-    # ── Layer 2b: depends_on + feature assignment validation ──
+    # ── Layer 2b: depends_on + brief validation ──
     all_svc_names = set(services.keys())
     for svc_name, svc in services.items():
         # Validate depends_on references
@@ -121,6 +147,11 @@ def validate_architecture(
                 return False, f"INVALID: service '{svc_name}' depends_on unknown service '{dep}'"
             if dep == svc_name:
                 return False, f"INVALID: service '{svc_name}' depends_on itself"
+
+        # Dependency build_new services need a brief for F4
+        if svc.get("source") == "build_new" and not svc.get("entities"):
+            if not svc.get("brief"):
+                return False, f"INVALID: dependency service '{svc_name}' has no entities and no brief"
 
     # Cycle detection in depends_on graph
     def _has_cycle(name, visited, stack):
@@ -141,6 +172,114 @@ def validate_architecture(
             if _has_cycle(svc_name, visited_cycle, stack_cycle):
                 return False, f"INVALID: circular dependency detected involving '{svc_name}'"
 
+    # ── Layer 2c: Entity superset check for revisions ──
+    # If a previous version exists (git tag), v2 must contain all v1 entities.
+    # Removing an entity breaks rollback safety (additive-only migrations).
+    try:
+        prev_arch_raw = subprocess.run(
+            ["git", "show", "HEAD~1:architecture.json"],
+            capture_output=True, text=True, timeout=5,
+        )
+        if prev_arch_raw.returncode == 0:
+            prev_arch = json.loads(prev_arch_raw.stdout)
+            prev_entities = set()
+            for svc in prev_arch.get("services", {}).values():
+                if svc.get("source") != "existing":
+                    prev_entities.update(svc.get("entities", {}).keys())
+            current_entities = set()
+            for svc in services.values():
+                if svc.get("source") != "existing":
+                    current_entities.update(svc.get("entities", {}).keys())
+            removed = prev_entities - current_entities
+            if removed:
+                return False, f"INVALID: entities removed from previous version: {', '.join(sorted(removed))}. Migrations must be additive only."
+    except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError):
+        pass  # No previous version or git not available — skip check
+
+    # ── Layer 2d: required_services check ──
+    # If features.json pins specific services, architect must include them all
+    # as source: "existing" with matching extends briefs verbatim when specified.
+    import unicodedata as _ud
+
+    def _normalize_brief(s: str) -> str:
+        """Normalize a brief for verbatim comparison.
+
+        - Unicode NFC to collapse lookalikes
+        - Collapse all whitespace runs to single space
+        - strip leading/trailing whitespace
+        This prevents trivial bypass via reordering/invisible chars while
+        still tolerating formatting differences.
+        """
+        if not isinstance(s, str):
+            return ""
+        normalized = _ud.normalize("NFC", s)
+        return " ".join(normalized.split()).strip()
+
+    features_file_check = Path(features_path)
+    if features_file_check.exists():
+        try:
+            with open(features_file_check) as f:
+                features_data_check = json.load(f)
+            required = features_data_check.get("required_services", [])
+            # Type guard: must be a list (not a string or object)
+            if not isinstance(required, list):
+                return False, f"INVALID: required_services must be an array, got {type(required).__name__}"
+            if not required:
+                # Empty array — nothing to check, skip cleanly
+                pass
+            else:
+                # Case-insensitive service lookup map (once, outside loop)
+                svc_lower_map = {k.lower(): (k, v) for k, v in services.items()}
+                for req in required:
+                    if not isinstance(req, dict):
+                        return False, f"INVALID: required_services entry must be an object, got {type(req).__name__}"
+                    req_name = req.get("name")
+                    if not req_name or not isinstance(req_name, str):
+                        continue
+                    # Case-insensitive lookup for robustness
+                    lookup = svc_lower_map.get(req_name.lower())
+                    if lookup is None:
+                        return False, f"INVALID: required service '{req_name}' missing from architecture.json"
+                    actual_name, svc = lookup
+                    if svc.get("source") != "existing":
+                        return False, f"INVALID: required service '{req_name}' must have source 'existing', got '{svc.get('source')}'"
+                    req_extends = req.get("extends")
+                    if req_extends is not None:
+                        if not isinstance(req_extends, dict):
+                            return False, f"INVALID: required service '{req_name}' extends must be an object, got {type(req_extends).__name__}"
+                        req_brief = req_extends.get("brief")
+                        if req_brief:
+                            svc_extends = svc.get("extends", {}) or {}
+                            if not isinstance(svc_extends, dict) or not svc_extends.get("brief"):
+                                return False, f"INVALID: required service '{req_name}' missing extends.brief from user pin"
+                            # Normalized verbatim comparison — NFC + whitespace collapse
+                            # blocks reordering, invisible char, and trailing whitespace tricks
+                            if _normalize_brief(svc_extends["brief"]) != _normalize_brief(req_brief):
+                                return False, f"INVALID: required service '{req_name}' extends.brief does not match user pin verbatim (architect rewrote)"
+        except (json.JSONDecodeError, KeyError):
+            pass  # features.json parse failure — non-blocking at this layer
+
+    # ── Layer 2e: depends_on → services consistency ──
+    # Every name referenced in any depends_on array MUST exist as a key in the
+    # services map. The architect sometimes adds a dependency via rule 10
+    # (depends_on) without adding the corresponding services entry (rule 8 or
+    # 11). That passes the required_services check above (if the missing name
+    # wasn't in features.required_services) but fails at build time when env
+    # injection tries to resolve the dependency. Caught here instead.
+    dangling = []
+    for svc_name, svc in services.items():
+        svc_deps = svc.get("depends_on", [])
+        if not isinstance(svc_deps, list):
+            continue
+        for dep_name in svc_deps:
+            if not isinstance(dep_name, str):
+                continue
+            if dep_name not in services:
+                dangling.append(f"'{svc_name}' depends_on '{dep_name}' but '{dep_name}' is not in the services map")
+    if dangling:
+        joined = "; ".join(dangling)
+        return False, f"INVALID: depends_on references unknown services: {joined}. Every depends_on name must appear as a services map key (add as source='existing' for catalog services)."
+
     # ── Layer 3: Semantic cross-reference with features.json ──
     features_file = Path(features_path)
     if features_file.exists():
@@ -148,17 +287,6 @@ def validate_architecture(
             with open(features_file) as f:
                 features_data = json.load(f)
             features = features_data.get("features", [])
-
-            # Validate feature assignment: every phase 2+ feature assigned to exactly one service
-            phase2_feature_ids = {f.get("id") for f in features if f.get("phase", 0) >= 2}
-            assigned_features = set()
-            for svc_name, svc in services.items():
-                if svc.get("source") == "existing":
-                    continue
-                for fid in svc.get("features", []):
-                    if fid in assigned_features:
-                        pass  # WARNING: duplicate assignment, non-blocking
-                    assigned_features.add(fid)
 
             # Collect all entity names across all services
             all_entity_names = set()

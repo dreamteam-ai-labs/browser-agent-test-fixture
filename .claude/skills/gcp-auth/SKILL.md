@@ -1,6 +1,7 @@
 ---
 name: gcp-auth
 description: GCP Identity Platform authentication with Firebase Auth, including two-credential architecture for secure deployments
+when_to_use: Use when wiring authentication for this project — Firebase client-side flow, GCP Identity Platform setup, backend token verification, or debugging auth failures.
 version: 1.0.0
 triggers:
   - gcp auth

@@ -47,6 +47,21 @@ def main():
 
     normalized = file_path.replace("\\", "/")
 
+    # Skip frontend paths entirely. Without this, `frontend/src/<dir>/` (the
+    # Next.js opt-in src/ layout) would fall through to the src/ check below
+    # — `parts.index("src")` would match the FIRST `src` segment in the path
+    # (frontend's), not the project-root backend `src/`. The result is a
+    # false-deny on legitimate frontend writes. The backend-package
+    # invariant doesn't apply to frontend code.
+    if normalized.startswith("frontend/") or "/frontend/" in normalized:
+        json.dump({
+            "hookSpecificOutput": {
+                "hookEventName": "PreToolUse",
+                "permissionDecision": "allow",
+            }
+        }, sys.stdout)
+        return
+
     # Only check files under src/
     if not (normalized.startswith("src/") or "/src/" in normalized):
         json.dump({

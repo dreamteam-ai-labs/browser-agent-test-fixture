@@ -1,6 +1,7 @@
 ---
 name: stripe-payments
 description: Stripe payment integration including subscriptions, one-time payments, webhooks, and customer portal
+when_to_use: Use when integrating Stripe — setting up subscriptions, checkout sessions, webhook verification, customer portal, or handling payment failure flows.
 version: 1.0.0
 triggers:
   - stripe

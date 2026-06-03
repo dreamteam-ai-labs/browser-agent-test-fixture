@@ -1,6 +1,7 @@
 ---
 name: model-training
 description: Machine learning model training with PyTorch, JAX, training loops, and experiment tracking
+when_to_use: Use when implementing ML training loops, experiment tracking (wandb/mlflow), model checkpointing, or hyperparameter sweeps.
 version: 1.0.0
 triggers:
   - pytorch

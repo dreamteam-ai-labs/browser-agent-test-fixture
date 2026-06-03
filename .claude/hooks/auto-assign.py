@@ -30,8 +30,27 @@ def log_hook(hook_name: str, agent_id: str, action: str, detail: str = ""):
         pass  # Best-effort logging — never break the hook
 
 
-def get_next_pending() -> dict | None:
-    """Find the next pending feature from features.json."""
+# Agent capability mapping: agent_id substring → compatible feature tags.
+# Agents not listed here (build-lead, qa-lead, etc.) can receive any feature.
+AGENT_TAGS = {
+    "backend-builder": {"backend"},
+    "frontend-builder": {"frontend", "ui"},
+}
+
+
+def _agent_can_build(agent_id: str, feature: dict) -> bool:
+    """Check if the agent's capabilities match the feature's tags."""
+    for pattern, allowed_tags in AGENT_TAGS.items():
+        if pattern in agent_id.lower():
+            feature_tags = set(feature.get("tags", []))
+            # Feature must have at least one tag the agent can handle
+            return bool(feature_tags & allowed_tags) if feature_tags else True
+    # Unknown agent or lead — can handle anything
+    return True
+
+
+def get_next_pending(agent_id: str = "") -> dict | None:
+    """Find the next pending feature from features.json that matches agent capabilities."""
     path = PROJECT_DIR / "features.json"
     if not path.exists():
         return None
@@ -42,7 +61,7 @@ def get_next_pending() -> dict | None:
         return None
 
     for feature in data.get("features", []):
-        if feature.get("status") == "pending":
+        if feature.get("status") == "pending" and _agent_can_build(agent_id, feature):
             return feature
 
     return None
@@ -55,7 +74,7 @@ def main():
         event = {}
 
     agent_id = event.get("agent_id", "unknown")
-    next_feature = get_next_pending()
+    next_feature = get_next_pending(agent_id)
 
     # Also check if any features are still in_progress
     has_in_progress = False

@@ -157,6 +157,20 @@ All tools use file locking for safe concurrent access from multiple agents.
 
 ---
 
+## Build-Time Feedback (`dreamteam-suggestions` MCP server)
+
+This project also has access to `dreamteam-suggestions` — an MCP server registered in `.mcp.json` that exposes a single tool: `mcp__dreamteam-suggestions__suggest`. It's an append-only channel into the central DreamTeam suggestion-service, monitored by the operator. Agents post build-time observations the factory can act on (template gaps, prompt friction, missing scaffolds, false-positive QA, contract drift).
+
+| Tool | Purpose |
+|------|---------|
+| `mcp__dreamteam-suggestions__suggest` | Submit a challenge, suggestion, or observation. Required: `agent_name`. Optional: `challenge`, `suggestion`, `category`, `raw` (JSONB). |
+
+**When to call (general):** the moment something surprises you, blocks you, or reveals a gap that better tooling would have prevented. Per-agent triggers are listed in each agent's prompt — read them in `.claude/agents/<agent>.md`. Append-only; submissions can't be edited or deleted, so each entry stands alone. Routine task work is NOT signal — only friction, surprise, or actionable improvement ideas.
+
+If you're reading this CLAUDE.md outside an agent context (e.g. during interactive `claude` use), the same tool is available — feel free to use it for ad-hoc operator-relevant observations.
+
+---
+
 ## Key Files
 
 | File | Purpose |
@@ -189,6 +203,71 @@ All tools use file locking for safe concurrent access from multiple agents.
 - Commit and push after each completed feature (`git add . && git commit -m "..." && git push`)
 - Use descriptive messages: `feat: implement user authentication`
 - Update `claude-progress.txt` before committing
+
+### Hook Trust Model
+
+The `.claude/hooks/` gates (path-guard, package-guard, build-gate, commit-guard,
+dep-guard, alembic-guard, contract-check, skip-test-check, etc.) enforce
+**agent honesty, not adversarial defense**. They exist so honest agents
+don't take shortcuts — forgetting to declare deps, skipping tests, drifting
+from contracts, writing to the wrong package, etc. They are forcing
+functions, not security boundaries.
+
+What this means concretely:
+
+- Agent-self-attested state (`set_state(key='last_test_result', value='pass')`,
+  `set_state(key='build_phase', value='builders')`) is trusted. Gates that
+  read these don't independently verify them. A misbehaving agent could
+  lie; the gate is for honest forgetfulness.
+- Most hooks fail-open on parse errors (corrupt stdin, malformed event JSON)
+  so hook bugs never kill agents. Logged in `.claude/hooks/hook-log.txt` for
+  audit.
+- `protect-harness-paths.py` is the ONE adversarial-grade gate — it blocks
+  agent writes to `.claude/`, `.git/`, `.vscode/`, and shell-config files
+  unconditionally (escape hatch: `DREAMTEAM_ALLOW_HARNESS_MUTATION=1`).
+  Defends against the CC 2.1.126 `--dangerously-skip-permissions` scope
+  broadening. Runs first in the PreToolUse chain.
+- Lead session (the orchestrator running this CLAUDE.md) is unrestricted
+  by `path-guard.py` — match_agent("") returns None → allow-everything.
+  Intentional: lead is operator-supervised, not a delegated teammate.
+  Harness-path protection still applies via protect-harness-paths.
+
+If you find yourself wanting to "work around" a gate, that's the signal
+the gate is doing its job — pause + understand why it fired. Don't reach
+for the escape hatch unless the operator has authorized it for the
+specific case.
+
+### Outbound Egress Policy
+
+Network calls to external hosts are gated against a hostname allowlist at
+`.claude/egress-allowlist.json`. Two enforcement layers run in parallel:
+
+1. **Bash level** — `outbound-egress-guard.py` (PreToolUse on Bash). Parses
+   URLs from the command + checks each host. Catches curl, wget (also
+   explicitly denied in `settings.json`), git clone over https, pip
+   `--index-url`, npm `--registry`, and any other URL-bearing flag.
+2. **Python level** — `.claude/scripts/sitecustomize.py` (auto-imported
+   on every Python interpreter start via PYTHONPATH). Monkey-patches
+   `urllib.request.urlopen`, `http.client.HTTPConnection.request`, and
+   `socket.create_connection` to check the destination host before
+   connecting. Raises `EgressBlockedError` on unlisted host. Covers
+   httpx, requests, anthropic SDK, openai SDK, stripe SDK, etc. — anything
+   that goes through Python's network stack.
+
+The Bash and Python layers share the same allowlist file. Editing the
+JSON file is operator-only (protected by `protect-harness-paths.py`).
+
+Default allowlist covers: localhost, PyPI, npm, GitHub, Anthropic API +
+docs, OpenAI, Stripe, Google APIs, Cloudflare, Coolify. Hosts match by
+suffix — `github.com` allows `api.github.com`, `raw.github.com`, etc.
+
+**If you need to reach an unlisted host mid-build:**
+- Set `DREAMTEAM_ALLOW_UNLISTED_EGRESS=1` for the specific call. This
+  matches the override pattern used by other gates. Logged to
+  `hook-log.txt` as `ALLOW_VIA_ESCAPE` for the audit trail.
+- OR ask the operator to add the host to the allowlist. The escape env
+  var is for one-off cases; the allowlist is the right home for durable
+  permits.
 
 ---
 
@@ -230,3 +309,8 @@ These are real bugs from previous production builds. Each one caused a deploymen
 - When running `next dev`, ensure NODE_ENV is NOT set to "production" (breaks Tailwind PostCSS). Use `env -u NODE_ENV npx next dev -p 3000`
 - When creating `frontend/tsconfig.json`, exclude `__tests__` from compilation
 - Verify signup/login via real HTTP requests — unit tests alone miss auth integration bugs
+
+### Post-deploy QA user seed
+- The QA user created by `scripts/qa-smoke-test.py` lives in the codespace's local database only — it does NOT travel to the deployed container.
+- The orchestrator is expected to run `python scripts/seed-qa-user.py --url <deployed-url>` after `/api/health` returns 200. The script is idempotent (409 = already exists = success).
+- If the seed step did not run and you can't log in on the deployed app, either invoke the script manually or use the app's signup flow.

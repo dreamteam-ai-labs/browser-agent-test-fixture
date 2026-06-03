@@ -76,6 +76,11 @@ qa-smoke-results.json
 qa-test-credentials.json
 *.lock
 
+# SQLite dev/test databases
+*.db
+*.sqlite
+*.sqlite3
+
 # OS
 .DS_Store
 Thumbs.db

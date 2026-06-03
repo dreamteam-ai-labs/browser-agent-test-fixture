@@ -6,7 +6,7 @@ model: sonnet
 maxTurns: 200
 isolation: worktree
 skills: ["testing-strategy", "progress-tracking"]
-mcpServers: ["reliable-ai"]
+mcpServers: ["reliable-ai", "dreamteam-suggestions"]
 memory: project
 ---
 
@@ -48,6 +48,21 @@ python3 -m uvicorn src.fixture.main:app --host 0.0.0.0 --port 8000 &
 cd frontend && ./node_modules/.bin/next dev -p 3000 &
 ```
 Wait 10 seconds for startup, then re-check health.
+
+### Step 1b: Wrapper env-var contract (OSS T1/T2 only)
+
+Run the wrapper env-var contract check:
+```bash
+python3 .claude/hooks/wrapper-env-contract.py
+echo "Exit code: $?"
+```
+
+This script reads `.dreamteam/provisioning-result.json::wrapper_env` and verifies the wrapper code in `src/` reads each declared env-var key verbatim — catching the R19/R20 inversion where build-lead invented a near-miss name (e.g. `MAILHOG_API_URL`) that doesn't match the recipe-declared key (`MAILHOG_HTTP_URL`). The factory has already injected the canonical key onto the wrapper deployment; reading the wrong name returns None at runtime and the upstream stays unreachable.
+
+- **Exit code 0** (no violations OR not an OSS T1/T2 service) → continue.
+- **Exit code 1** → **CRITICAL**. Report the script's stderr verbatim in qa-report.json as a critical issue named `wrapper-env contract violation`, with each declared/near-miss pair from the output. Do NOT proceed to Step 2 — wait for the lead to fix the wrapper.
+
+The same hook fires as a Stop hook on every agent's exit (registered in `.claude/settings.json`), so even if you forget this step the contract is still enforced. Running it explicitly here surfaces the failure in your qa-report.json instead of just blocking Stop.
 
 ### Step 2: Register + Get Auth Token
 
@@ -161,6 +176,7 @@ For non-CRUD features: a 404 is NON-CRITICAL but should be reported.
 - Browser CRUD test fails for any UI-tagged feature
 - UI-tagged feature has no component test
 - Browser console shows `pageerror` or failed resource loads
+- Wrapper env-var contract violation (Step 1b: `wrapper-env-contract.py` exited non-zero) — recipe-declared env-var keys not read verbatim by `src/` wrapper code
 
 **NON-CRITICAL (report but don't block):**
 - Frontend page returns 404 (routing config)
@@ -208,6 +224,30 @@ Message the lead with:
 **If critical issues exist**: wait for the lead to fix and ask you to retest. Then run the FULL cycle again.
 
 **If zero critical issues**: report success. You're done.
+
+## Rework Mode
+
+If `rework.json` exists in the project root, this is a **rework build** — the builder fixed specific bugs. In addition to the full test suite above, you MUST:
+
+1. **Verify each rework item is fixed.** Read `rework.json`. For each item:
+   - If `reproduction` steps are given, run them and confirm the bug no longer occurs
+   - If no reproduction steps, verify the described issue is resolved based on the fix description
+   - Check that a regression test exists for the fix
+2. **Report rework verification in qa-report.json** under a `rework_results` key:
+   ```json
+   "rework_results": [
+     {"issue": "DELETE returns 200 for nonexistent notes", "verified": true},
+     {"issue": "Empty title accepted", "verified": true}
+   ]
+   ```
+3. **Any unverified rework item is CRITICAL** — the whole point of this build is fixing these bugs.
+4. **Still run the full regression suite** — rework fixes must not break existing functionality.
+
+## Build-Time Feedback (`mcp__dreamteam-suggestions__suggest`)
+
+If you observe friction during the test cycle that the factory could prevent — a test infrastructure quirk that wastes time, a flaky harness pattern, an endpoint that passes its CRUD test but fails the user goal (the "spec letter passed, spirit failed" pattern), a recurring mock/fixture gap — call `mcp__dreamteam-suggestions__suggest` before exiting. Required field: `agent_name="qa-tester"`. Use `challenge` for what you hit (one sentence), `suggestion` for what would have helped (one sentence), `category` for the bucket (`"qa-harness"`, `"test-coverage"`, `"browser-test"`, `"contract-mismatch"`, etc.), and `raw` for structured context (failing test name, response shape, etc.). Append-only — submissions can't be edited.
+
+Do NOT call it for the routine "test failed → report → wait for fix" loop. That's normal QA; not friction the factory can act on. Only call when something surprised you that better tooling/scaffold/contract test would have caught upstream.
 
 ## Rules
 

@@ -64,6 +64,21 @@ def main():
         }, sys.stdout)
         return
 
+    # Skip test files — mocks and test fixtures legitimately hardcode localhost
+    if (
+        "/__tests__/" in normalized
+        or "/test/" in normalized
+        or "/tests/" in normalized
+        or basename.endswith((".test.ts", ".test.tsx", ".test.js", ".test.jsx", ".spec.ts", ".spec.tsx"))
+    ):
+        json.dump({
+            "hookSpecificOutput": {
+                "hookEventName": "PreToolUse",
+                "permissionDecision": "allow",
+            }
+        }, sys.stdout)
+        return
+
     # Check for hardcoded localhost URLs in the content being written
     if "localhost:8000" in new_content or "127.0.0.1:8000" in new_content:
         log_hook("localhost-guard", agent_id or "unknown", "BLOCK", f"file={normalized}")

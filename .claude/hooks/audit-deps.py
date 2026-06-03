@@ -22,6 +22,7 @@ import json
 import os
 import re
 import sys
+import tomllib
 from pathlib import Path
 
 PROJECT_DIR = Path(os.environ.get("CLAUDE_PROJECT_DIR", "."))
@@ -102,22 +103,31 @@ def normalize_package(name: str) -> str:
 
 
 def get_declared_deps(pyproject_path: Path) -> set[str]:
-    """Parse pyproject.toml and return normalized dependency names."""
+    """Parse pyproject.toml and return normalized dependency names.
+
+    Covers [project.dependencies] (canonical) + every group in
+    [project.optional-dependencies] (extras like [dev], [mcp], [agent-sdk]).
+    Uses stdlib tomllib (Python 3.11+) so multi-line strings, comments, and
+    optional-deps tables parse correctly.
+    """
     if not pyproject_path.exists():
         return set()
+    try:
+        with open(pyproject_path, "rb") as f:
+            data = tomllib.load(f)
+    except (OSError, tomllib.TOMLDecodeError):
+        return set()
+
     deps: set[str] = set()
-    in_deps = False
-    for line in pyproject_path.read_text(encoding="utf-8").splitlines():
-        stripped = line.strip()
-        if stripped == "dependencies = [":
-            in_deps = True
-            continue
-        if in_deps:
-            if stripped == "]":
-                break
-            match = re.match(r'^\s*"([^"]+)"', stripped)
-            if match:
-                deps.add(normalize_package(match.group(1)))
+    project = data.get("project", {}) or {}
+    for spec in project.get("dependencies", []) or []:
+        if isinstance(spec, str):
+            deps.add(normalize_package(spec))
+    optional = project.get("optional-dependencies", {}) or {}
+    for group_specs in optional.values():
+        for spec in group_specs or []:
+            if isinstance(spec, str):
+                deps.add(normalize_package(spec))
     return deps
 
 
@@ -194,18 +204,14 @@ def detect_project_package(pyproject_path: Path) -> str | None:
     """Try to detect the project's own package name from pyproject.toml."""
     if not pyproject_path.exists():
         return None
-    in_project = False
-    for line in pyproject_path.read_text(encoding="utf-8").splitlines():
-        stripped = line.strip()
-        if stripped == "[project]":
-            in_project = True
-            continue
-        if in_project and stripped.startswith("name"):
-            match = re.match(r'name\s*=\s*"([^"]+)"', stripped)
-            if match:
-                return normalize_package(match.group(1))
-        if in_project and stripped.startswith("[") and stripped != "[project]":
-            break
+    try:
+        with open(pyproject_path, "rb") as f:
+            data = tomllib.load(f)
+    except (OSError, tomllib.TOMLDecodeError):
+        return None
+    name = (data.get("project", {}) or {}).get("name")
+    if isinstance(name, str):
+        return normalize_package(name)
     return None
 
 

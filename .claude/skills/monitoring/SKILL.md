@@ -1,6 +1,7 @@
 ---
 name: Component Monitoring
 description: Monitor and debug Claude component usage in reliable-ai projects
+when_to_use: Use when inspecting which Claude components (agents, hooks, skills, MCP servers) fired during a build, debugging hook behavior, or reading `component-usage.log`.
 ---
 
 # Component Monitoring

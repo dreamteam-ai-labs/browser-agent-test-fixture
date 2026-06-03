@@ -12,7 +12,6 @@ from __future__ import annotations
 
 import json
 import os
-import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -55,32 +54,6 @@ def count_env_features(env_path: str = "environment_features.json") -> dict:
     return result
 
 
-def get_github_issues() -> list[dict]:
-    """Fetch GitHub issues created by the issue-detector hook."""
-    try:
-        result = subprocess.run(
-            ["gh", "issue", "list", "--label", "claude-detected", "--json",
-             "number,title,labels,createdAt,body", "--limit", "100"],
-            capture_output=True, text=True, timeout=30
-        )
-        if result.returncode == 0:
-            return json.loads(result.stdout)
-    except (subprocess.TimeoutExpired, FileNotFoundError, json.JSONDecodeError):
-        pass
-    return []
-
-
-def categorise_issues(issues: list[dict]) -> dict:
-    """Count issues by category label."""
-    categories = {}
-    for issue in issues:
-        labels = [l.get("name", "") for l in issue.get("labels", [])]
-        for label in labels:
-            if label != "claude-detected":
-                categories[label] = categories.get(label, 0) + 1
-    return categories
-
-
 def get_feature_details(features_path: str = "features.json") -> list[dict]:
     """Get per-feature outcome details."""
     path = Path(features_path)
@@ -118,8 +91,6 @@ def generate_report(output_format: str = "text") -> dict:
     """Generate the complete build report."""
     feature_counts = count_features()
     env_counts = count_env_features()
-    issues = get_github_issues()
-    issue_categories = categorise_issues(issues)
     feature_details = get_feature_details()
     buildability = calculate_buildability_score(feature_counts)
 
@@ -129,10 +100,6 @@ def generate_report(output_format: str = "text") -> dict:
         "features": feature_counts,
         "environment": env_counts,
         "buildability_score": buildability,
-        "github_issues": {
-            "total": len(issues),
-            "by_category": issue_categories,
-        },
         "feature_details": feature_details,
     }
 
@@ -148,7 +115,6 @@ def print_text_report(report: dict) -> None:
     """Print human-readable build report."""
     fc = report["features"]
     ec = report["environment"]
-    gi = report["github_issues"]
 
     print("=" * 60)
     print(f"BUILD REPORT: {report['project']}")
@@ -161,10 +127,6 @@ def print_text_report(report: dict) -> None:
           f"({fc['blocked']} blocked, {fc['pending']} pending)")
 
     print(f"Environment: {ec['passed']}/{ec['total']} tests passed")
-
-    print(f"\nGitHub Issues (claude-detected): {gi['total']}")
-    for cat, count in gi.get("by_category", {}).items():
-        print(f"  - {cat}: {count}")
 
     print("\nFeature Details:")
     for fd in report["feature_details"]:

@@ -18,34 +18,65 @@
       "Bash(python3:*)",
       "Bash(pip:*)",
       "Bash(pytest:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
       "Bash(curl -s http://localhost:*)",
       "Bash(curl -sf http://localhost:*)",
       "Bash(curl -s -X * http://localhost:*)",
-      "Bash(curl -s -o * http://localhost:*)",
-      "Bash(curl * http://localhost:*)",
-      "Bash(curl:*)",
-      "Bash(npm:*)",
-      "Bash(npx:*)",
-      "Bash(node:*)",
-      "Bash(cat:*)",
-      "Bash(ls:*)",
-      "Bash(cd:*)",
-      "Bash(git:*)"
+      "Bash(curl -s -o * http://localhost:*)"
     ],
     "deny": [
       "Read(.env*)",
       "Read(**/*.pem)",
       "Read(**/secrets/**)",
       "Bash(rm -rf:*)",
-      "Bash(git push --force:*)"
+      "Bash(git push --force:*)",
+      "Bash(wget:*)"
     ]
   },
   "env": {
-    "PYTHONPATH": "./src",
+    "PYTHONPATH": "./src:./.claude/scripts",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
+  "worktree": {
+    "baseRef": "head"
+  },
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/egress-allowlist-check.py\"",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/detect-amendments.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/protect-harness-paths.py\"",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/secrets-detection.py\"",
+            "timeout": 5
+          }
+        ]
+      },
       {
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [
@@ -86,6 +117,26 @@
             "timeout": 5
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/outbound-egress-guard.py\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/nextconfig-guard.py\"",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "PostCompact": [
@@ -123,12 +174,32 @@
         ]
       },
       {
-        "matcher": "Write|Edit",
+        "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/nextconfig-guard.py\"",
-            "timeout": 5
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/contract-check.py\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "if": "Bash(alembic revision *)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/alembic-guard.py\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/skip-test-check.py\"",
+            "timeout": 10
           }
         ]
       }
@@ -150,6 +221,11 @@
           {
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/build-gate.py\"",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/wrapper-env-contract.py\"",
             "timeout": 10
           }
         ]

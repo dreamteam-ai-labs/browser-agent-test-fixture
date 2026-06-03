@@ -1,6 +1,7 @@
 ---
 name: data-science
 description: Data science workflows with Jupyter, pandas, numpy, and visualization
+when_to_use: Use when analyzing data with pandas/numpy, creating Jupyter notebooks, building data visualizations, or structuring reproducible analysis pipelines.
 version: 1.0.0
 triggers:
   - jupyter

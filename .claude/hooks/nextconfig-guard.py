@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Next.config guard — rejects output: "export" in Next.js config.
+"""Next.config guard — blocks output: "export" in Next.js config.
 
-PostToolUse hook on Edit/Write of next.config files. Static export
+PreToolUse hook on Write/Edit of next.config files. Static export
 breaks the SSR deployment pipeline (Coolify uses `next start`).
 
 OBSOLESCENCE: Remove if Anthropic ships native file content validation.
@@ -31,13 +31,27 @@ def log_hook(hook_name: str, agent_id: str, action: str, detail: str = ""):
         pass
 
 
+EXPORT_PATTERN = re.compile(r'output\s*:\s*["\']export["\']')
+
+
+def _allow():
+    json.dump({
+        "hookSpecificOutput": {
+            "hookEventName": "PreToolUse",
+            "permissionDecision": "allow",
+        }
+    }, sys.stdout)
+
+
 def main():
     try:
         event = json.load(sys.stdin)
     except (json.JSONDecodeError, EOFError):
-        event = {}
+        _allow()
+        return
 
     agent_id = event.get("agent_id", "") or ""
+    tool_name = event.get("tool_name", "")
     tool_input = event.get("tool_input", {})
     file_path = tool_input.get("file_path", "") or tool_input.get("path", "")
 
@@ -45,39 +59,33 @@ def main():
     normalized = file_path.replace("\\", "/")
     basename = normalized.split("/")[-1] if "/" in normalized else normalized
     if not basename.startswith("next.config"):
-        json.dump({"decision": "allow"}, sys.stdout)
+        _allow()
         return
 
-    # Read the file AFTER the edit was applied (PostToolUse)
-    config_path = Path(file_path)
-    if not config_path.exists():
-        json.dump({"decision": "allow"}, sys.stdout)
-        return
+    # Inspect the content about to be written (PreToolUse — before it lands)
+    content_to_check = ""
+    if tool_name == "Write":
+        content_to_check = tool_input.get("content", "")
+    elif tool_name in ("Edit", "MultiEdit"):
+        content_to_check = tool_input.get("new_string", "")
 
-    try:
-        content = config_path.read_text(encoding="utf-8")
-    except OSError:
-        json.dump({"decision": "allow"}, sys.stdout)
-        return
-
-    # Check for output: "export" (various JS/TS patterns)
-    if re.search(r'output\s*:\s*["\']export["\']', content):
-        log_hook("nextconfig-guard", agent_id or "unknown", "WARN", f"output:export in {basename}")
-        # PostToolUse can't block — but we can add context telling the agent to fix it
+    if content_to_check and EXPORT_PATTERN.search(content_to_check):
+        log_hook("nextconfig-guard", agent_id or "unknown", "BLOCK", f"output:export in {basename}")
         json.dump({
             "hookSpecificOutput": {
-                "hookEventName": "PostToolUse",
-                "additionalContext": (
-                    "WARNING: next.config has output: 'export' which breaks SSR deployment. "
+                "hookEventName": "PreToolUse",
+                "permissionDecision": "deny",
+                "permissionDecisionReason": (
+                    "BLOCKED: output: 'export' breaks SSR deployment. "
                     "The production pipeline uses `next start` (SSR mode), not static export. "
-                    "Remove the output: 'export' line from next.config immediately."
+                    "Remove output: 'export' from next.config."
                 ),
             }
         }, sys.stdout)
         return
 
     log_hook("nextconfig-guard", agent_id or "unknown", "ALLOW", basename)
-    json.dump({"decision": "allow"}, sys.stdout)
+    _allow()
 
 
 if __name__ == "__main__":

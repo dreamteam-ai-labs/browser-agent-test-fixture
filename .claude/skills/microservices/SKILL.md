@@ -1,6 +1,7 @@
 ---
 name: microservices
 description: Microservices architecture with service discovery, messaging, and distributed patterns
+when_to_use: Use when the project has multiple services communicating over a network — service-to-service auth, messaging patterns, distributed state, or cross-service contracts.
 version: 1.0.0
 triggers:
   - microservices

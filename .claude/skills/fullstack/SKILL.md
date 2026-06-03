@@ -1,6 +1,7 @@
 ---
 name: fullstack
 description: Fullstack application development with frontend and backend subsystems
+when_to_use: Use when coordinating cross-cutting concerns between frontend and backend — auth flow design, API contract definition, session handling, CORS, or shared type definitions.
 version: 1.0.0
 triggers:
   - fullstack

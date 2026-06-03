@@ -14,6 +14,7 @@ import json
 import os
 import re
 import sys
+import tomllib
 from datetime import datetime
 from pathlib import Path
 
@@ -55,28 +56,31 @@ def normalize_npm_package(name: str) -> str:
 
 
 def get_declared_python_deps(manifest_path: Path) -> set[str]:
-    """Read declared dependencies from pyproject.toml."""
+    """Read declared dependencies from pyproject.toml.
+
+    Covers [project.dependencies] (canonical) + every group in
+    [project.optional-dependencies] (extras like [dev], [mcp], [agent-sdk]).
+    Uses stdlib tomllib (Python 3.11+) so multi-line strings, comments, and
+    optional-deps tables parse correctly.
+    """
     if not manifest_path.exists():
         return set()
     try:
-        text = manifest_path.read_text(encoding="utf-8")
-    except OSError:
+        with open(manifest_path, "rb") as f:
+            data = tomllib.load(f)
+    except (OSError, tomllib.TOMLDecodeError):
         return set()
 
     deps: set[str] = set()
-    in_deps = False
-    for line in text.splitlines():
-        stripped = line.strip()
-        if stripped == "dependencies = [":
-            in_deps = True
-            continue
-        if in_deps:
-            if stripped == "]":
-                break
-            # Parse: "package>=1.0", or "package",
-            match = re.match(r'^\s*"([^"]+)"', stripped)
-            if match:
-                deps.add(normalize_python_package(match.group(1)))
+    project = data.get("project", {}) or {}
+    for spec in project.get("dependencies", []) or []:
+        if isinstance(spec, str):
+            deps.add(normalize_python_package(spec))
+    optional = project.get("optional-dependencies", {}) or {}
+    for group_specs in optional.values():
+        for spec in group_specs or []:
+            if isinstance(spec, str):
+                deps.add(normalize_python_package(spec))
     return deps
 
 

@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 # Multi-stage Dockerfile for browser-agent-test-fixture
 # Stage 1: Build frontend
 # Stage 2: Run backend + serve frontend
@@ -23,9 +24,10 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install Node.js for Next.js production server
+# Install Node.js (Next.js production server) + git (pip clones private deps)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
+    git \
     && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y --no-install-recommends nodejs \
     && rm -rf /var/lib/apt/lists/*
@@ -33,7 +35,25 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copy everything needed for pip install (README.md optional via wildcard)
 COPY pyproject.toml README* ./
 COPY src/ ./src/
-RUN pip install --no-cache-dir .
+# Install private factory-owned pip deps via BuildKit secret mount. The token
+# (dreamteam-service-auth, dreamteam-suggestions-mcp, etc. — declared as
+# `git+https://...` URLs in pyproject.toml) is read from tmpfs at
+# /run/secrets/GITHUB_TOKEN and never appears in build args, `docker history`,
+# layer metadata, or build logs (journald). If the secret is absent or empty,
+# the build still works for services without private deps. Wired through by
+# the factory's Coolify deploy step (codespace-runner.deployCoolify) as
+# `--secret id=GITHUB_TOKEN,env=GITHUB_TOKEN`.
+RUN --mount=type=secret,id=GITHUB_TOKEN \
+    if [ -s /run/secrets/GITHUB_TOKEN ]; then \
+        TOKEN="$(cat /run/secrets/GITHUB_TOKEN)" && \
+        git config --global \
+            url."https://x-access-token:${TOKEN}@github.com/".insteadOf \
+            "https://github.com/" && \
+        pip install --no-cache-dir . && \
+        git config --global --unset url."https://x-access-token:${TOKEN}@github.com/".insteadOf; \
+    else \
+        pip install --no-cache-dir .; \
+    fi
 
 # Validate all imports resolve — fail the build if deps are missing.
 RUN python -c "from fixture.main import app; print('Import validation passed')"

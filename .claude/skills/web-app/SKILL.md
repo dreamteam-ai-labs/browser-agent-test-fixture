@@ -1,6 +1,7 @@
 ---
 name: web-app
-description: Frontend web app conventions for this project
+description: Frontend conventions for this project — Next.js 14 App Router, pages in src/app/, components in src/components/, Tailwind content paths, standalone output for Docker.
+when_to_use: Use when building or editing any frontend feature (pages, components, API client, routing, styling, form validation) or debugging frontend build/deployment issues.
 version: 1.0.0
 triggers:
   - react

@@ -1,6 +1,7 @@
 ---
 name: testing-strategy
-description: Testing pyramid pattern - unit vs integration tests to catch bugs that mocks hide
+description: Testing pyramid for this project — unit vs integration tests, when to mock, when not to.
+when_to_use: Use when writing new tests, reviewing test coverage, deciding between unit and integration tests, debugging tests that pass while production breaks, or choosing what to mock.
 version: 1.0.0
 triggers:
   - testing

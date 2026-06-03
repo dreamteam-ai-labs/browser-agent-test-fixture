@@ -1,6 +1,7 @@
 ---
 name: backend-api
-description: Backend API conventions for this project
+description: Backend conventions for this project — FastAPI routers, SQLAlchemy models in models.py, /api prefix, response shapes, FK relationships.
+when_to_use: Use when adding or editing backend endpoints, database models, Alembic migrations, request/response schemas, integration code for existing services, or debugging backend errors.
 version: 1.0.0
 triggers:
   - fastapi
@@ -21,11 +22,10 @@ tags:
 ```
 src/fixture/
 ├── main.py          # FastAPI app + router registration
-├── database.py      # Engine, session, create_tables()
-├── db_models.py     # SQLAlchemy ORM models
+├── database.py      # Engine, session, schema management (Alembic-driven)
+├── models.py        # SQLAlchemy ORM models + Pydantic schemas (canonical location for both)
 ├── auth.py          # GCP Identity Platform auth
 ├── config.py        # Pydantic settings
-├── schemas.py       # Pydantic request/response models
 └── routers/         # One file per feature (e.g., routers/projects.py)
 ```
 

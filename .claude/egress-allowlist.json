@@ -1,0 +1,27 @@
+{
+  "_comment_": "Outbound egress allowlist. Both outbound-egress-guard.py (Bash) and sitecustomize.py (Python network libs) consult this file. Edit to add hosts; agents cannot edit this file (protected by protect-harness-paths.py). Hosts match by suffix: 'github.com' allows api.github.com, raw.github.com, etc.",
+  "allowed_hosts": [
+    "localhost",
+    "127.0.0.1",
+    "::1",
+    "pypi.org",
+    "files.pythonhosted.org",
+    "registry.npmjs.org",
+    "npmjs.org",
+    "npmjs.com",
+    "github.com",
+    "githubusercontent.com",
+    "api.anthropic.com",
+    "console.anthropic.com",
+    "docs.anthropic.com",
+    "anthropic.com",
+    "api.openai.com",
+    "api.stripe.com",
+    "googleapis.com",
+    "accounts.google.com",
+    "cloudflare.com",
+    "coolify.io"
+  ],
+  "_escape_env_var": "DREAMTEAM_ALLOW_UNLISTED_EGRESS",
+  "_escape_values_accepted": ["1", "true", "True", "yes"]
+}

@@ -1,6 +1,7 @@
 ---
 name: cli-tool
 description: Command-line tool development with Python (argparse, click, typer) and best practices
+when_to_use: Use when building a CLI tool — designing subcommands, argparse/click/typer configs, help text conventions, or exit-code patterns.
 version: 1.0.0
 triggers:
   - cli

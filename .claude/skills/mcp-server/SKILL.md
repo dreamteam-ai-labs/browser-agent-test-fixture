@@ -1,6 +1,7 @@
 ---
 name: mcp-server
 description: MCP (Model Context Protocol) server development for tool integration with LLMs
+when_to_use: Use when authoring an MCP server — defining tools, resources, or prompts; handling stdio/http/sse transport; configuring `.mcp.json` for Claude Code.
 version: 1.0.0
 triggers:
   - mcp
