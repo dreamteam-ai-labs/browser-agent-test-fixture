@@ -3,11 +3,10 @@
   "services": {
     "fixture": {
       "source": "build_new",
-      "features": ["project-management", "task-management", "dashboard", "navigation"],
       "depends_on": [],
       "constraints": {
-        "auth": "GCP Identity Platform",
-        "database": "SQLite",
+        "auth": "jwt",
+        "database": "sqlite",
         "orm": "sqlalchemy",
         "backend": "fastapi",
         "frontend": "nextjs"
@@ -44,7 +43,7 @@
           },
           "endpoints": {
             "create": { "method": "POST",   "path": "/api/projects" },
-            "list":   { "method": "GET",    "path": "/api/projects" },
+            "list":   { "method": "GET",    "path": "/api/projects",      "response_type": "array" },
             "read":   { "method": "GET",    "path": "/api/projects/{id}" },
             "delete": { "method": "DELETE", "path": "/api/projects/{id}" }
           },
@@ -72,7 +71,7 @@
           },
           "endpoints": {
             "create": { "method": "POST",   "path": "/api/tasks" },
-            "list":   { "method": "GET",    "path": "/api/tasks" },
+            "list":   { "method": "GET",    "path": "/api/tasks",        "response_type": "array" },
             "delete": { "method": "DELETE", "path": "/api/tasks/{id}" }
           },
           "ui": {
@@ -128,6 +127,8 @@
       "url": "https://browser.dreamteamlabs.co.uk",
       "description": "Headless Chrome agent — navigates URLs, takes screenshots, runs smoke tests. Puppeteer-based, deployed on VPS.",
       "health": "GET /health",
+      "api_spec_source": "opt_out",
+      "api_spec_opt_out_reason": "No fixture app feature requires direct integration with browser-agent; it is used exclusively by QA tooling (qa-tester agent) outside the application runtime. The service-catalog provides a simplified API description rather than a formal OpenAPI spec, and no builder needs to generate client code against it.",
       "api": {
         "diagnose": {
           "method": "POST",
