@@ -39,18 +39,25 @@
             "name": { "type": "string", "required": true, "max_length": 255 },
             "description": { "type": "text" },
             "owner_id": { "type": "uuid", "required": true, "fk": "users.id" },
-            "created_at": { "type": "datetime", "default": "now" }
+            "created_at": { "type": "datetime", "default": "now" },
+            "updated_at": { "type": "datetime", "default": "now" }
           },
           "endpoints": {
             "create": { "method": "POST",   "path": "/api/projects" },
             "list":   { "method": "GET",    "path": "/api/projects",      "response_type": "array" },
             "read":   { "method": "GET",    "path": "/api/projects/{id}" },
+            "update": { "method": "PUT",    "path": "/api/projects/{id}" },
             "delete": { "method": "DELETE", "path": "/api/projects/{id}" }
           },
           "ui": {
             "page": "/projects",
             "display_name": "Projects",
-            "crud": ["list", "create", "read", "delete"]
+            "crud": ["list", "create", "read", "update", "delete"],
+            "pages": {
+              "list":   "/projects",
+              "create": "/projects/new",
+              "detail": "/projects/{id}"
+            }
           }
         },
         "tasks": {
@@ -67,17 +74,25 @@
               "default": "pending",
               "enum": ["pending", "in_progress", "done"]
             },
-            "created_at": { "type": "datetime", "default": "now" }
+            "created_at": { "type": "datetime", "default": "now" },
+            "updated_at": { "type": "datetime", "default": "now" }
           },
           "endpoints": {
             "create": { "method": "POST",   "path": "/api/tasks" },
             "list":   { "method": "GET",    "path": "/api/tasks",        "response_type": "array" },
+            "read":   { "method": "GET",    "path": "/api/tasks/{id}" },
+            "update": { "method": "PUT",    "path": "/api/tasks/{id}" },
             "delete": { "method": "DELETE", "path": "/api/tasks/{id}" }
           },
           "ui": {
             "page": "/tasks",
             "display_name": "Tasks",
-            "crud": ["list", "create", "delete"]
+            "crud": ["list", "create", "read", "update", "delete"],
+            "pages": {
+              "list":   "/tasks",
+              "create": "/tasks/new",
+              "detail": "/tasks/{id}"
+            }
           }
         }
       },
