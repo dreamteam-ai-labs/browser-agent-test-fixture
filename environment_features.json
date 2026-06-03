@@ -7,12 +7,12 @@
       "id": "verify-browser-agent",
       "name": "Verify Browser Agent End-to-End",
       "phase": 0,
-      "status": "pending",
+      "status": "completed",
       "description": "3-stage verification: (1) health check, (2) /diagnose navigates to codespace URL + screenshot, (3) direct URL reachability. Run: python3 tests/integration/test_browser_agent.py",
       "files": [
         "tests/integration/test_browser_agent.py"
       ],
-      "tests_pass": false,
+      "tests_pass": true,
       "dependencies": [],
       "validation": {
         "test_command": "python3 tests/integration/test_browser_agent.py",
