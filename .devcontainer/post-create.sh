@@ -99,16 +99,9 @@ if [ -x "$PYTEST_VENV_PIP" ]; then
     fi
 fi
 
-# 3. Install Claude Code CLI
-# FORENSIC RIG PIN (2026-06-03): pinned to 2.1.160 — the directly-evidenced
-# version the hang-era production codespace (-353) ran. The install path is
-# image/prebuild-baked, NOT npm-latest-at-create, so unpinned could give 2.1.160
-# OR a fresh-prebuild's latest; pinning reproduces the exact production binary.
-# forensic-repro.js hard-asserts `claude --version` == 2.1.160 before any round.
-# (Forensic fixture only — NOT a template change; production version policy is
-# unaffected.)
-echo "[3/3] Installing Claude Code (pinned 2.1.160 for forensic repro)..."
-npm install -g @anthropic-ai/claude-code@2.1.160
+# 3. Install Claude Code CLI (always install latest — non-negotiable)
+echo "[3/3] Installing Claude Code..."
+npm install -g @anthropic-ai/claude-code
 
 
 # Configure Claude Code
