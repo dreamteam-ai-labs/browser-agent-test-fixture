@@ -25,6 +25,28 @@ dev = [
     "httpx>=0.25",
 ]
 
+# Build-time MCP tooling the codespace session needs. Every real product declares
+# this via the template's pyproject; the fixture owns its own pyproject (it is in
+# render-fixture-templates.js NEVER_COPY, correctly — the template's would replace
+# the fixture's app package), so the extra has to be carried here by hand.
+#
+# 🔴 Its absence is why BOTH `dreamteam-suggestions` and `dreamteam-lane-tracking`
+# reported `failed` in every fixture build: `ensureServiceDeps` installs
+# `.[dev,services,buildtools]`, pip warns "fixture 1.0.0 does not provide the extra
+# 'buildtools'", EXITS 0, and the packages are never installed — while `.mcp.json`
+# advertises both servers. Same advertised-but-absent shape as reliable-ai before
+# the 2026-08-11 fix, arriving by a third route: a missing extra rather than a
+# failed install or a missing config.
+#
+# SHA-pinned, not `@stable`, deliberately: the Dockerfile COPYs pyproject.toml and
+# buildkit caches that layer, so a moving branch ref means a new tool silently
+# never installs. Production gets the same property by render-injecting the
+# resolved SHA; here it is by hand and will need refreshing.
+buildtools = [
+    "dreamteam-suggestions-mcp @ git+https://github.com/dreamteam-ai-labs/dreamteam-suggestions-mcp.git@ac01fa496765c71237984a15c3a8c3378a8e06e9",
+    "dreamteam-lane-tracking-mcp @ git+https://github.com/dreamteam-ai-labs/dreamteam-lane-tracking-mcp.git@49fda30866b00acc33a24c610745ba03e433d21b",
+]
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/fixture"]
 
