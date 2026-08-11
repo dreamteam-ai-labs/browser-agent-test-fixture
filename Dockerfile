@@ -35,9 +35,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copy everything needed for pip install (README.md optional via wildcard)
 COPY pyproject.toml README* ./
 COPY src/ ./src/
-# Install private factory-owned pip deps via BuildKit secret mount. The token
-# (dreamteam-service-auth, dreamteam-suggestions-mcp, etc. — declared as
-# `git+https://...` URLs in pyproject.toml) is read from tmpfs at
+# Install the RUNTIME factory-owned pip deps via BuildKit secret mount: the
+# `services` extra (dreamteam-service-auth, a `git+https://...` URL in
+# pyproject.toml). suggestions-mcp is build-time-only (the `buildtools` extra) and
+# is deliberately NOT installed here — it stays out of the runtime image. The
+# token is read from tmpfs at
 # /run/secrets/GITHUB_TOKEN and never appears in build args, `docker history`,
 # layer metadata, or build logs (journald). If the secret is absent or empty,
 # the build still works for services without private deps. Wired through by
@@ -49,10 +51,10 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
         git config --global \
             url."https://x-access-token:${TOKEN}@github.com/".insteadOf \
             "https://github.com/" && \
-        pip install --no-cache-dir . && \
+        pip install --no-cache-dir ".[services]" && \
         git config --global --unset url."https://x-access-token:${TOKEN}@github.com/".insteadOf; \
     else \
-        pip install --no-cache-dir .; \
+        pip install --no-cache-dir ".[services]"; \
     fi
 
 # Validate all imports resolve — fail the build if deps are missing.

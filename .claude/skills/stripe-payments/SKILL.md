@@ -297,7 +297,7 @@ class StripeService:
 from fastapi import APIRouter, Depends, HTTPException, Request, Header
 from pydantic import BaseModel
 import stripe
-from .auth import verify_firebase_token, TokenData
+from .auth import get_current_user, TokenData
 from .services.stripe_service import StripeService
 from .config import settings
 from .database import get_db
@@ -323,7 +323,7 @@ class SubscriptionResponse(BaseModel):
 @router.post("/checkout", response_model=CheckoutResponse)
 async def create_checkout(
     request: CheckoutRequest,
-    user: TokenData = Depends(verify_firebase_token),
+    user: TokenData = Depends(get_current_user),
     db = Depends(get_db),
 ):
     """Create a Stripe Checkout session."""
@@ -342,7 +342,7 @@ async def create_checkout(
 
 @router.post("/portal", response_model=PortalResponse)
 async def create_portal(
-    user: TokenData = Depends(verify_firebase_token),
+    user: TokenData = Depends(get_current_user),
     db = Depends(get_db),
 ):
     """Create a Stripe Customer Portal session."""
@@ -358,7 +358,7 @@ async def create_portal(
 
 @router.get("/subscription", response_model=SubscriptionResponse)
 async def get_subscription(
-    user: TokenData = Depends(verify_firebase_token),
+    user: TokenData = Depends(get_current_user),
     db = Depends(get_db),
 ):
     """Get current user's subscription status."""
@@ -590,7 +590,7 @@ export function PricingPage() {
 **middleware.py:**
 ```python
 from fastapi import Depends, HTTPException
-from .auth import verify_firebase_token, TokenData
+from .auth import get_current_user, TokenData
 from .services.stripe_service import StripeService
 from .database import get_db
 
@@ -602,7 +602,7 @@ class RequireSubscription:
 
     async def __call__(
         self,
-        user: TokenData = Depends(verify_firebase_token),
+        user: TokenData = Depends(get_current_user),
         db = Depends(get_db),
     ) -> TokenData:
         service = StripeService(db)

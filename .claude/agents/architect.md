@@ -19,7 +19,7 @@ You extract a structured architecture from features.json. Your output is `archit
 
 ## Constraints (fixed — do not change)
 
-- **Auth**: GCP Identity Platform (legacy opt-in; only when features.json pins `auth_provider: gcp_idp`)
+- **Auth**: none — no end-user auth; do not plan auth flows or emit auth middleware
 - **Database**: SQLite
 - **ORM**: SQLAlchemy
 - **Backend**: FastAPI

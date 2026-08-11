@@ -1,18 +1,18 @@
 {
   "project": "browser-agent-test-fixture-environment-setup",
   "version": "0.1.0",
-  "last_updated": "2026-06-03T21:17:28.528Z",
+  "last_updated": "2026-08-11T07:50:21.227Z",
   "features": [
     {
       "id": "verify-browser-agent",
       "name": "Verify Browser Agent End-to-End",
       "phase": 0,
-      "status": "completed",
+      "status": "pending",
       "description": "3-stage verification: (1) health check, (2) /diagnose navigates to codespace URL + screenshot, (3) direct URL reachability. Run: python3 tests/integration/test_browser_agent.py",
       "files": [
         "tests/integration/test_browser_agent.py"
       ],
-      "tests_pass": true,
+      "tests_pass": false,
       "dependencies": [],
       "validation": {
         "test_command": "python3 tests/integration/test_browser_agent.py",

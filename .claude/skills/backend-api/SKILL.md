@@ -24,7 +24,7 @@ src/fixture/
 ├── main.py          # FastAPI app + router registration
 ├── database.py      # Engine, session, schema management (Alembic-driven)
 ├── models.py        # SQLAlchemy ORM models + Pydantic schemas (canonical location for both)
-├── auth.py          # GCP Identity Platform auth
+├── auth.py          # Auth dependency (get_current_user / token verification)
 ├── config.py        # Pydantic settings
 └── routers/         # One file per feature (e.g., routers/projects.py)
 ```

@@ -12,6 +12,10 @@
     "dreamteam-suggestions": {
       "command": "python",
       "args": ["-m", "dreamteam_suggestions_mcp"]
+    },
+    "dreamteam-lane-tracking": {
+      "command": "python",
+      "args": ["-m", "dreamteam_lane_tracking_mcp"]
     }
   }
 }

@@ -57,6 +57,11 @@
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/detect-amendments.py\"",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/lane-tracking.py\" session-start",
+            "timeout": 15
           }
         ]
       }
@@ -146,6 +151,11 @@
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/post-compact.py\"",
             "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/lane-tracking.py\" post-compact",
+            "timeout": 15
           }
         ]
       }
@@ -227,6 +237,11 @@
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/wrapper-env-contract.py\"",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/lane-tracking.py\" stop",
+            "timeout": 15
           }
         ]
       }

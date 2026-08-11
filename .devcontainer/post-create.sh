@@ -15,16 +15,17 @@ echo "=== browser-agent-test-fixture Codespace Setup ==="
 # SSH sessions (via /etc/profile.d/codespaces.sh). post-create.sh runs before
 # any SSH session, so we load them here using the same approach.
 #
-# File-from-operator ALWAYS wins over the auto-injected env. GitHub injects
-# CODESPACE_GITHUB_TOKEN scoped to the codespace's own repo only — pip
-# git+https clones for cross-org private deps (dreamteam-service-auth,
-# dreamteam-suggestions-mcp) hit 403 "Write access not granted" with that
-# limited token even though it IS authenticated. The operator-uploaded
-# user-level secret (broad-scope PAT) lives in $SECRETS_FILE and is the
-# one we need. An earlier `if [ -z "$CODESPACE_GITHUB_TOKEN" ]` guard
-# silently skipped the file load when the limited auto-token raced ahead,
-# leaving pip with the wrong token. Always-load is the source-side fix
-# pairing the factory's defensive R15/R16 SSH-context retry path.
+# Always-load: source the file unconditionally so codespace secrets
+# (CLAUDE_CODE_OAUTH_TOKEN, DREAMTEAM_SERVICE_API_KEY, etc.) are available to
+# post-create even though no SSH session has run yet. An earlier
+# `if [ -z "$CODESPACE_GITHUB_TOKEN" ]` guard could skip the load when the native
+# auto-token raced ahead — always-load avoids that.
+#
+# NOTE (codespace cred-shed): this load NO LONGER exists to obtain a broad-scope
+# GitHub PAT for cross-org pip clones. The cross-org private deps
+# (dreamteam-service-auth, dreamteam-suggestions-mcp) are installed runner-side
+# post-provision (see step 0.5 below), so the codespace holds no standing
+# cross-org GitHub credential.
 SECRETS_FILE="/workspaces/.codespaces/shared/.env-secrets"
 if [ -f "$SECRETS_FILE" ]; then
     echo "  Loading codespace secrets from $SECRETS_FILE..."
@@ -53,21 +54,21 @@ fi
 # login shell (bash -lc) or explicitly prepend PATH. The factory loop's
 # run-claude.sh handles this.
 
-# 0.5. Configure git credentials for private-repo pip deps. pyproject.toml may
-#      pin factory-owned packages (dreamteam-service-auth,
-#      dreamteam-suggestions-mcp, future services) as `git+https://...` URLs.
-#      Without credentials, pip's clone step prompts for a password and the
-#      install hangs (or the 2>/dev/null fallback below silently skips the
-#      dep). The codespace always has CODESPACE_GITHUB_TOKEN; this maps it
-#      onto github.com HTTPS URLs so pip can clone without prompting.
-#      No-op if no private deps are declared — safe to run unconditionally.
-TOKEN="${CODESPACE_GITHUB_TOKEN:-$GITHUB_TOKEN}"
-if [ -n "$TOKEN" ]; then
-    git config --global \
-        url."https://x-access-token:${TOKEN}@github.com/".insteadOf \
-        "https://github.com/"
-    echo "  Configured git credentials for private pip deps"
-fi
+# 0.5. (codespace cred-shed) NO git credentials are configured at create time —
+#      and the codespace holds NO standing cross-org GitHub credential.
+#      The factory-owned CROSS-ORG private deps (dreamteam-service-auth,
+#      dreamteam-suggestions-mcp) are NOT in this project's main `dependencies`;
+#      they live in the `services` / `buildtools` optional-dependency extras. So
+#      the create-time `pip install -e ".[dev]"` below pulls only public packages
+#      — no cross-org git clone, no token needed here.
+#
+#      Those private deps are installed INTO this codespace by the factory runner
+#      post-provision (`pip install -e ".[dev,services,buildtools]"` with a
+#      gateway-minted, contents:read, ~1h deps-token routed per-repo), AFTER
+#      provisioning and BEFORE QA — so the suite can import them. The DEPLOYED
+#      container gets the runtime `services` extra via the Dockerfile's BuildKit
+#      GITHUB_TOKEN secret mount. This is why the prior broad-scope operator PAT
+#      (loaded from $SECRETS_FILE) is shed: nothing here needs it.
 
 # 1. Install build dependencies (skip if prebuilt image already has them)
 echo "[1/3] Installing build dependencies..."
