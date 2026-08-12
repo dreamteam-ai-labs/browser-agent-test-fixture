@@ -8,9 +8,29 @@ from sqlalchemy.orm import Session
 
 from ..auth import get_current_user
 from ..database import get_db
-from ..models import Task, User
+from ..models import Project, Task, User
 
 router = APIRouter(prefix="/api/tasks", tags=["tasks"])
+
+
+def _validate_project(project_id: Optional[int], user: User, db: Session) -> None:
+    """Ensure a supplied project_id refers to a project owned by the user.
+
+    A None project_id is allowed (task not linked to a project). A non-existent
+    or non-owned project_id is rejected so we never create an orphaned task.
+    """
+    if project_id is None:
+        return
+    project = (
+        db.query(Project)
+        .filter(Project.id == project_id, Project.owner_id == user.id)
+        .first()
+    )
+    if not project:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Project {project_id} does not exist or is not owned by the current user",
+        )
 
 BROWSER_AGENT_URL = os.environ.get("BROWSER_AGENT_URL", "https://browser.dreamteamlabs.co.uk")
 
@@ -45,6 +65,7 @@ def list_tasks(db: Session = Depends(get_db), user: User = Depends(get_current_u
 
 @router.post("", response_model=TaskResponse, status_code=status.HTTP_201_CREATED)
 def create_task(body: TaskCreate, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    _validate_project(body.project_id, user, db)
     task = Task(
         title=body.title,
         description=body.description,
@@ -73,6 +94,7 @@ def update_task(task_id: int, body: TaskCreate, db: Session = Depends(get_db), u
     task = db.query(Task).filter(Task.id == task_id, Task.user_id == user.id).first()
     if not task:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
+    _validate_project(body.project_id, user, db)
     task.title = body.title
     task.description = body.description
     task.project_id = body.project_id
