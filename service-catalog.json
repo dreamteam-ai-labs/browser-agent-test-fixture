@@ -1,39 +1,69 @@
 {
   "services": {
+    "analytics-service": {
+      "url": "https://analytics-service.dreamteamlabs.co.uk",
+      "description": "Web analytics infrastructure for the dreamteam factory and customer products. Self-hosted fork of umami (privacy-respecting, no third-party cookies, MIT-licensed). Factory builds and customer products emit page-view and custom event telemetry through a thin factory-conformant wrapper; factory operators view fleet-wide dashboards filtered per-tenant. Internal observability primitive — not exposed to end users of customer products. Service-to-service middleware enforces Level 1 (shared-secret Bearer) on /api/*; the umami-native UI is reachable through factory operator auth at the service root. The factory's contribution is the deployment scaffold, the Level 1 auth edge, the per-tenant event-routing layer, and the operator-auth wrapping in front of umami's UI; everything else is umami as-shipped from upstream.",
+      "health": "GET /api/health"
+    },
+    "audit-log-service": {
+      "url": "https://audit-log-service.dreamteamlabs.co.uk",
+      "description": "Centralised, immutable, tamper-evident event store for the entire DreamTeam factory fleet. Every other service's 'this happened' record. Foundation for GDPR compliance, SOC-2 evidence, security forensics, and cross-service transaction tracing. Architectural pattern is middleware-native (Option 1, locked 2026-05-03): services do NOT import an audit-client and do NOT write emit code. The dreamteam-service-auth library's AuditEmissionMiddleware emits one audit event per inbound HTTP request, derived from the request envelope (templated path, status, latency, actor from request.state.service_auth + contextvars). Drift-apply pushes the lib + template fleet-wide, so every existing and future service starts emitting audit events automatically. audit-log's POST /api/events is consumed by that middleware, NOT by hand-written service code; the API shape is a middleware-to-audit-log contract. Async fire-and-forget emission: callers do not wait for confirmation, audit-log unavailability is silently absorbed by emitting services (drop-with-warning). The deployed services continue serving their own callers regardless of audit-log health. Audit-log holds compliance-critical data — strong service auth (Level 3 JWT preferred, shared-secret fallback) is required for both writes and reads. Vocabulary note: DT does not have a tenant concept; the design uses product_id (customer product slug) and emitting_service (which infra service wrote the event). v0.1.0 scope is foundational: shape-only events by default (PII-free metadata), with optional opt-in body capture via per-service service.audit.yaml landing in v0.1.0 schema even before any service ships a YAML so the API does not have to re-spin. Out of v0.1.0 scope: end-user-facing 'show me my account history' reads (v0.2.0 when a customer product asks), S3/GCS export (waits for storage-service), SIEM integrations (waits for the first paying customer asking), real-time alerting (routes via notification-service when shipped), per-product retention overrides (single global 7-year default for v0.1.0).",
+      "health": "GET /api/health"
+    },
+    "auth-service": {
+      "url": "https://auth-service.dreamteamlabs.co.uk",
+      "description": "Thin FastAPI facade in front of Google Cloud Identity Platform (GCP IDP). Customer products call this service for register/login/verify/me/logout instead of calling GCP IDP directly — the facade centralises credential management (service account JSON, API key) and owns the product_id → GCP tenant_id mapping. This is a FACADE over GCP IDP, not a replacement: user accounts still live in GCP IDP. At Phase 5.3: JWT pass-through only (idToken from GCP IDP is returned verbatim; not re-signed), dedicated tenant mode only (one GCP tenant per customer product; tenant_mode='shared' is reserved for future). Service-to-service middleware enforces Level 1 (shared-secret Bearer) — callers are other infrastructure in the factory, not end users.",
+      "health": "GET /api/health"
+    },
     "browser-agent": {
       "url": "https://browser.dreamteamlabs.co.uk",
-      "description": "Headless Chrome agent — navigates URLs, takes screenshots, runs smoke tests. Puppeteer-based, deployed on VPS.",
-      "health": "GET /health",
-      "api": {
-        "diagnose": {
-          "method": "POST",
-          "path": "/diagnose",
-          "description": "Navigate to URL, take screenshot, return screenshot URL. No Claude call ($0).",
-          "request": { "url": "string (required)" },
-          "response": { "success": "boolean", "finalUrl": "string", "screenshotUrl": "string", "events": "array", "elapsed": "number" }
-        },
-        "explore": {
-          "method": "POST",
-          "path": "/explore",
-          "description": "Full Claude-powered site exploration with feature discovery (~$12).",
-          "request": { "url": "string (required)", "maxIterations": "number (default 20)", "timeout": "number" },
-          "response": { "success": "boolean", "url": "string", "iterations": "number", "features": "string", "parsed_features": "array" }
-        },
-        "quick-analyze": {
-          "method": "POST",
-          "path": "/quick-analyze",
-          "description": "Lighter exploration — 10 iterations, 60s timeout (~$5).",
-          "request": { "url": "string (required)" },
-          "response": { "success": "boolean", "url": "string", "iterations": "number", "parsed_features": "array" }
-        },
-        "smoke-test": {
-          "method": "POST",
-          "path": "/smoke-test",
-          "description": "QA smoke test with login, CRUD testing, screenshots. Supports mock mode (~$12, mock=$0).",
-          "request": { "url": "string (required)", "credentials": "object {email, password}", "features": "array", "maxIterations": "number", "mock": "boolean" },
-          "response": "NDJSON stream — progress events then final result line"
-        }
-      }
+      "description": "Headless Chrome agent",
+      "health": "GET /health"
+    },
+    "cost-attribution-service": {
+      "url": "https://cost-attribution-service.dreamteamlabs.co.uk",
+      "description": "Central cost-attribution sink for the DreamTeam factory. Every infrastructure service that incurs real cost (LLM tokens, Stripe fees, SendGrid email, cloud storage) records a cost_event here, stamped with the product_id that caused it. Downstream consumers — billing, monetisation, agent accounting, cost anomaly detection — read aggregated rollups or filtered event streams from this service. Foundational: no upstream service dependencies. Supports two recording modes: synchronous estimates (common — emitted at call time with best-guess cost) and async reconciliation (rare — updates the estimate with the actual amount when it arrives later, e.g. via Stripe fee webhooks). Customer products do not record costs directly; only infrastructure services do, because products consume the infra and the infra knows the cost. Service-to-service middleware enforces Level 1 (shared-secret Bearer) on /api/* except /api/health.",
+      "health": "GET /api/health"
+    },
+    "hello-greeting-bare-579": {
+      "url": "https://hello-greeting-bare-579.dreamteamlabs.co.uk",
+      "description": "Factory product: dreamteam-hello-greeting-bare-579",
+      "health": "GET /api/health"
+    },
+    "hello-world-service": {
+      "url": "https://hello-world-service.dreamteamlabs.co.uk",
+      "description": "Pure lifecycle proof for the Phase 5 infrastructure-service framework. Minimal FastAPI service with a single /api/hello endpoint — exists solely to validate end-to-end repo creation, build, deploy, and catalog registration for infrastructure services. No auth, no database, no frontend.",
+      "health": "GET /api/health"
+    },
+    "lane-tracking-service": {
+      "url": "http://xs1jw4smwfrnzp60z2g4xvl6.178.104.58.159.sslip.io",
+      "description": "Build-plane blackboard service: a durable, async store of per-product build FACTS. Build lanes (codespaces) register on start by publishing a registration fact, publish realized endpoints / contracts / status / doc-links as they work, and read what sibling lanes have published so far. Consumers are the factory's build agents ONLY (via the dreamteam-lane-tracking MCP client + hooks) — never shipped products; this is the first service born with service_plane: \"build\", kept off every product's runtime rail by the classifier short-circuits. Fact envelope and enums are the FROZEN frame authored in features-json spec/lane-fact-envelope-spec.md and registered as the LaneFact H3 type; this service owns the instance store (its own dt_ schema) and acts as LaneFact's backend — instances flow through this service, never the registry CRUD surface. No real-time anything: publish-facts-never-request-reply; reads are polls. First Stage-2c dogfood: born through the FDM front door (InternalCustomer intent -> composition client -> factory-operations governed verbs), with github_repo_name and role riding the recipe birth_intent block, not this file.",
+      "health": "GET /api/health"
+    },
+    "mailhog-service": {
+      "url": "https://mailhog-service.dreamteamlabs.co.uk",
+      "description": "Developer/test SMTP capture infrastructure for the dreamteam factory and customer products. Wraps mailhog (Go binary, MIT-licensed) unmodified — upstream runs as-shipped, the factory ships a thin FastAPI service in front for service-to-service auth, per-tenant message-isolation, cost-attribution, and operator-UI gating. Customer-product services submit transactional/dev email via SMTP to mailhog's port 1025 with an X-Dreamteam-Product-ID custom header; the DT-side wrap polls mailhog's message store, indexes captured messages against the originating product, and serves a tenant-filtered HTTP API + operator-auth-gated mailhog-native UI. The factory's contribution is the deployment scaffold, the Level 1 auth edge on /api/*, the per-tenant message-routing layer, the cost-attribution event emission, and the operator-auth wrapping in front of mailhog's UI; everything else is mailhog as-shipped from upstream. SMTP port 1025 is intentionally unauthenticated — internal-network-only by design (Coolify network isolation), customer-product services on the factory network reach it directly. Phase 6 wrap-and-deploy lab-rat: validates that the factory can ship an OSS service unmodified with a thin DT-side conformance layer rather than forking and conforming the OSS itself.",
+      "health": "GET /api/health"
+    },
+    "minimal-service": {
+      "url": "http://x14ms2ktg2zjnnpapsvjqsh8.178.104.58.159.sslip.io",
+      "description": "Throwaway fixture service for the internal-fast-test recipe lane. Package name minimal_service matches recipes/fixtures/minimal/app so build:mock overlays cleanly onto the birth-rendered scaffold. Exists solely to exercise the cheap birth/deploy path (and the model-gateway smoke-test). Safe to tear down.",
+      "health": "GET /api/health"
+    },
+    "model-gateway-service": {
+      "url": "https://model-gateway-service.dreamteamlabs.co.uk",
+      "description": "The DreamTeam factory's single controlled entrance for LLM (Anthropic) access — a transparent, credential-injecting reverse proxy over the Anthropic Messages API. Its reason to exist: the build codespace's agent (Claude Code) must call a model backend to think, and the agent-identity credential that authorises that call is the one secret the cred-shed could not remove from the codespace (it cannot be minted/scoped by anyone but Anthropic, the LLM call is irreducible from the codespace, and there is no platform-native substitute). model-gateway-service holds the real Anthropic credential so the codespace never has to: the codespace points ANTHROPIC_BASE_URL at this service and carries only a short-lived, scoped, per-session JWT — which IS mintable/revocable, so 'zero stored codespace secrets' becomes reachable. Beyond the cred-shed, this is the model control plane: every agent call passes through one governed seam, giving per-build/per-caller cost attribution (token-accurate), and the future home of model routing, budget caps, and a reasoning audit trail. DESIGN: bespoke (NOT LiteLLM), standard infra-service pattern (features.json-driven, full lifecycle, dreamteam-service-auth middleware, catalog registration, Coolify Factory-Infra deploy, drift-compatible). The ONLY divergence from a normal infra service is the relay endpoint itself, which forwards bytes (faithful SSE streaming pass-through) rather than modelling domain objects. NON-NEGOTIABLE (operator): dual upstream credential mode from day one — the service authenticates UPSTREAM to Anthropic via EITHER an Anthropic API key (DEFAULT — the only fleet-viable path after Anthropic's 2026-06-15 change moved headless/Agent-SDK usage off subscription pools and restricted subscription OAuth to Claude Code/claude.ai) OR a Claude subscription OAuth token (opt-in via per-request header/env override), selectable per request; dual-mode is retained as the operator non-negotiable so the subscription path stays available without ever blocking the fleet on the 'can a subscription token be relayed at fleet scale?' question. Stateless: holds no data of its own (use_postgres false); cost events go to cost-attribution-service (the usage sink), audit events to audit-log-service. Spec: .factory/phases/7-foundational-infra+/working/2026-06-15-model-gateway-service-spec.md.",
+      "health": "GET /api/health"
+    },
+    "payment-service": {
+      "url": "https://payment-service.dreamteamlabs.co.uk",
+      "description": "Thin FastAPI facade in front of Stripe. Customer products and build-time agents (Neva et al.) call this service for charges, refunds, payouts, and webhook ingest instead of holding Stripe credentials themselves — the facade centralises STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET. Tracks charges, payouts, and webhook events in its own Postgres schema (dt_payment_service) for idempotency + audit. This is a FACADE over Stripe, not a replacement: customer objects still live in Stripe. At Phase 5.4: test-mode only (sk_test_... keys), inbound charges via full PaymentIntent flow, outbound payouts stubbed (DB record only, no fund movement — real outbound requires Stripe Connect, deferred). Endpoint shapes are chosen to be compatible with the Stripe Agent Toolkit (https://github.com/stripe/agent-toolkit) so a future MCP wrapper is trivial. Service-to-service middleware enforces Level 1 (shared-secret Bearer) on /api/* except /api/health and /webhooks/*. First real infra→infra composition: declares required_services: [auth-service] so the factory generates an AuthClient that can verify forwarded end-user idTokens, closing task #79.",
+      "health": "GET /api/health"
+    },
+    "suggestion-service": {
+      "url": "https://suggestion-service.dreamteamlabs.co.uk",
+      "description": "Append-only capture service for build-time agent feedback. Claude Code agents working inside customer-product codespaces POST challenges, suggestions, and raw observations via an MCP tool; future analysis and prompt-improvement workflows read from this store. Append-only �� no UPDATE or DELETE endpoints, no analysis logic. Service-to-service middleware enforces Level 1 (shared-secret Bearer) on /api/* — every caller (build-time agents, dreamteam-suggestions-mcp, ad-hoc operators) must present DREAMTEAM_SERVICE_API_KEY. Build-time agents inherit the secret as a Codespace env var so authentication is invisible to them; the same posture as every other infra service in the fleet.",
+      "health": "GET /api/health"
     }
   }
 }

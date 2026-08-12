@@ -55,3 +55,149 @@
 2026-04-07T20:55:21.285 | commit-guard | agent=unknown | ALLOW | msg: fix: rename projects.user_id to owner_id to match SQLAlchemy ORM model
 2026-04-07T20:58:46.607 | commit-guard | agent=a9e8f087a37845015 | ALLOW | msg: qa: iteration 2 — all tests pass, zero critical issues
 2026-04-07T20:59:59.479 | commit-guard | agent=ac15236282768668a | ALLOW | msg: $(cat <<
+2026-08-12T09:57:39.803 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:57:39.952 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:57:40.131 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:57:40.139 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:57:40.182 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:57:40.308 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:57:45.911 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:57:45.916 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:57:46.265 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:57:46.331 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:57:46.333 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:57:49.597 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:57:50.088 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:57:50.646 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:08.848 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:08.868 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:08.990 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:09.034 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:09.035 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:23.039 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:23.052 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:23.196 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:23.231 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:23.235 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:28.157 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:28.177 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:28.243 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:28.335 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:28.375 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:28.375 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:51.049 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:51.056 | protect-harness-paths | agent= | DENY | path=/workspaces/browser-agent-test-fixture/.claude/agent-memory/architect/project_fixture_overview.md matched=.claude/
+2026-08-12T09:58:51.063 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:51.067 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:51.071 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:51.079 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:58:51.080 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:03.688 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:03.700 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:03.703 | outbound-egress-guard | agent=unknown | DENY | unlisted_hosts=[browser.dreamteamlabs.co.uk] command=DREAMTEAM_ALLOW_HARNESS_MUTATION=1 bash -c 'cat > /workspaces/browser-agent-test-fixture/.claude/agent-memory/architect/
+2026-08-12T09:59:20.119 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:20.135 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:20.251 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:20.300 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:20.308 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:24.645 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:24.658 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:24.804 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:24.818 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:24.824 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:26.945 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:26.965 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:27.045 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:27.138 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:27.174 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:27.176 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:34.014 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:34.048 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:34.053 | build-gate | agent=architect | ALLOW | not lead session
+2026-08-12T09:59:34.057 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:53.086 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:53.126 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:53.401 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:53.454 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:53.480 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:53.496 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:57.764 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:57.778 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:57.993 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:58.025 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T09:59:58.038 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:01.234 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:03.419 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:05.332 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:09.355 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:09.376 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:09.541 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:09.579 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:09.581 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:11.784 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:15.442 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:19.176 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:21.394 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:24.113 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:24.132 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:24.250 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:24.271 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:24.283 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:27.215 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:27.235 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:27.304 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:00:27.306 | sitecustomize-egress | agent=python | DENY | source=urllib.request.urlopen host=browser.dreamteamlabs.co.uk
+2026-08-12T10:00:32.307 | sitecustomize-egress | agent=python | DENY | source=urllib.request.urlopen host=browser.dreamteamlabs.co.uk
+2026-08-12T10:00:42.307 | sitecustomize-egress | agent=python | DENY | source=urllib.request.urlopen host=browser.dreamteamlabs.co.uk
+2026-08-12T10:00:57.307 | sitecustomize-egress | agent=python | DENY | source=urllib.request.urlopen host=browser.dreamteamlabs.co.uk
+2026-08-12T10:01:12.308 | sitecustomize-egress | agent=python | DENY | source=urllib.request.urlopen host=browser.dreamteamlabs.co.uk
+2026-08-12T10:01:27.308 | sitecustomize-egress | agent=python | DENY | source=urllib.request.urlopen host=browser.dreamteamlabs.co.uk
+2026-08-12T10:01:27.454 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:01:27.456 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:01:27.458 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:01:34.823 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:01:34.839 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:01:34.906 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:01:34.909 | sitecustomize-egress | agent=python | ALLOW_VIA_ESCAPE | source=urllib.request.urlopen host=browser.dreamteamlabs.co.uk env=DREAMTEAM_ALLOW_UNLISTED_EGRESS
+2026-08-12T10:01:34.917 | sitecustomize-egress | agent=python | ALLOW_VIA_ESCAPE | source=http.client.HTTPSConnection.request host=browser.dreamteamlabs.co.uk env=DREAMTEAM_ALLOW_UNLISTED_EGRESS
+2026-08-12T10:01:34.917 | sitecustomize-egress | agent=python | ALLOW_VIA_ESCAPE | source=socket.create_connection host=browser.dreamteamlabs.co.uk env=DREAMTEAM_ALLOW_UNLISTED_EGRESS
+2026-08-12T10:01:35.011 | sitecustomize-egress | agent=python | ALLOW_VIA_ESCAPE | source=urllib.request.urlopen host=browser.dreamteamlabs.co.uk env=DREAMTEAM_ALLOW_UNLISTED_EGRESS
+2026-08-12T10:01:35.018 | sitecustomize-egress | agent=python | ALLOW_VIA_ESCAPE | source=http.client.HTTPSConnection.request host=browser.dreamteamlabs.co.uk env=DREAMTEAM_ALLOW_UNLISTED_EGRESS
+2026-08-12T10:01:35.019 | sitecustomize-egress | agent=python | ALLOW_VIA_ESCAPE | source=socket.create_connection host=browser.dreamteamlabs.co.uk env=DREAMTEAM_ALLOW_UNLISTED_EGRESS
+2026-08-12T10:01:40.392 | sitecustomize-egress | agent=python | ALLOW_VIA_ESCAPE | source=urllib.request.urlopen host=ominous-winner-r4v4vjvqj5w52x54-8000.app.github.dev env=DREAMTEAM_ALLOW_UNLISTED_EGRESS
+2026-08-12T10:01:40.400 | sitecustomize-egress | agent=python | ALLOW_VIA_ESCAPE | source=http.client.HTTPSConnection.request host=ominous-winner-r4v4vjvqj5w52x54-8000.app.github.dev env=DREAMTEAM_ALLOW_UNLISTED_EGRESS
+2026-08-12T10:01:40.400 | sitecustomize-egress | agent=python | ALLOW_VIA_ESCAPE | source=socket.create_connection host=ominous-winner-r4v4vjvqj5w52x54-8000.app.github.dev env=DREAMTEAM_ALLOW_UNLISTED_EGRESS
+2026-08-12T10:01:40.618 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:01:40.656 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:01:40.662 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:01:45.362 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:01:45.364 | skip-test-check | agent=unknown | OK | feature=verify-browser-agent
+2026-08-12T10:01:56.385 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:00.995 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:01.006 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:01.154 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:01.187 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:01.191 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:08.108 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:08.129 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:08.241 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:08.277 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:08.283 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:13.669 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:13.681 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:13.749 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:13.838 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:13.873 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:13.875 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:16.848 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:16.854 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:18.183 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:18.236 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:18.240 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:21.386 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:25.091 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:28.655 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:28.659 | skip-test-check | agent=unknown | OK | feature=database-schema
+2026-08-12T10:02:31.957 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:31.963 | commit-guard | agent=unknown | ALLOW | msg: feat: verify database-schema foundation (models + database session)
+2026-08-12T10:02:31.980 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
