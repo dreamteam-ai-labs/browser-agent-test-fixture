@@ -47,6 +47,16 @@ buildtools = [
     "dreamteam-lane-tracking-mcp @ git+https://github.com/dreamteam-ai-labs/dreamteam-lane-tracking-mcp.git@49fda30866b00acc33a24c610745ba03e433d21b",
 ]
 
+# Required for the SHA-pinned git+https deps in [buildtools] above. Hatchling
+# validates EVERY optional-dependency group during metadata prep — not just the
+# extras being installed — so without this flag a direct reference in ANY group
+# fails the BARE `pip install -e .`: no metadata, no fastapi, no backend
+# (measured 2026-08-12, first editable install after d1156f0 added the pins;
+# the production template has carried this same flag at pyproject.toml.mustache:115
+# since the extras pattern shipped — the fixture copy just missed it).
+[tool.hatch.metadata]
+allow-direct-references = true
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/fixture"]
 
