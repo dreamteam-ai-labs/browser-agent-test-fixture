@@ -1,5 +1,5 @@
 import os
-from typing import Optional
+from typing import Literal, Optional
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -20,7 +20,7 @@ class TaskCreate(BaseModel):
     description: str = ""
     project_id: Optional[int] = None
     assignee_id: Optional[int] = None
-    status: str = "pending"
+    status: Literal["pending", "in_progress", "done"] = "pending"
     url: Optional[str] = None
 
 
