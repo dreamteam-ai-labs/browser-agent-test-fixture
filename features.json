@@ -11,7 +11,7 @@
   "use_postgres": false,
   "required_services": [],
   "egress_endpoints": [],
-  "last_updated": "2026-08-12T10:06:25.563593Z",
+  "last_updated": "2026-08-12T10:06:30.946243Z",
   "features": [
     {
       "id": "database-schema",
@@ -181,7 +181,7 @@
       "id": "dashboard",
       "name": "Dashboard",
       "description": "Overview page at /dashboard showing project and task counts with quick links.",
-      "status": "in_progress",
+      "status": "completed",
       "phase": 2,
       "files": [
         "frontend/src/app/dashboard/page.tsx"
@@ -190,24 +190,31 @@
         "user-auth",
         "frontend-setup"
       ],
-      "tests_pass": false,
+      "tests_pass": true,
       "metadata": {
         "complexity": "simple",
         "category": "Frontend",
-        "priority": "low"
+        "priority": "low",
+        "completion_warning": "Completed in 7s (threshold: 600s)"
       },
       "started_at": "2026-08-12T10:06:21.991078Z",
-      "completed_at": null,
+      "completed_at": "2026-08-12T10:06:29.317084Z",
       "last_touched_at": "2026-08-12T10:06:25.563583Z",
-      "iteration_count": 1,
+      "iteration_count": 2,
       "work_history": [
         {
           "iteration": 1,
           "timestamp": "2026-08-12T10:06:25.563586Z",
           "note": "Verified /dashboard page.tsx: shows project count, task count, welcome message, quick links to /projects and /tasks wrapped in Layout. dashboard.test.tsx covers heading, counts, welcome, stat cards. 21 jest tests pass, npm run build green (11 routes)."
+        },
+        {
+          "iteration": 2,
+          "timestamp": "2026-08-12T10:06:29.317085Z",
+          "note": "COMPLETED",
+          "tests_pass": true
         }
       ],
-      "completion_notes": null,
+      "completion_notes": "Dashboard at /dashboard shows project & task counts with quick links to /projects and /tasks, welcome message from /api/auth/me. Component test covers heading, counts, welcome, cards. npm test (21 pass) + npm run build green.",
       "tags": [
         "frontend"
       ]
@@ -292,7 +299,7 @@
       "id": "task-management",
       "name": "Task Management",
       "description": "Full CRUD for tasks with project assignment. POST /api/tasks creates task with project_id. GET /api/tasks lists user's tasks. DELETE /api/tasks/{id} removes task. Frontend pages: /tasks (list), /tasks/new (create form with project selector).",
-      "status": "pending",
+      "status": "in_progress",
       "phase": 2,
       "files": [
         "src/fixture/routers/tasks.py",
@@ -310,9 +317,9 @@
         "category": "Core",
         "priority": "medium"
       },
-      "started_at": null,
+      "started_at": "2026-08-12T10:06:30.946239Z",
       "completed_at": null,
-      "last_touched_at": null,
+      "last_touched_at": "2026-08-12T10:06:30.946243Z",
       "iteration_count": 0,
       "work_history": [],
       "completion_notes": null,
