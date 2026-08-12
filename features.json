@@ -11,7 +11,7 @@
   "use_postgres": false,
   "required_services": [],
   "egress_endpoints": [],
-  "last_updated": "2026-08-12T10:02:28.599235Z",
+  "last_updated": "2026-08-12T10:03:38.914831Z",
   "features": [
     {
       "id": "database-schema",
@@ -57,7 +57,7 @@
       "id": "frontend-setup",
       "name": "Frontend Project Setup",
       "description": "Next.js 14 app with Tailwind CSS. App Router structure with pages for login, register, dashboard, projects, and tasks. API client using axios with empty baseURL and Next.js rewrites to proxy /api/* to backend port 8000. Use next.config.mjs (not .ts).",
-      "status": "pending",
+      "status": "completed",
       "phase": 1,
       "files": [
         "frontend/src/app/",
@@ -65,18 +65,31 @@
         "frontend/next.config.mjs"
       ],
       "dependencies": [],
-      "tests_pass": false,
+      "tests_pass": true,
       "metadata": {
         "complexity": "medium",
         "category": "Frontend",
-        "priority": "high"
+        "priority": "high",
+        "completion_warning": "Completed in 7s (threshold: 600s)"
       },
-      "started_at": null,
-      "completed_at": null,
-      "last_touched_at": null,
-      "iteration_count": 0,
-      "work_history": [],
-      "completion_notes": null,
+      "started_at": "2026-08-12T10:03:31.635129Z",
+      "completed_at": "2026-08-12T10:03:38.914822Z",
+      "last_touched_at": "2026-08-12T10:03:34.822360Z",
+      "iteration_count": 2,
+      "work_history": [
+        {
+          "iteration": 1,
+          "timestamp": "2026-08-12T10:03:34.822365Z",
+          "note": "Verified Next.js 14 App Router with Tailwind, all pages (login/register/dashboard/projects/tasks), axios client with empty baseURL + relative /api URLs, next.config.mjs rewrites proxy. 21 jest tests pass, npm run build green."
+        },
+        {
+          "iteration": 2,
+          "timestamp": "2026-08-12T10:03:38.914823Z",
+          "note": "COMPLETED",
+          "tests_pass": true
+        }
+      ],
+      "completion_notes": "Next.js 14 App Router + Tailwind fully scaffolded. axios client empty baseURL, next.config.mjs rewrites /api/* to backend. 21 jest tests pass, npm run build succeeds (11 routes).",
       "tags": [
         "frontend"
       ]

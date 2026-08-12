@@ -201,3 +201,11 @@
 2026-08-12T10:02:31.957 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
 2026-08-12T10:02:31.963 | commit-guard | agent=unknown | ALLOW | msg: feat: verify database-schema foundation (models + database session)
 2026-08-12T10:02:31.980 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:33.407 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:33.481 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:33.515 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:37.282 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:40.474 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:02:40.491 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:03:38.944 | skip-test-check | agent=unknown | OK | feature=frontend-setup
+2026-08-12T10:03:42.538 | commit-guard | agent=unknown | ALLOW | msg: feat: verify frontend-setup foundation (Next.js 14 + Tailwind + api client)
