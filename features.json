@@ -11,7 +11,7 @@
   "use_postgres": false,
   "required_services": [],
   "egress_endpoints": [],
-  "last_updated": "2026-08-12T10:04:23.078300Z",
+  "last_updated": "2026-08-12T10:06:25.563593Z",
   "features": [
     {
       "id": "database-schema",
@@ -181,7 +181,7 @@
       "id": "dashboard",
       "name": "Dashboard",
       "description": "Overview page at /dashboard showing project and task counts with quick links.",
-      "status": "pending",
+      "status": "in_progress",
       "phase": 2,
       "files": [
         "frontend/src/app/dashboard/page.tsx"
@@ -196,11 +196,17 @@
         "category": "Frontend",
         "priority": "low"
       },
-      "started_at": null,
+      "started_at": "2026-08-12T10:06:21.991078Z",
       "completed_at": null,
-      "last_touched_at": null,
-      "iteration_count": 0,
-      "work_history": [],
+      "last_touched_at": "2026-08-12T10:06:25.563583Z",
+      "iteration_count": 1,
+      "work_history": [
+        {
+          "iteration": 1,
+          "timestamp": "2026-08-12T10:06:25.563586Z",
+          "note": "Verified /dashboard page.tsx: shows project count, task count, welcome message, quick links to /projects and /tasks wrapped in Layout. dashboard.test.tsx covers heading, counts, welcome, stat cards. 21 jest tests pass, npm run build green (11 routes)."
+        }
+      ],
       "completion_notes": null,
       "tags": [
         "frontend"
@@ -241,7 +247,7 @@
       "id": "project-management",
       "name": "Project Management",
       "description": "Full CRUD for projects. POST /api/projects creates project with owner_id from auth. GET /api/projects lists user's projects. GET /api/projects/{id} returns single project. DELETE /api/projects/{id} removes project. Frontend pages: /projects (list), /projects/new (create form).",
-      "status": "pending",
+      "status": "completed",
       "phase": 2,
       "files": [
         "src/fixture/routers/projects.py",
@@ -252,18 +258,31 @@
         "database-schema",
         "frontend-setup"
       ],
-      "tests_pass": false,
+      "tests_pass": true,
       "metadata": {
         "complexity": "medium",
         "category": "Core",
-        "priority": "medium"
+        "priority": "medium",
+        "completion_warning": "Completed in 49s (threshold: 600s)"
       },
-      "started_at": null,
-      "completed_at": null,
-      "last_touched_at": null,
-      "iteration_count": 0,
-      "work_history": [],
-      "completion_notes": null,
+      "started_at": "2026-08-12T10:05:35.051331Z",
+      "completed_at": "2026-08-12T10:06:23.729285Z",
+      "last_touched_at": "2026-08-12T10:06:21.866159Z",
+      "iteration_count": 2,
+      "work_history": [
+        {
+          "iteration": 1,
+          "timestamp": "2026-08-12T10:06:21.866163Z",
+          "note": "Verified existing implementation in routers/projects.py satisfies full CRUD spec: POST/GET list/GET one/PUT/DELETE at /api/projects, owner_id from auth, isolation enforced. Manually curl-verified all endpoints (201/200/200/200/204/404/401). 8 project tests pass in test_projects.py."
+        },
+        {
+          "iteration": 2,
+          "timestamp": "2026-08-12T10:06:23.729286Z",
+          "note": "COMPLETED",
+          "tests_pass": true
+        }
+      ],
+      "completion_notes": "Full CRUD for projects already implemented in routers/projects.py per architecture.json spec (create/list/read/update/delete at /api/projects, owner_id scoping). Verified via pytest (8 tests in test_projects.py) and live curl smoke test against running server (create 201, list/get/update 200, delete 204, 404 after delete, 401 unauthenticated).",
       "tags": [
         "backend",
         "frontend"
