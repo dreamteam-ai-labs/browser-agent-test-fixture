@@ -47,6 +47,16 @@ buildtools = [
     "dreamteam-lane-tracking-mcp @ git+https://github.com/dreamteam-ai-labs/dreamteam-lane-tracking-mcp.git@49fda30866b00acc33a24c610745ba03e433d21b",
 ]
 
+# Same story as buildtools: every real product declares this via the template
+# (pyproject.toml.mustache `services`, pinned @{{service_auth_rev}}); the fixture
+# carries it by hand. Its absence made `ensureServiceDeps` warn "does not provide
+# the extra 'services'" in every run and left dreamteam_service_auth
+# non-importable while QA templates import it. SHA = stable branch 2026-08-12;
+# refresh alongside the buildtools pins.
+services = [
+    "dreamteam-service-auth @ git+https://github.com/dreamteam-ai-labs/dreamteam-service-auth.git@d9606b5348d7f9178ff05ffda10651390926a225",
+]
+
 # Required for the SHA-pinned git+https deps in [buildtools] above. Hatchling
 # validates EVERY optional-dependency group during metadata prep — not just the
 # extras being installed — so without this flag a direct reference in ANY group
