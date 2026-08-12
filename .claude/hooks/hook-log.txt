@@ -230,3 +230,14 @@
 2026-08-12T10:04:08.951 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
 2026-08-12T10:04:08.957 | commit-guard | agent=unknown | ALLOW | msg: feat: verify health-endpoint foundation (GET /api/health + app config)
 2026-08-12T10:04:08.962 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:04:10.375 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:04:10.390 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:04:10.394 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:04:12.851 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:04:16.876 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:04:19.952 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:04:23.162 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:04:23.165 | skip-test-check | agent=unknown | OK | feature=user-auth
+2026-08-12T10:04:26.996 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:04:27.019 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:04:27.023 | commit-guard | agent=unknown | ALLOW | msg: feat: verify user-auth foundation (register/login/me + JWT middleware)
