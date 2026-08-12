@@ -209,3 +209,24 @@
 2026-08-12T10:02:40.491 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
 2026-08-12T10:03:38.944 | skip-test-check | agent=unknown | OK | feature=frontend-setup
 2026-08-12T10:03:42.538 | commit-guard | agent=unknown | ALLOW | msg: feat: verify frontend-setup foundation (Next.js 14 + Tailwind + api client)
+2026-08-12T10:03:44.032 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:03:44.035 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:03:44.039 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:03:46.015 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:03:48.513 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:03:48.527 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:03:48.649 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:03:48.656 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:03:48.684 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:03:52.370 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:03:52.371 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:03:55.775 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:03:55.812 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:03:55.814 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:03:58.313 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:04:01.652 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:04:05.484 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:04:05.487 | skip-test-check | agent=unknown | OK | feature=health-endpoint
+2026-08-12T10:04:08.951 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
+2026-08-12T10:04:08.957 | commit-guard | agent=unknown | ALLOW | msg: feat: verify health-endpoint foundation (GET /api/health + app config)
+2026-08-12T10:04:08.962 | sitecustomize-egress | agent=python | PATCHES_INSTALLED | allowlist_size=20
