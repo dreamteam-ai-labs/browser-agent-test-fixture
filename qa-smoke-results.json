@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-04-07T20:56:37Z",
+  "timestamp": "2026-08-12T10:28:48Z",
   "auth": {
     "success": true,
-    "email": "qa-tester-213d2770@test.example.com",
+    "email": "qa-tester-a3533bb9@test.example.com",
     "password": "TestPass123!",
     "auth_method": "backend_register",
     "steps": {
@@ -14,7 +14,7 @@
         "path": "/api/auth/me"
       }
     },
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3IiwiZW1haWwiOiJxYS10ZXN0ZXItMjEzZDI3NzBAdGVzdC5leGFtcGxlLmNvbSIsImV4cCI6MTc3NTY4MTc5OH0.02Rulha_E7DWCAHiQtxjwPt-n-zjhiUXvYxVC2vLkKM",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMyIsImVtYWlsIjoicWEtdGVzdGVyLWEzNTMzYmI5QHRlc3QuZXhhbXBsZS5jb20iLCJleHAiOjE3ODY2MTY5Mjl9.ouOJ3jb5b9xG234QVhK7dOCqOKuM1cBARyzPJGlxheQ",
     "token_verified": true
   },
   "browser_smoke_test": {
@@ -22,21 +22,6 @@
     "entities_tested": 3,
     "entities_total": 3,
     "per_entity_results": {
-      "projects": {
-        "overall": "error",
-        "tests": [],
-        "critical_issues": [
-          "No response from tester"
-        ],
-        "consoleMessages": [
-          {
-            "type": "error",
-            "text": "Failed to load resource: the server responded with a status of 404 ()",
-            "url": "https://fixture-harness-r4v4vjvqjqvj2x5v7-3000.app.github.dev/favicon.ico"
-          }
-        ],
-        "error": "401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"invalid x-api-key\"},\"request_id\":\"req_011CZq5Z91YV3sfksQKL5vwB\"}"
-      },
       "login": {
         "overall": "error",
         "tests": [],
@@ -47,10 +32,25 @@
           {
             "type": "error",
             "text": "Failed to load resource: the server responded with a status of 404 ()",
-            "url": "https://fixture-harness-r4v4vjvqjqvj2x5v7-3000.app.github.dev/favicon.ico"
+            "url": "https://ominous-winner-r4v4vjvqj5w52x54-3000.app.github.dev/favicon.ico"
           }
         ],
-        "error": "401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"invalid x-api-key\"},\"request_id\":\"req_011CZq5Z8wq72KEACsS2rqk2\"}"
+        "error": "401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"API key is invalid.\"},\"request_id\":null}"
+      },
+      "projects": {
+        "overall": "error",
+        "tests": [],
+        "critical_issues": [
+          "No response from tester"
+        ],
+        "consoleMessages": [
+          {
+            "type": "error",
+            "text": "Failed to load resource: the server responded with a status of 404 ()",
+            "url": "https://ominous-winner-r4v4vjvqj5w52x54-3000.app.github.dev/favicon.ico"
+          }
+        ],
+        "error": "401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"API key is invalid.\"},\"request_id\":null}"
       },
       "tasks": {
         "overall": "error",
@@ -62,10 +62,10 @@
           {
             "type": "error",
             "text": "Failed to load resource: the server responded with a status of 404 ()",
-            "url": "https://fixture-harness-r4v4vjvqjqvj2x5v7-3000.app.github.dev/favicon.ico"
+            "url": "https://ominous-winner-r4v4vjvqj5w52x54-3000.app.github.dev/favicon.ico"
           }
         ],
-        "error": "401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"invalid x-api-key\"},\"request_id\":\"req_011CZq5bL6MZkwyA7v6CANhr\"}"
+        "error": "401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"API key is invalid.\"},\"request_id\":null}"
       }
     }
   },
